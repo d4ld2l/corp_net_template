@@ -1,0 +1,1 @@
+class LanguageLevel < ApplicationRecord; end

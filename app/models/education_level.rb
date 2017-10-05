@@ -1,0 +1,1 @@
+class EducationLevel < ApplicationRecord; end
