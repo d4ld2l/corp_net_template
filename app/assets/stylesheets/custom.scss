@@ -1,0 +1,93 @@
+body{
+  background-color: white;
+  margin-bottom: 50px;
+}
+
+.tt-suggestion{
+  padding: 1.3em;
+  border-radius: 2px;
+}
+
+.tt-suggestion:hover{
+  background-color: #0088cc;
+  margin-bottom: 5px;
+  a{
+    color: #fff;
+  }
+}
+
+.twitter-typeahead {
+  display: block!important;
+}
+
+.tt-dropdown-menu {
+  min-width: 560px;
+
+  a {
+    display: block;
+  }
+}
+
+.margin-right-10 {
+  margin-right: 10px;
+}
+
+.margin-top-30 {
+  margin-top: 30px;
+}
+
+.margin-top-10 {
+  margin-top: 10px;
+}
+
+.margin-bottom-10 {
+  margin-bottom: 10px;
+}
+
+td, th {
+  padding: 10px;
+  position: relative;
+  outline: 0;
+}
+
+body:not(.nohover) tbody#index tr:hover {
+  background-color: #f4f4f4;
+}
+
+.max_width {
+ width: 100%;
+}
+
+.user_image_in_group img {
+  -webkit-border-radius: 100%;
+  -moz-border-radius: 100%;
+  -ms-border-radius: 100%;
+  -o-border-radius: 100%;
+  border-radius: 100%;
+  border: 5px solid #ecf0f1;
+  margin-bottom: 10px;
+}
+
+.user_block {
+  cursor: pointer;
+  display: block!important;
+}
+
+
+.illumination{
+  background-color: lightgrey;
+}
+
+#communityTab.nav>li>a {
+  //padding-top: 5px;
+  padding: 5px;
+}
+
+.form-group{
+  margin-top:0px !important;
+  margin-bottom:0px !important;
+}
+
+.simple-label {
+  font-size: 11px;
+}
