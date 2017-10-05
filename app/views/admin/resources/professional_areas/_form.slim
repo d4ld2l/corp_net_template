@@ -1,0 +1,14 @@
+= simple_form_for(@resource_instance) do |f|
+  = f.input :name, required: true
+  #professional_specializations
+    h3 Профессиональные направления
+    = f.simple_fields_for :professional_specializations do |p|
+      = render 'professional_specialization_fields', f: p, professional_specialization: p.object
+    .links
+      = link_to_add_association 'Добавить', f, :professional_specializations, class: 'btn btn-success'
+  p
+    - if @resource_instance.new_record?
+      = f.submit "Добавить профобласть", class: 'btn btn-info'
+    - else
+      = f.submit "Обновить", class: 'btn btn-info'
+    = link_to "Отмена", @resource_class, class: 'button'

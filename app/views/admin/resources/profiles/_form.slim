@@ -1,0 +1,57 @@
+= simple_form_for @resource_instance do |f|
+  .row
+    .col-md-4
+      = f.input :surname
+    .col-md-4
+      = f.input :name
+    .col-md-4
+      = f.input :middlename
+  .row.margin-bottom-10
+    .col-md-3
+      = f.input :sex, as: :select,
+              collection: [['Мужской', :male], ['Женский', :female], ['Не имеет значения', :undefined]],
+              required: true
+    .col-md-9
+      = f.input :city
+  = f.input :photo, wrapper: :layouts_input_file
+
+  = f.input :birthday, as: :string, input_html:{'data-value': @resource_instance&.birthday, class: 'datepicker-uicker'}, start_year: Date.today.year - 100
+
+  = f.input :email_private
+  = f.input :phone_number_private
+  = f.input :skype
+  = f.input :telegram
+  = f.input :vk_url
+  = f.input :fb_url
+  = f.input :linkedin_url
+
+  - if can? :manage, LegalUnitEmployee
+    h3 Кадровая информация
+    - unless @resource_instance.default_legal_unit_employee
+      - lu =  @resource_instance.build_default_legal_unit_employee
+      - lu.build_legal_unit_employee_position unless lu.legal_unit_employee_position
+      - lu.build_legal_unit_employee_state unless lu.legal_unit_employee_state
+    = f.simple_fields_for :default_legal_unit_employee do |ff|
+      = ff.hidden_field :id
+      = ff.input :legal_unit_id, collection: LegalUnit.all.map{|x| [x.name, x.id]}, label: 'Юридическое лицо', include_blank: false
+      = ff.simple_fields_for :legal_unit_employee_position do |p|
+        = p.input :department_code, as: :select, collection:  Department.all.map {|d| [d.name_ru, d.code]}, label: 'Подразделение', include_blank: false
+        = p.input :position_code, as: :select, collection: Position.all.map {|g| [g.name_ru, g.code]}, label: 'Должность', include_blank: false
+      = ff.simple_fields_for :legal_unit_employee_state do |s|
+        = s.input :state, label: 'Статус'
+      = ff.input :office_id, as: :select, collection: Office.all.collect {|o| [o.name, o.id]}, include_blank: false, label: 'Офис'
+      = ff.association :manager, collection: Profile.where.not(id: @resource_instance.id).map {|p| [p.full_name, p.id]}, label: 'Руководитель'
+
+      = ff.input :email_work, label: 'Email (рабочий)'
+      = ff.input :email_corporate, label: 'Email (корпоративный)'
+      = ff.input :phone_work, label: 'Телефон (рабочий)'
+      = ff.input :phone_corporate, label: 'Телефон (корпоративный)'
+
+
+
+  .pull-right
+    - if @resource_instance.new_record? && can?(:create, @resource_instance)
+      = f.submit "Создать профиль", class: 'btn btn-info'
+    - elsif can?(:update, @resource_instance)
+      = f.submit "Обновить", class: 'btn btn-info'
+    = link_to "Отмена", [:my, :profile], class: 'button'

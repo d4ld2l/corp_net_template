@@ -1,0 +1,50 @@
+#main
+  #real-estates-detail.row
+    .col-lg-4.col-md-4.col-xs-12
+      .panel.panel-default
+        .panel-heading
+          header.panel-title
+            .text-center
+              strong Пользователь
+        .panel-body
+          #author.text-center
+            = image_tag @resource_instance.photo.for_profile.url
+            h3 =@resource_instance.full_name
+            .margin-bottom-10
+              small.label.label-warning = @resource_instance.default_legal_unit_employee&.legal_unit_employee_position&.position&.name_ru
+            p = @resource_instance.birthday&.strftime("%d.%m.%Y")
+            p.sosmed-author
+              - if @resource_instance.vk_url.present?
+                = link_to @resource_instance.vk_url, target: :_blank do
+                  i.fa.fa-vk.margin-right-10 title="Vk"
+              - if @resource_instance.fb_url.present?
+                = link_to @resource_instance.fb_url, target: :_blank do
+                  i.fa.fa-facebook.margin-right-10  title="Facebook"
+              - if @resource_instance.linkedin_url.present?
+                = link_to @resource_instance.linkedin_url, target: :_blank do
+                  i.fa.fa-linkedin title="LinkediIn"
+    .col-lg-8.col-md-8.col-xs-12
+      .panel
+        .panel-body
+          ul#profileTab.nav.nav-pills
+            li.active
+              a data-toggle="tab" href="#detail"  Контактная информация
+            - if can? :see_about_tab, @resource_instance
+              li
+                a data-toggle="tab" href="#about" О сотруднике
+            - if can?(:see_resumes_tab, @resource_instance) || @resource_instance.is_managed_by?(current_profile)
+              li
+                a data-toggle="tab" href='#resumes' Резюме
+            - if @message
+              li
+                a data-toggle="tab" href="#message"  Отправить приглашение
+          #profileTabContent.tab-content
+            hr
+            = render 'detail_tab'
+            - if can? :see_about_tab, @resource_instance
+              = render 'about_tab'
+            - if can?(:see_resumes_tab, @resource_instance) || @resource_instance.is_managed_by?(current_profile)
+              = render 'resumes_tab'
+            - if @message
+              #message.tab-pane.fade
+                = render 'email_form'

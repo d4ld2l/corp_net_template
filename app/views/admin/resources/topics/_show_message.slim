@@ -1,0 +1,22 @@
+.row style="margin-top:15px;"
+  .col-md-2
+    = image_tag message.user&.profile&.photo.thumb.url
+  .col-md-8
+    .row
+      .col-md-12
+        = link_to message.user.profile&.full_name, [message.user&.profile], class: 'margin-right-10'
+        = l(message.created_at)
+    .row
+      .col-md-12
+        = message.body
+  .col-md-2
+    = button_tag 'Ответить', type: 'button', id: "#{message.id}", class: 'btn btn-primary btn-xs reply'
+hr
+
+- if message.children_messages.any?
+  - message.children_messages.each do |message|
+    .row style="margin-left:10px; margin-top:15px;"
+      .col-md-12
+        .panel style="margin-left:10px;"
+          .panel-body
+            = render 'admin/resources/topics/show_message', message: message

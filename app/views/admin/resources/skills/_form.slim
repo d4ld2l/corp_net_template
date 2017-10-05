@@ -1,0 +1,13 @@
+= form_for(@resource_instance) do |f|
+  = render "shared/errors"
+  fieldset
+    ol
+      li.required
+        = f.label :name
+        = f.text_field :name, size: 80
+    p
+      - if @resource_instance.new_record?
+        = f.submit "Добавить навык", class: 'btn btn-info'
+      - else
+        = f.submit "Обновить", class: 'btn btn-info'
+      = link_to "Отмена", skills_path, class: 'button'

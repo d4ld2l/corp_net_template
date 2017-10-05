@@ -1,0 +1,39 @@
+#about.tab-pane.fade
+  table.table.table-th-block
+    thead
+      tr
+        th.col-md-4
+        th
+    tbody
+      tr
+        td.active Должность
+        td = @resource_instance.default_legal_unit_employee&.legal_unit_employee_position&.position&.name_ru
+      tr
+        td.active Дата приема на работу
+        td = l(@resource_instance.default_legal_unit_employee&.hired_at) if @resource_instance.default_legal_unit_employee&.hired_at
+      tr
+        td.active Статус в текущем юридическом лице
+        td = @resource_instance.default_legal_unit_employee&.legal_unit_employee_state&.state
+      tr
+        td.active Заработная плата
+        td = @resource_instance.default_legal_unit_employee&.wage
+      tr
+        td.active Руководитель
+        td = @resource_instance.default_legal_unit_employee&.manager&.full_name
+      tr
+        td.active Подразделение
+        td = @resource_instance.default_legal_unit_employee&.legal_unit_employee_position&.department&.name_ru
+      tr
+        td.active История кадровых перемещений
+        td
+          ul
+            - @resource_instance.default_legal_unit_employee&.legal_unit_employee_position&.versions&.each do |x|
+              - unless x.event.to_s == 'create'
+                li = "#{x.reify.department&.name_ru} / #{x.reify.position&.name_ru} (#{l(x.created_at)})"
+      tr
+        td.active История статусов
+        td
+          ul
+            - @resource_instance.default_legal_unit_employee&.legal_unit_employee_state&.versions&.each do |x|
+              - unless x.event.to_s == 'create'
+                li = "#{x.reify&.state} (#{l(x.created_at)})"

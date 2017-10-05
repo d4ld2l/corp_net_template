@@ -1,0 +1,8 @@
+- if user_signed_in?
+  .row
+    .col-md-5
+      = render 'admin/home/groups_list'
+    .col-md-7
+      = render 'admin/home/last_news_list'
+- else
+  = render 'admin/devise/custom_form/login-register'

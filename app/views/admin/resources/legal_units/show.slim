@@ -1,0 +1,42 @@
+= resource_page_header("Просмотр юридического лица '#{@resource_instance.name}'")
+.row
+  .col-md-12
+    table.table.table-bordered
+      tbody
+        tr
+          td Название
+          td = @resource_instance.name
+        tr
+          td Код
+          td = @resource_instance.code
+        tr
+          td Иникальный идентификатор
+          td = @resource_instance.uuid
+        tr
+          td Лого
+          td = image_tag(@resource_instance.logo)
+        tr
+          td Дата создания
+          td = l(@resource_instance.created_at)
+        tr
+          td Последнее обновление
+          td = l(@resource_instance.updated_at)
+.row
+  .col-md-12
+    h4 Сотрудники
+    table.table.table-bordered
+      thead
+        tr
+          th ФИО
+          th Должность
+      tbody
+        - @resource_instance.legal_unit_employees.each do |x|
+          tr
+            td = link_to(x&.profile&.full_name || '', x&.profile)
+            td = x&.legal_unit_employee_position&.position&.name_ru
+.row
+  .col-md-12
+    = link_to "Все юр. лица", resource_class, class: 'btn btn-default'
+    - if can? :update, resource_class
+      = link_to "Редактировать", [:edit, @resource_instance], class: 'btn btn-info'
+      = link_to "Редактировать сотрудников", [:edit_employees, @resource_instance], class: 'btn btn-info'

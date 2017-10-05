@@ -1,0 +1,9 @@
+.nested-fields
+  .panel
+    .panel-body
+      .row
+        .col-md-11
+          = f.input :name, required: true
+        .col-md-1
+          = link_to_remove_association f, class: 'btn btn-simple btn-danger' do
+            i.fa.fa-remove

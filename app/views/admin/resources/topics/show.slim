@@ -1,0 +1,19 @@
+.row
+  = link_to 'Вернуться к обсуждениям', [@community, :topics], class: 'btn btn-primary'
+  = link_to 'Вернуться к группе', [@community], class: 'btn btn-primary'
+
+.panel
+  .panel-body
+    .row
+      .col-md-12.text-center
+        h3 = @resource_instance&.subject
+    hr
+
+    .row
+      .col-md-12#messages
+        - @resource_instance.messages.where(parent_message_id: nil).each do |message|
+          = render 'show_message', message: message
+
+    .row
+      .col-md-12#message_form
+        = render 'message_form'

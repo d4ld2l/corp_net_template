@@ -1,0 +1,8 @@
+= simple_form_for(@resource_instance) do |f|
+  = f.input :name, required: true, label: 'Название'
+  p
+    - if @resource_instance.new_record?
+      = f.submit "Добавить роль на проекте", class: 'btn btn-info'
+    - else
+      = f.submit "Обновить", class: 'btn btn-info'
+    = link_to "Отмена", project_roles_path, class: 'button'

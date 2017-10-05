@@ -1,0 +1,19 @@
+.modal-dialog.login.animated
+  .modal-content
+    .modal-header
+      button.close aria-hidden="true" data-dismiss="modal" type="button"  &times;
+      h4.modal-title Вход
+    .modal-body
+      .box
+        .content
+          .division
+            .line.l
+            span SHR
+            .line.r
+          .error
+          .form.loginBox
+            = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+              = f.email_field :email, id: 'email', class: 'form-control', placeholder: 'Email', type: 'text'
+              = f.password_field :password, id: 'password', class: 'form-control', placeholder: 'Password', type: 'password'
+              = f.submit "Log in", class: 'btn btn-default btn-login'
+              /input.btn.btn-default.btn-login type="submit" value="Войти"

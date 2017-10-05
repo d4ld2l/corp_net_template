@@ -1,0 +1,11 @@
+= simple_form_for @notification do |f|
+  = f.hidden_field :notice_id, value: @notification.notice.id
+  = f.hidden_field :notice_type, value: @notification.notice.model_name.to_s
+  = f.hidden_field :user_id, value: current_user.id
+  .row
+    .col-md-8
+      = f.input :body
+    .col-md-2
+      = f.input :dispatch
+    .col-md-2
+      = f.button :button, 'Новое оповещение', class: 'btn btn-primary btn-xs'

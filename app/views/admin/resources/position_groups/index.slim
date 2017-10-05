@@ -1,0 +1,26 @@
+h2 Список групп позиций
+- if can? :create, resource_class
+  p = link_to 'Создать', new_position_group_path, :class => "btn btn-primary"
+table.table
+  thead
+    tr
+      th.col-md-2 Код
+      th.col-md-4 Название
+      th.col-md-2 Дата создания
+      th.col-md-2 Дата удаления
+      th.col-md-2 Действия
+  tbody#index
+    - @collection.each do |position_group|
+      tr
+        td = position_group.code
+        td = position_group.name_ru
+        td = l(position_group.created_at)
+        td = l(position_group.updated_at)
+        td
+          - if can? :update, resource_class
+            = link_to [:edit, position_group], class: 'btn btn-success btn-simple btn-xs' do
+              i.fa.fa-edit
+          - if can? :delete, position_group
+            = link_to [position_group], method: :delete, class: 'btn btn-danger btn-simple btn-xs' do
+              i.fa.fa-remove
+= render 'shared/pagination'

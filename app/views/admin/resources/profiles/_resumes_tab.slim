@@ -1,0 +1,20 @@
+#resumes.tab-pane.fade
+  - if can? :manage, @resource_instance
+    p = link_to 'Создать', new_resume_path(user_id: @resource_instance.user.id), :class => "btn btn-primary"
+  h4 Мои резюме
+  table.table.table-th-block
+    thead
+      tr
+        th Название
+        th Дата создания
+        th Дата обновления
+        th Действия
+    tbody
+      - @resource_instance.user.resumes.each do |resume|
+        tr
+          td.active = link_to resume.position, resume
+          td = l(resume.created_at)
+          td = l(resume.updated_at)
+          td
+            = index_edit_button(resume)
+            = index_delete_button(resume)

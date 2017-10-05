@@ -1,0 +1,8 @@
+- path = path || [:admin, resource_class]
+
+.row
+  .col-md-6.form-group
+    = form_tag path, method: :get do
+      = text_field_tag :q, params[:q], placeholder: 'Поиск', id: 'quick-search', class: 'form-control', autocomplete: 'off'
+      = link_to 'Очистить', path, class: 'btn btn-xs pull-right' if params[:q]
+      = button_tag 'Найти', type: 'submit', class: 'btn btn-primary btn-xs pull-right'

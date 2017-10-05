@@ -1,0 +1,12 @@
+= simple_form_for [@community, @topic, @message], url: [:create_message, @community, @topic], remote: true do |f|
+  = f.hidden_field :parent_message_id
+
+  .row
+    .col-md-2
+      = image_tag current_profile&.photo.thumb.url
+    .col-md-8
+      #parent_message_body
+
+      = f.input :body
+    .col-md-2
+      = f.button :submit, 'Опубликовать', class: 'btn btn-info btn-xs'

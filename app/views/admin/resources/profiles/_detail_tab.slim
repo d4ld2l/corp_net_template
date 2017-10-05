@@ -1,0 +1,70 @@
+#detail.tab-pane.fade.active.in
+  table.table.table-th-block
+    thead
+      tr
+        th.col-md-4
+        th
+    tbody
+      tr
+        td.active Город:
+        td = @resource_instance&.city
+      tr
+        td.active Руководитель
+        td = @resource_instance&.default_legal_unit_employee&.manager&.full_name
+      tr
+        td.active Email (корпоративный)
+        td = @resource_instance.user.email
+      tr
+        td.active Email (рабочий)
+        td = @resource_instance&.default_legal_unit_employee&.email_work
+      tr
+        td.active Email (личный)
+        td = @resource_instance.email_private
+      tr
+        td.active Телефон (корпоративный)
+        td = @resource_instance&.default_legal_unit_employee&.phone_corporate
+      tr
+        td.active Телефон (рабочий)
+        td = @resource_instance&.default_legal_unit_employee&.phone_work
+      tr
+        td.active Телефон (личный)
+        td = @resource_instance.phone_number_private
+      tr
+        td.active = resource_class.human_attribute_name(:skype)
+        td = @resource_instance.skype
+      tr
+        td.active = resource_class.human_attribute_name(:telegram)
+        td = @resource_instance.telegram
+      tr
+        td.active Дата рождения
+        td = l(@resource_instance.birthday) if @resource_instance.birthday
+      tr
+        td.active = resource_class.human_attribute_name(:office)
+        td = @resource_instance&.default_legal_unit_employee&.office&.name
+      tr
+        td.active Основное юрлицо:
+        td = @resource_instance&.default_legal_unit_employee&.legal_unit&.name
+      tr
+        td.active Дополнительные юрлица:
+        td
+          ul
+           - @resource_instance&.legal_unit_employees do |l|
+            li = l&.legal_unit&.name
+      tr
+        td.active Зарегистрирован:
+        td = l(@resource_instance.user&.created_at, format: :date)
+  h3 Проекты
+  table.table.table-th-block
+    thead
+      tr
+        th.col-md-3 Название
+        th.col-md-3 Роль
+        th.col-md-3 Приступил
+        th.col-md-3 Закончил
+    tbody
+      tr
+        - @resource_instance.user.user_projects.each do |up|
+          td = up.project.title
+          td = up.project_role&.name
+          td = l(up.start_date) if up.start_date
+          td = l(up.end_date) if up.end_date

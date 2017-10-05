@@ -1,0 +1,32 @@
+.nested-fields
+  .panel
+    .panel-body
+      .row
+        .col-md-11
+          .row
+            .col-md-12
+              = f.input :user_id, collection: User.only_with_profile.map {|x| [x.full_name, x.id]}, include_blank: false, disabled: f.object&.persisted?
+          .row
+            .col-md-12
+              = f.input :project_role_id, collection: ProjectRole.all.map {|x| [x.name, x.id]}, label: 'Роль на проекте'
+          .row
+            .col-md-6
+              = f.input :start_date, as: :string, input_html: {'data-value': f.object[:start_date], class: 'datepicker-uicker'}, label: 'Дата начала работы на проекте'
+            .col-md-6
+              = f.input :end_date, as: :string, input_html: {'data-value': f.object[:end_date], class: 'datepicker-uicker'}, label: 'Дата окончания работы на проектк'
+          .row
+            .col-md-6
+              = f.input :skills, as: :string, label: 'Навыки'
+            .col-md-3
+              = f.input :worked_hours, label: 'Отработанные часы'
+            .col-md-3
+              = f.input :rating, as: :range, label: 'Оценка', input_html:{min:0, max:5, step:1, value:f.object.rating || 0}
+          .row
+            .col-md-12
+              = f.input :duties, label: 'Обязанности'
+          .row
+            .col-md-12
+              = f.input :feedback, label: 'Отзыв'
+        .col-md-1
+          = link_to_remove_association f, class: 'btn btn-simple btn-danger' do
+            i.fa.fa-remove

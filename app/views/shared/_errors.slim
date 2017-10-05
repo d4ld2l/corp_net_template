@@ -1,0 +1,4 @@
+- if @resource_instance && @resource_instance.errors.any?
+  #error-explanation
+    - @resource_instance.errors.full_messages.each do |message|
+      .alert.alert-danger.alert-dismissable= message

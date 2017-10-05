@@ -1,0 +1,8 @@
+= simple_form_for @resource_instance do |f|
+  = f.input :name
+
+  - if @resource_instance.new_record?
+    = f.submit "Добавить категорию", class: 'btn btn-info'
+  - else
+    = f.submit "Обновить", class: 'btn btn-info'
+  = link_to "Отмена", users_admin_index_path, class: 'button'

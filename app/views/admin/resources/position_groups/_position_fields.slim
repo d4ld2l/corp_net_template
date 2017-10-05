@@ -1,0 +1,15 @@
+.nested-fields
+  .panel
+    .panel-body
+      .row
+        .col-md-11
+          = f.input :legal_unit_id, collection: LegalUnit.all.map{|x| [x.name, x.id]}, label: 'Юридическое лицо', include_blank: false
+          = f.input :code, required: true
+          = f.input :name_ru, required: true
+          = f.input :description, as: :text
+          = f.hidden_field :position_group_code, value: @position_group.code
+          = f.input :salary_from
+          = f.input :salary_up
+        .col-md-1
+          = link_to_remove_association f, class: 'btn btn-simple btn-danger' do
+            i.fa.fa-remove

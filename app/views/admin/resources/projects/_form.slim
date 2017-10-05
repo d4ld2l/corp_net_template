@@ -1,0 +1,22 @@
+= simple_form_for(@resource_instance) do |f|
+  = f.input :legal_unit_id, collection: LegalUnit.all.map{|x| [x.name, x.id]}, label: 'Юридическое лицо', include_blank: false
+  = f.input :title, size: 80
+  = f.input :charge_code
+  = f.input :description, size: 80
+  = f.input :manager, collection: User.only_with_profile.map{|x| [x.full_name, x.id]}, include_blank: false
+  = f.input :customer_id, collection: Customer.all.collect {|c| [c.name, c.id]}, include_blank: false
+  = f.input :begin_date, as: :string, size: 20, input_html: {'data-value': @resource_instance.begin_date, class: 'datepicker-uicker'}
+  = f.input :end_date, as: :string, size: 20, input_html: {'data-value': @resource_instance.begin_date, class: 'datepicker-uicker'}
+  = f.input :status, size: 80
+  h3 Сотрудники на проекте
+  #users
+    = f.simple_fields_for :user_projects do |user_p|
+      = render 'user_project_fields', f: user_p, project: f.object
+    .links
+      = link_to_add_association 'Добавить', f, :user_projects, class: 'btn btn-success'
+  p
+    - if @resource_instance.new_record?
+      = f.submit "Добавить проект", class: 'btn btn-info'
+    - else
+      = f.submit "Обновить", class: 'btn btn-info'
+    = link_to "Отмена", projects_path, class: 'button'

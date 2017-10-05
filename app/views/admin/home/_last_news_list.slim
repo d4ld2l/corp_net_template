@@ -1,0 +1,19 @@
+.panel
+  .panel-heading
+    h2 Последние новости
+  .panel-body
+    table.table-bordered
+      thead
+        tr
+          th.col-md-4 Название
+          th.col-md-2 Категория
+          th.col-md-2 Превью
+          th.col-md-4 Дата создания
+      tbody#index
+        - @news.each do |c|
+          tr
+            td = link_to c.title, c
+            td = c&.news_category&.name
+            td = c.preview
+            td = l(c.created_at)
+= link_to 'Все новости', NewsItem

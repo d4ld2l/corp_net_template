@@ -1,0 +1,50 @@
+.container
+  .row
+    .col-sm-3
+    .col-sm-3.button_box
+      i.material-icons.btn_login mood
+      br
+      button.btn.btn-primary.btn-simple.btn-lg.btn_login data-toggle="modal"
+        | Вход
+
+    .col-sm-3.button_box
+      i.material-icons.btn_register plus_one
+      br
+      button.btn.btn-primary.btn-simple.btn-lg.btn_register data-toggle="modal"
+        | Регистрация
+    .col-sm-3
+  #loginModal.modal.fade.login
+    .modal-dialog.login.animated
+      .modal-content
+        .modal-header
+          button.close aria-hidden="true" data-dismiss="modal" type="button"  &times;
+          h4.modal-title Вход
+        .modal-body
+          .box
+            .content
+              .division
+                .line.l
+                span SHR
+                .line.r
+              .error
+              .form.loginBox
+                = form_for(:user, url: user_session_path, :html => {:id => "sign_in_user"},:format => :json, :remote => true) do |f|
+                  = f.email_field :email, id: 'email', class: 'form-control', placeholder: 'Email', type: 'text'
+                  = f.password_field :password, id: 'password', class: 'form-control', placeholder: 'Password', type: 'password'
+                  = f.submit 'Войти', class: 'btn btn-default btn-login'
+          .box
+            .content.registerBox style="display:none;"
+              .form
+                = form_for(:user, url: registration_path(User), :html => {:id => "sign_up_user"}, :format => :json, :remote => true) do |f|
+                  = f.email_field :email, id: 'email', class: 'form-control', placeholder: 'Email', type: 'text'
+                  = f.password_field :password, id: 'password', class: 'form-control', placeholder: 'Password', type: 'password'
+                  = f.password_field :password_confirmation, id: 'password_confirmation', class: 'form-control', placeholder: 'Repeat Password', type: 'password'
+                  = f.submit 'Зарегистрироваться', class: 'btn btn-default btn-login'
+        .modal-footer
+          .forgot.login-footer
+            span
+              = "Попробуй "
+              a.show_register зарегистрироваться
+          .forgot.register-footer style="display:none"
+            span = "Уже? "
+            a.show_login Заходи

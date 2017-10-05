@@ -1,0 +1,10 @@
+- parent.comments.each do |comment|
+  .margin-bottom-10
+    .row
+      .col-md-6
+        = link_to comment.user&.profile&.full_name, [comment.user&.profile]
+      .col-md-6
+        = l(comment.created_at)
+    .row
+      .col-md-12
+        = comment.body

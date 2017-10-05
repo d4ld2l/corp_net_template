@@ -1,0 +1,16 @@
+h2 Список навыков
+- if can? :create, resource_class
+  p = link_to 'Создать', new_skill_path, :class => "btn btn-primary"
+table.table.table-bordered
+  thead
+    tr
+      th Навык
+      th Действия
+  tbody
+    - @collection.each do |skill|
+      tr
+        td= skill.name
+        td
+          - if can? :update, resource_class
+            = link_to 'Редактировать', edit_skill_path(skill), :class => "btn btn-primary"
+= render 'shared/pagination'

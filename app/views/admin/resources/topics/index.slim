@@ -1,0 +1,35 @@
+h2 Список пользователей
+.row
+  = link_to 'Создать обсуждение', new_community_topic_path, class: 'btn btn-primary'
+  = link_to 'Вернуться к группе', [@community], class: 'btn btn-primary'
+/p
+/  = render 'shared/quick_search', path: users_admin_index_path
+
+table.table
+  tbody#index
+    - @collection.each do |topic|
+      tr
+        td
+          .row
+            .col-md-4
+              = image_tag(topic.photo.thumb.url)
+            .col-md-4
+              = link_to topic.subject, [@community , topic]
+            .col-md-4
+              - if topic.messages.any?
+                = link_to topic.messages.last.user.profile.full_name, [topic.messages.last.user.profile]
+= render 'shared/pagination'
+
+        /td.td-actions.text-right
+        /  - if user.profile.present?
+        /    = link_to [user.profile], class: 'btn btn-info btn-simple btn-xs' do
+        /      i.fa.fa-user
+        /    = link_to [:edit, user.profile], class: 'btn btn-success btn-simple btn-xs-lnk' do
+        /      i.fa.fa-edit
+        /  - else
+        /    button.btn.btn-info.btn-simple.btn-xs data-toggle="tooltip" title="У этого пользователя пока что нет профиля"
+        /      i.fa.fa-user
+        /    button.btn.btn-success.btn-simple.btn-xs-lnk data-toggle="tooltip" title="У этого пользователя пока что нет профиля"
+        /      i.fa.fa-edit
+        /    /button.btn.btn-danger.btn-simple.btn-xs rel="tooltip" title="Remove" type="button"
+            /  i.fa.fa-times

@@ -1,0 +1,26 @@
+h2 Список профессиональных областей
+- if can? :create, resource_class
+  p = link_to 'Создать', new_professional_area_path, :class => "btn btn-primary"
+table.table
+  thead
+    tr
+      th.col-md-3 Название
+      th.col-md-3 Кол-во специализаций
+      th.col-md-2 Дата создания
+      th.col-md-2 Дата обновления
+      th.col-md-2 Действия
+  tbody#index
+    - @collection.each do |area|
+      tr
+        td = link_to area.name, area
+        td = area.professional_specializations.count
+        td = l(area.created_at)
+        td = l(area.updated_at)
+        td
+          - if can? :update, resource_class
+            = link_to [:edit, area], class: 'btn btn-success btn-simple btn-xs' do
+              i.fa.fa-edit
+          - if can? :delete, area
+            = link_to [area], method: :delete, class: 'btn btn-danger btn-simple btn-xs' do
+              i.fa.fa-remove
+= render 'shared/pagination'

@@ -1,0 +1,25 @@
+= resource_page_header("Просмотр профобласти #{@resource_instance.name}")
+.row
+  .col-md-12
+    table.table.table-bordered
+      tbody
+        tr
+          td Название
+          td = @resource_instance.name
+        tr
+          td Дата создания
+          td = l(@resource_instance.created_at)
+        tr
+          td Последнее обновление
+          td = l(@resource_instance.updated_at)
+        tr
+          td Специализации
+          td
+            ul
+              - @resource_instance.professional_specializations.each do |ps|
+                li = ps.name
+.row
+  .col-md-12
+    = link_to "Все профобласти", professional_areas_path, class: 'btn btn-default'
+    - if can? :update, resource_class
+      = link_to "Редактировать", edit_professional_area_path(@resource_instance), class: 'btn btn-info'

@@ -1,0 +1,20 @@
+.panel
+  .panel-heading
+    h2 Открытые группы
+  .panel-body
+    table.table-condensed
+      thead
+        tr
+          th.col-md-4 Название
+          th.col-md-2 Количество участников
+          th.col-md-2 Количество публикаций
+          th.col-md-4 Дата создания
+      tbody#index
+        - @communities.each do |c|
+          tr
+            td = link_to c.name, c
+            td = c.users.count
+            td = c.topics.count
+            td = l(c.created_at)
+= link_to 'Все группы', Community
+

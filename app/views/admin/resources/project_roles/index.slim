@@ -1,0 +1,24 @@
+h2 Список ролей на проекте
+- if can? :create, resource_class
+  p = link_to 'Создать', new_project_role_path, :class => "btn btn-primary"
+table.table
+  thead
+    tr
+      th.col-md-6 Название
+      th.col-md-2 Дата создания
+      th.col-md-2 Дата обновления
+      th.col-md-2 Действия
+  tbody#index
+    - @collection.each do |p_role|
+      tr
+        td = link_to p_role.name, p_role
+        td = l(p_role.created_at)
+        td = l(p_role.updated_at)
+        td
+          - if can? :update, resource_class
+            = link_to [:edit, p_role], class: 'btn btn-success btn-simple btn-xs' do
+              i.fa.fa-edit
+          - if can? :delete, p_role
+            = link_to [p_role], method: :delete, class: 'btn btn-danger btn-simple btn-xs' do
+              i.fa.fa-remove
+= render 'shared/pagination'

@@ -1,0 +1,7 @@
+h2 = t('.title')
+p
+  - if @resource_instance.nil? && can?(:create, @resource_instance)
+    = link_to t('create'), new_profile_path, class: 'btn btn-primary'
+  - elsif can?(:update, @resource_instance)
+    = link_to t('edit'), [:edit, @resource_instance], class: 'btn btn-primary'
+= render 'profile'

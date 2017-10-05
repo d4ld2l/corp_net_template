@@ -1,0 +1,12 @@
+= simple_form_for [@community, @resource_instance] do |f|
+  = f.input :subject
+
+  = f.input :photo,
+          wrapper: :layouts_input_file
+
+  .pull-right
+    - if @resource_instance.new_record?
+      = f.submit "Создать обсуждение", class: 'btn btn-info'
+    - else
+      = f.submit "Обновить", class: 'btn btn-info'
+    = link_to "Отмена", [:communities], class: 'button'

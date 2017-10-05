@@ -1,0 +1,19 @@
+= resource_page_header("Просмотр категории событий #{@resource_instance.name}")
+.row
+  .col-md-12
+    table.table.table-bordered
+      tbody
+        tr
+          td Название
+          td = @resource_instance.name
+        tr
+          td Цвет
+          td
+            span.small style="background-color:#{@resource_instance.color || ''};"
+              = @resource_instance.color
+
+.row
+  .col-md-12
+    = link_to "Все типы событий", [:event_types], class: 'btn btn-default'
+    - if can? :update, @resource_instance
+      = link_to "Редактировать", [:edit, @resource_instance], class: 'btn btn-info'

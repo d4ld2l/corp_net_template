@@ -1,0 +1,6 @@
+<%- if @message.parent_message.present? %>
+  var _id = <%= @message.id %>
+  $(document).find(_id).closest('.row').append('<%= j render 'show_message', message: @message %>')
+<%- else %>
+  $('#messages').append('<%= j render 'show_message', message: @message %>')
+<%- end %>

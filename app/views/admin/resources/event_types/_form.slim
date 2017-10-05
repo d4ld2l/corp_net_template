@@ -1,0 +1,9 @@
+= simple_form_for @resource_instance do |f|
+  = f.input :name, label: 'Название'
+  = f.input :color, as: :colorpicker, label: 'Цвет'
+
+  - if @resource_instance.new_record?
+    = f.submit "Создать", class: 'btn btn-info'
+  - else
+    = f.submit "Обновить", class: 'btn btn-info'
+  = link_to "Отмена", event_types_path, class: 'button'

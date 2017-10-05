@@ -1,0 +1,64 @@
+h2 Список проектов
+- if can? :update, resource_class
+  p = link_to 'Создать', new_project_path, :class => "btn btn-primary"
+= search_form_for @q do |f|
+  = label_tag :selector, "Поиск"
+  = select_tag "selector",
+          "<option value='1'>Название</option> \
+          <option value='2'>Менеджер</option>                         \
+          <option value='3'>Заказчик</option>                         \
+          <option value='4'>Описание</option>".html_safe
+  = f.search_field :title_cont
+  = f.submit "Найти"
+  = link_to 'Сбросить', projects_path
+table.table
+  thead
+    tr
+      th.col-md-2 Проект
+      th.col-md-2 Заказчик
+      th.col-md-2 Юрлицо
+      th.col-md-2 Код проекта
+      th.col-md-1 Дата создания
+      th.col-md-1 Дата обновления
+      th.col-md-2 Действия
+  tbody#index
+    - @collection.each do |project|
+      tr
+        td = link_to project.title, [project]
+        td = project.customer&.name
+        td = project.legal_unit&.name
+        td = project.charge_code
+        td = l(project.created_at)
+        td = l(project.updated_at)
+        td
+          - if can? :update, resource_class
+            = link_to [:edit, project], class: 'btn btn-success btn-simple btn-xs', 'data-toggle': 'tooltip', 'data-original-title': 'Редактировать' do
+              i.fa.fa-edit
+          - if can? :manage, resource_class
+            = link_to [project], method: :delete, class: 'btn btn-danger btn-simple btn-xs', 'data-toggle': 'tooltip', 'data-original-title': 'Удалить' do
+              i.fa.fa-remove
+= render 'shared/pagination'
+javascript:
+    $(document).ready(function () {
+        $('#selector').on('change', function () {
+            if (this.value == 1)
+            {
+                $('#q_title_cont').attr('name', 'q[title_cont]');
+            }
+            else
+              if (this.value == 2)
+              {
+                  $('#q_title_cont').attr('name', 'q[manager_cont]');
+              }
+              else
+                if (this.value == 3)
+                {
+                    $('#q_title_cont').attr('name', 'q[customer_name_cont]');
+                }
+                else
+                  if (this.value == 4)
+                  {
+                      $('#q_title_cont').attr('name', 'q[description_cont]');
+                  }
+        });
+    });
