@@ -1,0 +1,8 @@
+ru:
+  activerecord:
+    models:
+      notification: Мероприятие
+    attributes:
+      notification:
+        body: Запись
+        dispatch: 'Оповестить всех?'

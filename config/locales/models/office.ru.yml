@@ -1,0 +1,7 @@
+ru:
+  activerecord:
+    models:
+      office: Офис
+    attributes:
+      office:
+        name: Название

@@ -1,0 +1,16 @@
+ru:
+  activerecord:
+    models:
+      project: Проект
+    attributes:
+      project:
+        title: Название
+        description: Описание
+        manager: Менеджер
+        customer_id: Заказчик
+        begin_date: Дата начала
+        end_date: Дата окончания
+        status: Статус
+        charge_code: Код проекта
+      user_project:
+        user_id: Сотрудник

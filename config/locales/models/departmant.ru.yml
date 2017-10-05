@@ -1,0 +1,12 @@
+ru:
+  activerecord:
+    models:
+      department: Подразделение
+    attributes:
+      department:
+        company_id: Компания
+        parent_id: Родительское подразделение
+        code: Код подразделения
+        name_ru: Название
+        region: Регион
+        logo: Лого

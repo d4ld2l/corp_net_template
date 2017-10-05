@@ -1,0 +1,10 @@
+ru:
+  admin:
+    resources:
+      profiles:
+        profile:
+          data: Данные
+        my:
+          title: Мой профиль
+        show:
+          title: Профиль сотрудника

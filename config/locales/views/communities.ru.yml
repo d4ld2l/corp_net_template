@@ -1,0 +1,11 @@
+ru:
+  admin:
+    resources:
+      communities:
+        partials:
+          index_table:
+            opened: Открытая группа
+            closed: Закрытая группа
+          form:
+            opened: Открытая группа
+            closed: Закрытая группа

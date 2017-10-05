@@ -1,0 +1,35 @@
+ru:
+  activerecord:
+    models:
+      profile: Мероприятие
+      profiles: Мероприятия
+    attributes:
+      profile:
+        surname: Фамилия
+        name: Имя
+        middlename: Отчество
+        photo: Фото
+        birthday: Дата рождения
+        position: Позиция
+        email_work: Рабочий email
+        email_private: Личный email
+        phone_number_landline: Стационарный телефон
+        phone_number_corporate: Корпоративный телефон
+        phone_number_private: Личный телефон
+        office_id: Офис
+        office: Офис
+        skype: Skype
+        telegram: Telegram
+        vk_url: Ссылка на профиль в Vk
+        fb_url: Ссылка на профиль в Facebook
+        linkedin_url: Ссылка на профиль в LinkedIn
+        manager: Менеджер
+        department_code: Код подразделения
+        position_code: Позиция
+        department_head: Глава подразделения
+        sex: Пол
+        city: Город
+      profile/sex:
+        male: Мужской
+        female: Женский
+        undefined: Не указан

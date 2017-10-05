@@ -1,0 +1,11 @@
+ru:
+  activerecord:
+    models:
+      community: Группа
+    attributes:
+      community:
+        name: Название
+        description: Описание
+        tag_list: Теги
+        c_type: Тип
+        photo: Изображение группы

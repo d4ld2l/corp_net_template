@@ -1,0 +1,7 @@
+ru:
+  activerecord:
+    models:
+      message: Мероприятие
+    attributes:
+      message:
+        body: Сообщене

@@ -1,0 +1,7 @@
+ru:
+  activerecord:
+    models:
+      news_category: Группа
+    attributes:
+      news_category:
+        name: Название

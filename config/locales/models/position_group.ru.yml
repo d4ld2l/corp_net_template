@@ -1,0 +1,16 @@
+ru:
+  activerecord:
+    models:
+      position_group: Группа позиций
+    attributes:
+      position_group:
+        name_ru: Название
+        code: Код группы
+        description: Описание
+      position:
+        code: Код позиции
+        name_ru: Название
+        description: Описание
+        salary_from: Зарплата от
+        salary_up: Зарплата до
+        position_group_code: Код группы позиций

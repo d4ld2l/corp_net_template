@@ -1,0 +1,12 @@
+ru:
+  activerecord:
+    models:
+      news_item: Мероприятие
+    attributes:
+      news_item:
+        title: Заголовок
+        body: Новость
+        preview: Превью
+        news_category_id: Категория
+        on_top: Наверх
+        tag_list: Теги

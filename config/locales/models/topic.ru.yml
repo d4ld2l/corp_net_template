@@ -1,0 +1,8 @@
+ru:
+  activerecord:
+    models:
+      topic: Мероприятие
+    attributes:
+      topic:
+        subject: Тема
+        photo: Фото
