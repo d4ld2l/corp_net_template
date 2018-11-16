@@ -1,0 +1,8 @@
+.account_block
+  - if account
+    = link_to [account] do
+      = image_tag account.photo.thumb.url
+      br
+      = account.email
+  - else
+    = account.email

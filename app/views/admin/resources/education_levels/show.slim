@@ -1,0 +1,20 @@
+= resource_page_header("Просмотр уровня образования #{@resource_instance.name}")
+.row
+  .col-md-12
+    table.table.table-bordered
+      tbody
+        tr
+          td Название
+          td = @resource_instance.name
+        tr
+          td Дата создания
+          td = l(@resource_instance.created_at)
+        tr
+          td Последнее обновление
+          td = l(@resource_instance.updated_at)
+.row
+  .col-md-12
+    - if can? :update, resource_class
+      = link_to "Редактировать", edit_education_level_path(@resource_instance), class: 'btn btn-info'
+    - if can? :manage, @resource_instance
+      = link_to 'Удалить', [@resource_instance], method: :delete, class: 'btn btn-info button_remove'

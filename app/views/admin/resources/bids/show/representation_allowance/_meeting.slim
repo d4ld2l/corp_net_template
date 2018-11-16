@@ -1,0 +1,26 @@
+h4 Детали встречи
+table.table.table-bordered
+  tbody
+    tr
+      td Дата и время встречи
+      td = l(@resource_instance.meeting_information.starts_at) if @resource_instance.meeting_information&.starts_at
+    tr
+      td Место встречи
+      td = @resource_instance.meeting_information.place
+    tr
+      td Адрес
+      td = @resource_instance.meeting_information.address
+    tr
+      td Цель встречи
+      td = @resource_instance.meeting_information.aim
+    tr
+      td Результат встречи
+      td = @resource_instance.meeting_information.result&.html_safe
+    tr
+      td Сумма (руб)
+      td = @resource_instance.meeting_information.amount
+    tr
+      td Файлы
+      td
+        - if @resource_instance.meeting_information.base64_document.any?
+          = link_to @resource_instance.meeting_information.base64_document.last&.file_identifier || @resource_instance.meeting_information.base64_document.last&.name, @resource_instance.meeting_information.base64_document.last.file.url

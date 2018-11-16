@@ -1,0 +1,31 @@
+= resource_page_header("Просмотр оценочной сессии \"#{@resource_instance.name}\"")
+.row
+  .col-md-12
+    .panel.panel-default
+      .panel-heading
+        ul#session-tab.nav.nav-pills
+          li.active
+            a data-toggle="tab" href="#session-info" Оценочная сессия
+          li
+            a data-toggle="tab" href="#session-results" Результаты
+          li
+            a data-toggle="tab" href="#session-conclusion" Выводы
+      .panel-body
+        #session-tab-content.tab-content
+          = render 'admin/resources/assessment/sessions/show/info'
+          = render 'admin/resources/assessment/sessions/show/results'
+          = render 'admin/resources/assessment/sessions/show/conclusion'
+.row
+  .col-md-12
+    = link_to "Все сессии", assessment_sessions_path, class: 'btn btn-default'
+    - if can? :update, resource_class
+      = link_to "Редактировать", edit_assessment_session_path(@resource_instance), class: 'btn btn-info'
+      - @resource_instance.aasm.states(permitted: true).map(&:name).each do |s|
+        = link_to "В статус \"#{t("activerecord.attributes.assessment_session.status.#{s}")}\"",
+                change_state_assessment_session_path(@resource_instance&.id, s),
+                class: 'btn btn-info',
+                method: :put
+      - if @resource_instance.status == 'in_progress'
+        = link_to "Напомнить непрошедшим", [:send_reminders, @resource_instance], class: 'btn btn-info', method: :post
+    - if @resource_instance.status == 'completed' || @resource_instance.status == 'closed'
+        = link_to "Сформировать отчёт", [:build, @resource_instance], class: 'btn btn-default'

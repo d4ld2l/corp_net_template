@@ -1,0 +1,7 @@
+ru:
+  activerecord:
+    models:
+      contract_type: Тип договора
+    attributes:
+      contract_type:
+        name: Название

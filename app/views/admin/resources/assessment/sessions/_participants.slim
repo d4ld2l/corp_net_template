@@ -1,0 +1,16 @@
+h4 Участники оценки
+h5 Руководители
+= f.simple_fields_for :participants do |i|
+  = render(partial: 'participant_fields', locals: { f: i, kind: 'manager' }) if i.object.kind == 'manager'
+.links
+  = link_to_add_association 'Добавить', f, :participants, class: 'btn btn-success', render_options: { locals: { kind: 'manager' } }
+h5 Линейные коллеги
+= f.simple_fields_for :participants do |i|
+  = render(partial: 'participant_fields', locals: { f: i, kind: 'associate' }) if i.object.kind == 'associate'
+.links
+  = link_to_add_association 'Добавить', f, :participants, class: 'btn btn-success', render_options: { locals: { kind: 'associate' } }
+h5 Подчиненные
+= f.simple_fields_for :participants do |i|
+  = render(partial: 'participant_fields', locals: { f: i, kind: 'subordinate' }) if i.object.kind == 'subordinate'
+.links
+  = link_to_add_association 'Добавить', f, :participants, class: 'btn btn-success', render_options: { locals: { kind: 'subordinate' } }

@@ -1,0 +1,2 @@
+class BonusReason < ApplicationRecord
+end

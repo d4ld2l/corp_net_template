@@ -1,0 +1,7 @@
+.row
+  .col-md-12
+    .panel
+      .panel-body
+        = c.hidden_field :id
+        = c.input :body, label: 'Комментарий'
+        = c.submit 'Отправить', class: 'btn btn-info', id: 'send_comment_in_news'

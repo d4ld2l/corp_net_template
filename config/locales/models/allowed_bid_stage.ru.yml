@@ -1,0 +1,16 @@
+ru:
+  activerecord:
+    models:
+      allowed_bid_stage: Статусная модель
+    attributes:
+      allowed_bid_stage:
+        allowed_stage_id: Статус в
+        additional_executor_id: Дополнительный исполнитель
+        notification: Уведомление о смене статуса
+        bids_executor_ids: Кого дополнительно уведомлять
+        executor: Исполнитель
+        executors:
+          author: Автор
+          assistant: Ассистент
+          matching_user: Согласующий
+        name_for_button: Значение кнопки

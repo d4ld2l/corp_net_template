@@ -1,0 +1,20 @@
+h2 Список групп наград
+- if can? :create, resource_class
+    p = link_to 'Создать', new_achievement_group_path, :class => "btn btn-primary"
+table.table
+  thead
+    tr
+      th.col-md-2 = sortable_header 'Название', 'name'
+      th.col-md-2 = sortable_header 'Дата создания', 'created_at'
+      th.col-md-2 = sortable_header 'Последнее обновление', 'updated_at'
+      th.col-md-2 Действия
+  tbody#index
+    - @collection.each do |ach_g|
+      tr
+        td = link_to ach_g.name, [ach_g]
+        td = l(ach_g.created_at)
+        td = l(ach_g.updated_at)
+        td
+          = index_edit_button(ach_g) if can? :update, resource_class
+          = index_delete_button(ach_g) if can? :delete, ach_g
+= render 'shared/pagination'

@@ -1,0 +1,5 @@
+h4 Наблюдатели
+= f.simple_fields_for :spectators do |i|
+  = render 'spectator_fields', f: i
+.links
+  = link_to_add_association 'Добавить', f, :spectators, partial: 'spectator_fields', class: 'btn btn-success'

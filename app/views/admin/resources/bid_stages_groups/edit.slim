@@ -1,0 +1,3 @@
+= resource_page_header("Редактирование статусной модели №#{@resource_instance.id}")
+#form-wrapper
+  = render "step_#{@current_step}", options: { url: bid_stages_group_path(from: 1, validate: false), method: :patch }

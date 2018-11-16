@@ -1,64 +1,69 @@
 h2 Список проектов
 - if can? :update, resource_class
   p = link_to 'Создать', new_project_path, :class => "btn btn-primary"
-= search_form_for @q do |f|
-  = label_tag :selector, "Поиск"
-  = select_tag "selector",
-          "<option value='1'>Название</option> \
-          <option value='2'>Менеджер</option>                         \
-          <option value='3'>Заказчик</option>                         \
-          <option value='4'>Описание</option>".html_safe
-  = f.search_field :title_cont
-  = f.submit "Найти"
-  = link_to 'Сбросить', projects_path
+= simple_form_for :q, method: :get do |f|
+  /= label_tag :selector, "Поиск"
+  = f.input :q, label: false, placeholder: 'Поиск', input_html: {'value': params[:q].present? ? params[:q][:q] : ""}
+  = f.submit "Найти", class: 'btn btn-primary'
+  = link_to 'Сбросить', projects_path, class: 'btn'
 table.table
   thead
     tr
-      th.col-md-2 Проект
-      th.col-md-2 Заказчик
-      th.col-md-2 Юрлицо
-      th.col-md-2 Код проекта
-      th.col-md-1 Дата создания
-      th.col-md-1 Дата обновления
-      th.col-md-2 Действия
+      th.col-md-1 = sortable_header 'Название', 'title'
+      th.col-md-1 = sortable_header 'Количество участников', 'account_projects_count'
+      th.col-md-1 = sortable_header 'Статус', 'status'
+      th.col-md-1 Заказчик
+      th.col-md-1 = sortable_header 'Период', 'begin_date'
+      th.col-md-1 = sortable_header 'Менеджер', 'manager_id'
+      th.col-md-1 = sortable_header 'Подразделение', 'department_id'
+      th.col-md-1 = sortable_header 'Создатель', 'created_by_id'
+      th.col-md-1 = sortable_header 'Дата создания', 'created_at'
+      th.col-md-1 = sortable_header 'Обновил', 'updated_by_id'
+      th.col-md-1 = sortable_header 'Дата обновления', 'updated_at'
+      th.col-md-1 Действия
   tbody#index
     - @collection.each do |project|
       tr
         td = link_to project.title, [project]
-        td = project.customer&.name
-        td = project.legal_unit&.name
-        td = project.charge_code
+        td = project.account_projects_count
+        td = t("activerecord.attributes.project.statuses.#{project.status}")
+        td = project.main_customer&.name
+        td = "#{l(project.begin_date) if project.begin_date} - #{l(project.end_date) if project.end_date}"
+        td = project.manager&.full_name
+        td = project.department&.name_ru
+        td = project.created_by&.full_name
         td = l(project.created_at)
+        td = project.updated_by&.full_name
         td = l(project.updated_at)
         td
           - if can? :update, resource_class
             = link_to [:edit, project], class: 'btn btn-success btn-simple btn-xs', 'data-toggle': 'tooltip', 'data-original-title': 'Редактировать' do
               i.fa.fa-edit
           - if can? :manage, resource_class
-            = link_to [project], method: :delete, class: 'btn btn-danger btn-simple btn-xs', 'data-toggle': 'tooltip', 'data-original-title': 'Удалить' do
+            = link_to [project], method: :delete, class: 'btn btn-danger btn-simple btn-xs button_remove', 'data-toggle': 'tooltip', 'data-original-title': 'Удалить' do
               i.fa.fa-remove
 = render 'shared/pagination'
-javascript:
-    $(document).ready(function () {
-        $('#selector').on('change', function () {
-            if (this.value == 1)
-            {
-                $('#q_title_cont').attr('name', 'q[title_cont]');
-            }
-            else
-              if (this.value == 2)
-              {
-                  $('#q_title_cont').attr('name', 'q[manager_cont]');
-              }
-              else
-                if (this.value == 3)
-                {
-                    $('#q_title_cont').attr('name', 'q[customer_name_cont]');
-                }
-                else
-                  if (this.value == 4)
-                  {
-                      $('#q_title_cont').attr('name', 'q[description_cont]');
-                  }
-        });
-    });
+//javascript:
+//    $(document).ready(function () {
+//        $('#selector').on('change', function () {
+//            if (this.value == 1)
+//            {
+//                $('#q_title_cont').attr('name', 'q[title_cont]');
+//            }
+//            else
+//              if (this.value == 2)
+//              {
+//                  $('#q_title_cont').attr('name', 'q[manager_cont]');
+//              }
+//              else
+//                if (this.value == 3)
+//                {
+//                    $('#q_title_cont').attr('name', 'q[customer_name_cont]');
+//                }
+//                else
+//                  if (this.value == 4)
+//                  {
+//                      $('#q_title_cont').attr('name', 'q[description_cont]');
+//                  }
+//        });
+//    });

@@ -1,0 +1,28 @@
+h2 Список вакансий
+table.table
+  thead
+    tr
+      th.col-md-3 = sortable_header 'Название', 'name'
+      th.col-md-1 = sortable_header 'Статус', 'status'
+      /th.col-md-2 Создатель
+      th.col-md-2 = sortable_header 'Рекрутер', 'recruiter_name'
+      th.col-md-2 = sortable_header 'Менеджер', 'manager_name'
+      th.col-md-1 = sortable_header 'Дата создания', 'created_at'
+      th.col-md-2 Действия
+  tbody#index
+    - @collection.each do |vacancy|
+      tr
+        td = link_to vacancy.name, vacancy
+        td = t("activerecord.enum.vacancy_status.#{vacancy.status}")
+        /td = vacancy.creator&.full_name
+        td = vacancy.owner&.full_name
+        td = vacancy.creator&.full_name
+        td = l(vacancy.created_at)
+        td
+          - if can? :update, vacancy
+            = link_to [:edit, vacancy], class: 'btn btn-success btn-simple btn-xs' do
+              i.fa.fa-edit
+          - if can? :delete, vacancy
+            = link_to [vacancy], method: :delete, class: 'btn btn-danger btn-simple btn-xs button_remove' do
+              i.fa.fa-remove
+= render 'shared/pagination'

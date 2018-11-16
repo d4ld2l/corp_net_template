@@ -15,6 +15,7 @@
 //= require jquery_ujs
 //= require cocoon
 //= require bootstrap
+//= require bootstrap-select
 //= require moment
 //= require moment/ru
 //= require bootstrap-datetimepicker
@@ -23,17 +24,29 @@
 //= require material-kit.js
 //= require autocomplete
 //= require bootstrap-colorpicker
+//= require surveys
+//= require admin/resources/bid_stages_groups
+//= require admin/resources/services
 //= require tags
 //= require cocoon
 //= require ckeditor/init
 //= require chartkick
+//= require jquery-ui/widgets/sortable
+//= require Chart.min
 //= require_tree .
+//= require_self
 
 
 String.prototype.replaceAll = function(search, replacement) {
   var target = this;
   return target.split(search).join(replacement);
 };
+
+$(document).ready(function() {
+  $('#supervisor_company_id').change(function() {
+    $(this).closest('form').submit();
+  });
+});
 
 // Chartkick.configure({language: "ru-Ru"});
 // Chartkick.charts.load('current', {'packages':['corechart'], 'language': 'ru'});

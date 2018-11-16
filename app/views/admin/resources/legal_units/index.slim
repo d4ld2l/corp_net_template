@@ -4,11 +4,11 @@ h2 Список юридических лиц
 table.table
   thead
     tr
-      th.col-md-4 Название
+      th.col-md-4 = sortable_header 'Название', 'name'
       th.col-md-1 Код
       th.col-md-1 UUID
-      th.col-md-2 Дата создания
-      th.col-md-2 Дата удаления
+      th.col-md-2 = sortable_header 'Дата создания', 'created_at'
+      th.col-md-2 = sortable_header 'Дата обновления', 'updated_at'
       th.col-md-2 Действия
   tbody#index
     - @collection.each do |l_unit|

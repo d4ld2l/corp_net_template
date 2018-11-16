@@ -1,0 +1,9 @@
+ru:
+  activerecord:
+    models:
+      project_role: Проектная роль
+    attributes:
+      project_role:
+        name: Название
+        description: Описание
+        skill_ids: Компетенции

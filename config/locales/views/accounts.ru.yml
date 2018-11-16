@@ -1,0 +1,14 @@
+ru:
+  admin:
+    resources:
+      accounts:
+        account:
+          data: Данные
+        my:
+          title: Мой профиль
+        show:
+          title: Профиль сотрудника
+        password_form:
+            current_password: Текущий пароль
+            password: Новый пароль
+            password_confirmation: Подтверждение пароля

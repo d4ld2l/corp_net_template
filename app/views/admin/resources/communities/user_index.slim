@@ -1,0 +1,73 @@
+.panel
+  .panel-heading
+    = link_to 'Вернуться к группе', [@community], class: 'btn btn-primary'
+  .panel-body
+    .row
+      .col-md-12
+        ul#accountsTab.nav.nav-pills.margin-bottom-10
+          li.active
+            a data-toggle="tab" href="#comm_creator"
+              |Создатель
+          li
+            a data-toggle="tab" href="#accounts"
+              |Участники
+              span.badge = @resource_instance.account_communities.accounts_in_status_count(:accepted)
+          - if @community.account == current_account
+            li
+              a data-toggle="tab" href="#excluded"
+                |Исключены
+                span.badge = @resource_instance.account_communities.accounts_in_status_count(:excluded)
+            li
+              a data-toggle="tab" href="#deleted"
+                |Удалились
+                span.badge = @resource_instance.account_communities.accounts_in_status_count(:deleted)
+            li
+              a data-toggle="tab" href="#expected"
+                |Ожидают подтверждения
+                span.badge = @resource_instance.account_communities.accounts_in_status_count(:expected)
+            li
+              a data-toggle="tab" href="#rejected"
+                |Отклонены
+                span.badge = @resource_instance.account_communities.accounts_in_status_count(:rejected)
+        #accountsTabContent.tab-content
+          #comm_creator.tab-pane.fade.active.in
+            .row
+              .col-md-2.text-center.account_image_in_group
+                .account_block
+                  = link_to [@resource_instance.account] do
+                    = image_tag @resource_instance.account.photo.thumb.url
+                    br
+                    = @resource_instance.account.email
+          #accounts.tab-pane.fade
+            .row
+              - @resource_instance.account_communities.where(status: :accepted).each do |caccount|
+                .col-md-2.text-center.account_image_in_group
+                  = render 'admin/resources/communities/partials/each_account_in_community', caccount: caccount
+                  - if caccount.account != @community.account && @community.account == current_account
+                    = link_to 'Исключить', [:change_state, @community, state: :excluded, association: 'account_communities', resource_id: caccount.id], method: :put
+          - if @community.account == current_account
+            #expected.tab-pane.fade
+              .row
+                - @resource_instance.account_communities.where(status: :expected).each do |caccount|
+                  .col-md-2.text-center.account_image_in_group
+                    = render 'admin/resources/communities/partials/each_account_in_community', caccount: caccount
+                    = link_to 'Отлонить', [:change_state, @community, state: :rejected, association: 'account_communities', resource_id: caccount.id], method: :put
+                    br
+                    = link_to 'Принять', [:change_state, @community, state: :accepted, association: 'account_communities', resource_id: caccount.id], method: :put
+            #excluded.tab-pane.fade
+              .row
+                - @resource_instance.account_communities.where(status: :excluded).each do |caccount|
+                  .col-md-2.text-center.account_image_in_group
+                    = render 'admin/resources/communities/partials/each_account_in_community', caccount: caccount
+                    = link_to 'Вернуть', [:change_state, @community, state: :accepted, association: 'account_communities', resource_id: caccount.id], method: :put
+            #rejected.tab-pane.fade
+              .row
+                - @resource_instance.account_communities.where(status: :rejected).each do |caccount|
+                  .col-md-2.text-center.account_image_in_group
+                    = render 'admin/resources/communities/partials/each_account_in_community', caccount: caccount
+                    = link_to 'Вернуть', [:change_state, @community, state: :accepted, association: 'account_communities', resource_id: caccount.id], method: :put
+            #deleted.tab-pane.fade
+              .row
+                - @resource_instance.account_communities.where(status: :deleted).each do |caccount|
+                  .col-md-2.text-center.account_image_in_group
+                    = render 'admin/resources/communities/partials/each_account_in_community', caccount: caccount

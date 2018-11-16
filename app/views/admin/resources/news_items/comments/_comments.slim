@@ -1,0 +1,5 @@
+- @resource_instance.comments.each do |c|
+  = render 'admin/resources/news_items/comments/show_comment_fields', comment:c
+
+/ = simple_form_for :comment, url: add_comment_news_item_path(@resource_instance), remote: true do |c|
+/   = render 'admin/resources/news_items/comments/new_comment_fields', c:c

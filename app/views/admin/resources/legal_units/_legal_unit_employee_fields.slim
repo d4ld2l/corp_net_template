@@ -1,0 +1,67 @@
+.nested-fields
+  .panel
+    .panel-body
+      .row
+        .col-md-11
+          .row
+            .col-md-8
+              = f.input :account_id, collection: @accounts, required: true, label: 'Сотрудник'
+            .col-md-8
+              = f.input :default, label: 'Данное юрлицо является основным для этого сотрудника'
+          .row
+            .col-md-6
+              = f.input :email_corporate, label: 'Корпоративный email'
+            .col-md-6
+              = f.input :email_work, label: 'Рабочий email'
+          .row
+            .col-md-6
+              = f.input :phone_corporate, label: 'Корпоративный телефон'
+            .col-md-6
+              = f.input :phone_work, label: 'Рабочий телефон'
+          .row
+            .col-md-6
+              = f.input :office_id, collection: Office.all.map{|x| [x.name, x.id]}, label: 'Офис'
+            .col-md-6
+              = f.input :starts_work_at, as: :string, input_html: {'data-value': f.object[:starts_work_at], class: 'datepicker-uicker'}, label: 'Дата выхода на работу'
+          .row
+            .col-md-6
+              = f.input :hired_at, as: :string, input_html: {'data-value': f.object[:hired_at], class: 'datepicker-uicker'}, label: 'Дата начала контракта'
+            .col-md-6
+              = f.input :contract_end_at, as: :string, input_html: {'data-value': f.object[:contract_end_at], class: 'datepicker-uicker'}, label: 'Дата окончания контракта'
+          .row
+            .col-md-6
+              = f.input :contract_type_id, collection: ContractType.all.map{|x| [x.name, x.id]}, label: 'Тип трудового договора'
+            .col-md-6
+              = f.input :contract_id, label: 'Номер трудового договора'
+          .row
+            .col-md-6
+              = f.input :wage_rate, label: 'Ставка'
+            .col-md-6
+              = f.input :probation_period, label: 'Испытательный срок'
+          .row
+            .col-md-4
+              = f.input :pay, label: 'Оклад'
+            .col-md-4
+              = f.input :extrapay, label: 'Надбавка'
+            .col-md-4
+              = f.input :wage, label: 'Зарплата'
+          .row
+            .col-md-6
+              = f.input :structure_unit, label: 'Подразделение'
+              - f.object.build_legal_unit_employee_state
+              = f.simple_fields_for :legal_unit_employee_state do |p|
+                = p.input :state, label: 'Статус сотрудника'
+            .col-md-6
+              - f.object.build_legal_unit_employee_position unless f.object.legal_unit_employee_position
+              = f.simple_fields_for :legal_unit_employee_position do |p|
+                = p.hidden_field :id
+                = p.input :department_code, collection: Department.all.map {|x| [x.name_ru, x.code]}, label: 'Блок / Практика'
+                = p.input :position_code, collection: Position.all.map {|x| [x.name_ru, x.code]}, label: 'Должность'
+          .row
+            .col-md-6
+              = f.simple_fields_for :legal_unit_employee_state do |p|
+                = p.input :comment, as: :text, rows: 3, label: 'Комментарий к статусу'
+
+        .col-md-1
+          = link_to_remove_association f, class: 'btn btn-simple btn-danger button_remove' do
+            i.fa.fa-remove

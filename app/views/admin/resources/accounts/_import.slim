@@ -1,0 +1,18 @@
+#import.modal.fade role="dialog" aria-labelledby="import" aria-hidden="true"
+  .modal-dialog
+    .modal-content
+      .row
+        .col-md-12
+            .modal-header
+              button type="button" class="close" data-dismiss="modal" &times
+              .modal-title Импорт сотрудников
+              / = simple_form_for :import_departments, url: import_departments_path do |f|
+              .modal-body
+                = simple_form_for :account, url: import_accounts_path do |f|
+                  .row
+                    .col-md-12
+                        = f.input :import_legal_unit_id, collection: LegalUnit.all.map{|x| [x.name, x.id ]}, label: 'Юридическое лицо', include_blank: false
+                        = f.input :import_file, as: :file, wrapper: :layouts_input_file, label: 'Файл .XLS или .XLSX'
+                  .row
+                    .col-md-12
+                        = f.submit 'Импортировать', class: 'btn btn-primary pull-right'

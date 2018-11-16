@@ -1,5 +1,18 @@
 = simple_form_for(@resource_instance) do |f|
   = f.input :name, required: true
+  h3 Контрагенты
+  = errors_for f.object, :default
+  #counterparts
+    = f.simple_fields_for :counterparties do |p|
+      = render 'counterparty_fields', f: p, customer: f.object
+    .links
+      = link_to_add_association 'Добавить контрагента', f, :counterparties, class: 'btn btn-success'
+  h3 Контактные лица
+  #customer_contacts
+    = f.simple_fields_for :customer_contacts do |cc|
+      = render 'customer_contact_fields', f: cc
+    .links
+      = link_to_add_association 'Добавить контактное лицо', f, :customer_contacts, class: 'btn btn-success'
   p
     - if @resource_instance.new_record?
       = f.submit "Добавить заказчика", class: 'btn btn-info'

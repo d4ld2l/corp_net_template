@@ -1,0 +1,40 @@
+- news.each do |n_elem|
+  .row
+    .col-md-12
+      h3 = n_elem.title
+  .row
+    .col-md-6
+      = link_to n_elem.author.full_name, n_elem.author
+    .col-md-6
+      = l(n_elem.created_at)
+  .row
+    .col-md-12
+      - n_elem.tag_list.each do |tag|
+        = link_to tag, [:search_news_by_tag, @community, state: "##{n_elem.state}", tag: tag], class: 'margin-right-10', remote: true
+  hr
+  .row
+    .col-md-12
+      = n_elem.body&.html_safe
+  .row
+    .col-md-12
+      - if @community.account == current_account
+        .pull-right
+          - if n_elem.may_to_published?
+            = link_to 'Опубликовать', [:change_state, @community, state: :published, association: 'news_items', resource_id: n_elem.id], method: :put, class: 'btn btn-primary btn-xs'
+          - if n_elem.may_to_unpublished?
+            = link_to 'Снять с публикации', [:change_state, @community, state: :unpublished, association: 'news_items', resource_id: n_elem.id], method: :put, class: 'btn btn-primary btn-xs'
+          - if n_elem.may_to_archived?
+            = link_to 'В архив', [:change_state, @community, state: :archived, association: 'news_items', resource_id: n_elem.id], method: :put, class: 'btn btn-primary btn-xs'
+      - if n_elem.author == current_account || @community.account == current_account
+        = link_to 'Редактировать', '#create_news', 'data-toggle': 'tab', class: 'btn btn-primary btn-xs edit_news', id: "#{n_elem.id}"
+
+
+  hr
+  - if n_elem.published?
+    h4 Комментарии
+    #comments_index
+      = render 'admin/resources/comments/index_with_parent', parent: n_elem
+    hr
+
+    = render 'admin/resources/comments/form', resource_id: n_elem.id, column: :news_item_id
+  hr

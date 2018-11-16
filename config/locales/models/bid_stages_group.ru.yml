@@ -1,0 +1,15 @@
+ru:
+  activerecord:
+    models:
+      bid_stages_group: Статусная модель
+    attributes:
+      bid_stages_group:
+        name: Название
+        code: Код
+        initial_notification: Уведомление о создании
+        initial_executor: Исполнитель
+        initial_notifiable: Кого уведомлять
+        initial_executors:
+          author: Автор
+          assistant: Ассистент
+          matching_user: Согласующий

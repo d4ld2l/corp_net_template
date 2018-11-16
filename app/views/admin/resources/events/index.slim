@@ -1,0 +1,28 @@
+h2 Список мероприятий
+- if can? :update, resource_class
+  p = link_to 'Создать', new_event_path, :class => "btn btn-primary"
+table.table
+  thead
+    tr
+      th.col-md-2 = sortable_header 'Название', 'name'
+      th.col-md-2 = sortable_header 'Организатор', 'accounts.surname'
+      th.col-md-2 = sortable_header 'Дата начала', 'starts_at'
+      th.col-md-2 = sortable_header 'Дата завершения', 'ends_at'
+      th.col-md-2 = sortable_header 'Тип', 'event_types.name'
+      th.col-md-2 Действия
+  tbody#index
+    - @collection.each do |event|
+      tr
+        td = link_to event.name, [event]
+        td = event&.created_by&.full_name
+        td = l(event&.starts_at&.localtime) if event.starts_at
+        td = l(event&.ends_at&.localtime) if event.ends_at
+        td = event&.event_type&.name
+        td
+          - if can? :update, event
+            = link_to [:edit, event], class: 'btn btn-success btn-simple btn-xs', 'data-toggle': 'tooltip', 'data-original-title': 'Редактировать' do
+              i.fa.fa-edit
+          - if can? :manage, event
+            = link_to [event], method: :delete, class: 'btn btn-danger btn-simple btn-xs button_remove', 'data-toggle': 'tooltip', 'data-original-title': 'Удалить' do
+              i.fa.fa-remove
+= render 'shared/pagination'

@@ -1,0 +1,7 @@
+ru:
+  activerecord:
+    models:
+      resume_source: Источник резюме
+    attributes:
+      resume_source:
+        name: Название

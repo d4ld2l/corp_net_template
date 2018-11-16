@@ -1,0 +1,130 @@
+.row.clearfix
+  .col-md-6.text-left
+    = resource_page_header("#{@resource_instance.name}")
+  .col-md-6.margin-top-10
+      = link_to('Опубликовать', [:publish, @resource_instance], method: :post, class: 'btn btn-primary') if @resource_instance.may_to_published?
+      = link_to('Снять с публикации', [:unpublish, @resource_instance], method: :post, class: 'btn btn-primary') if @resource_instance.may_to_unpublished?
+      = link_to('Результаты', [@resource_instance, :survey_results], class: 'btn btn-primary') if @resource_instance.survey_results&.any?
+      = link_to('Редактировать', [:edit, @resource_instance], class: 'btn btn-primary') if can? :update, @resource_instance
+      = link_to('Удалить', [@resource_instance], method: :delete, class: 'btn btn-primary button_remove') if @resource_instance.may_to_archived? && can?(:manage, @resource_instance)
+.row
+  .col-md-12
+    table.table.table-bordered
+      tbody
+        tr
+          td Название опроса
+          td = @resource_instance.name
+        tr
+          td Изображение
+          td = image_tag @resource_instance.symbol.medium.url if @resource_instance.symbol.medium.url
+        tr
+          td Статус
+          td = t(@resource_instance.state, scope: 'surveys.state')
+        tr
+          td Тип опроса
+          td = t("activerecord.enum.survey_type.#{@resource_instance.survey_type}")
+        tr
+          td Описание
+          td = @resource_instance.note&.html_safe
+        tr
+          td Анонимный опрос
+          td = t(@resource_instance.anonymous)
+        tr
+          td Цвет фона
+          td style="background-color:#{@resource_instance.background};"
+        tr
+          td Правила прохождения опроса
+          td = link_to @resource_instance.document_identifier, @resource_instance.document.url if @resource_instance.document.url
+        tr
+          td Другие документы
+          td
+            ul
+              - @resource_instance.documents.each do |d|
+                li = link_to d.name, d.file.url
+        tr
+          td Автор опроса
+          td = link_to_account @resource_instance.creator&.full_name, [@resource_instance.creator]
+        tr
+          td Автор последнего редактирования
+          td = link_to_account @resource_instance.editor&.full_name, [@resource_instance.editor]
+        tr
+          td Опубликовал
+          td = link_to_account @resource_instance.publisher&.full_name, [@resource_instance.publisher]
+        tr
+          td Дата создания опроса
+          td = l(@resource_instance.created_at, format: :date)
+        tr
+          td Дата последнего редактирования
+          td = l(@resource_instance.updated_at, format: :date) if @resource_instance.editor
+        tr
+          td Дата публикации
+          td = l(@resource_instance.published_at, format: :date) if @resource_instance.published_at
+        tr
+          td Cнял с публикации
+          td = link_to_account @resource_instance.unpublisher&.full_name, [@resource_instance.unpublisher]
+        tr
+          td Время завершения опроса
+          td = l(@resource_instance.ends_at) if @resource_instance.ends_at
+        tr
+          td Дата снятия с публикации
+          td = l(@resource_instance.unpublished_at, format: :date) if @resource_instance.unpublished_at
+        tr
+          td Доступен всем
+          td = @resource_instance.available_to_all? ? "Да" : "Нет"
+
+.row
+  h3.text-center Вопросы
+  .col-md-12
+    - @resource_instance.questions.each.with_index(1) do |question, index|
+      h4 Вопрос #{index}
+      .row
+        .col-md-12
+          table.table.table-bordered
+            tbody
+              tr
+                td Формулировка вопроса
+                td = question.wording&.html_safe
+              tr
+                td Тип вопроса
+                td = t "activerecord.enum.question_type.#{question.question_type}" if question.question_type
+              tr
+                td Изображение
+                td = image_tag question.image.small_medium.url if question.image.small_medium.url
+              tr
+                td Запрет на свой вариант ответа
+                td = t(question.ban_own_answer)
+      - unless question.offered_variants.blank?
+        .row
+          .col-md-12
+            h5.text-center Варианты ответа
+            table.table.table-bordered
+              tbody
+                tr
+                  td.col-md-3
+                    b Изображение
+                  td.col-md-9
+                    b Формулировка
+                - question.offered_variants.each do |variant|
+                  tr
+                    td = image_tag variant.image.small_medium.url if variant.image.small_medium.url
+                    td = variant.wording&.html_safe
+      hr
+
+.row
+  .col-md-12
+  -  unless @resource_instance.available_to_all?
+    h2 Участники
+    table.table.table-bordered
+      thead
+        tr
+          th ФИО
+      tbody
+        - @resource_instance.survey_participants.each do |sp|
+          tr
+            td = link_to(sp.account&.full_name || '', account_path(sp&.account&.id), target: "_blank") if sp&.account
+  = link_to('Все опросы', surveys_path, class: 'btn')
+  = link_to('Опубликовать', [:publish, @resource_instance], method: :post, class: 'btn btn-primary') if @resource_instance.may_to_published?
+  = link_to('Снять с публикации', [:unpublish, @resource_instance], method: :post, class: 'btn btn-primary') if @resource_instance.may_to_unpublished?
+  = link_to('Результаты', [@resource_instance, :survey_results], class: 'btn btn-primary') if @resource_instance.survey_results&.any?
+  = link_to('Редактировать', [:edit, @resource_instance], class: 'btn btn-primary') if can? :update, @resource_instance
+  = link_to('Удалить', [@resource_instance], method: :delete, class: 'btn btn-primary button_remove') if @resource_instance.may_to_archived? && can?(:manage, @resource_instance)

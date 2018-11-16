@@ -1,0 +1,42 @@
+h2 Список пользователей
+- if can? :create, resource_class
+  p = link_to 'Создать', new_accounts_path, class: 'btn btn-primary'
+  p = link_to 'Импорт', '#import',  data: { toggle: 'modal', target: '#import'}
+p
+  = render 'shared/quick_search', path: accounts_path
+  = render 'status_tabs'
+
+table.table
+  thead
+    tr
+      th.col-md-1 Email
+      th.col-md-4 ФИО
+      th.col-md-2 Роли
+      th.col-md-2 Дата создания
+      th.col-md-3.text-right Действия
+  tbody#index
+    - @collection.each do |account|
+      tr
+        td = link_to(account.email, accounts_path(account.id))
+        td = link_to(account.account.full_name, [account.account]) if account.account
+        td
+          ul
+            - account.roles.map(&:name).each do |x|
+              li = x
+        td = l(account.created_at)
+        td.td-actions.text-right
+          = change_account_status_button(account)
+          = link_to edit_accounts_path(account, update:'password'), class: 'btn btn-info btn-simple btn-xs', rel:"tooltip", title:"Сменить пароль" do
+            i.fa.fa-account-secret
+          = link_to edit_accounts_path(account, update: 'data'), class: 'btn btn-info btn-simple btn-xs', rel:"tooltip", title:"Редактировать" do
+            i.fa.fa-edit
+          /= link_to accounts_path(account), method: :delete, class: 'btn btn-danger btn-simple btn-xs', rel:"tooltip", title:"Удалить" do
+          /  i.fa.fa-times
+          /= link_to change_state_accounts_path(account, to: 'blocked'), class: 'btn btn-info btn-simple btn-xs' do
+          /  i.fa.fa-account
+          /= link_to change_state_accounts_path(account, to: 'active'), class: 'btn btn-info btn-simple btn-xs' do
+          /  i.fa.fa-account
+
+= render 'shared/pagination'
+= render 'import'
+

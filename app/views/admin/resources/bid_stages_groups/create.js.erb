@@ -1,0 +1,7 @@
+<%- if @resource_instance.errors.any? && @current_step == 1 %>
+  $('#form-wrapper').html('<%=j render "step_#{@current_step}", options: { url: bid_stages_groups_path(from: 1, validate: true) } %>');
+  $('#form-wrapper').trigger('form_changed', { step: '<%=j "step_#{@current_step}" %>' });
+<%- else %>
+  $('#form-wrapper').html('<%=j render "step_#{@current_step}", options: { url: [@resource_instance, from: @current_step, validate: false], method: :patch } %>');
+  $('#form-wrapper').trigger('form_changed', { step: '<%=j "step_#{@current_step}" %>' });
+<%- end %>

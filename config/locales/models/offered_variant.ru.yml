@@ -1,0 +1,8 @@
+ru:
+  activerecord:
+    models:
+      offered_variant: Опрос
+    attributes:
+      offered_variant:
+        wording: Вариант ответа
+        own_answer: Вариант пользователя

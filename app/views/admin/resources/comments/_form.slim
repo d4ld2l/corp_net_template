@@ -1,7 +1,7 @@
 = simple_form_for @comment, remote: true do |f|
   - if resource_id.present?
     = f.hidden_field column, value: resource_id
-  = f.hidden_field :user_id, value: current_user.id
+  = f.hidden_field :account_id, value: current_account.id
   .row
     .col-md-12
       = f.input :body

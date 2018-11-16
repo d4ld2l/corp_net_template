@@ -1,0 +1,40 @@
+= simple_form_for(@resource_instance) do |f|
+  p
+    = f.input :active_color, as: :colorpicker,
+            label: 'Активный цвет'
+    = f.input :active_color_light, as: :colorpicker,
+            label: 'Активный цвет (светлый)',
+            hint: 'Должен быть светлее активного'
+    = f.input :active_color_dark, as: :colorpicker,
+            label: 'Активный цвет (темный)',
+            hint: 'Должен быть темнее активного'
+    = f.input :base_color, as: :colorpicker,
+            label: 'Базовый цвет'
+    = f.input :menu_color, as: :colorpicker,
+            label: 'Цвет меню'
+    = f.input :side_menu_color, as: :colorpicker,
+            label: 'Цвет бокового меню'
+    = f.input :head_menu_item, as: :colorpicker,
+            label: 'Цвет пункта меню'
+    = f.input :head_menu_item_active, as: :colorpicker,
+            label: 'Цвет активного пункта меню'
+    = f.input :head_menu_item_hover, as: :colorpicker,
+            label: 'Цвет пункта меню при наведении'
+    = f.input :main_logo, wrapper: :layouts_input_file,
+            label: 'Логотип (пункт меню для перехода на главную страницу)'
+    p.help-block Размер болжен быть 27x27 px
+    = f.input :signin_logo, wrapper: :layouts_input_file,
+            label: 'Логотип для страницы авторизации'
+    p.help-block Размер болжен быть 400х100 px
+    = f.input :signin_picture, wrapper: :layouts_input_file,
+            label: 'Изображение для страницы авторизации'
+    p.help-block Размер болжен быть 560х800 px
+    = f.input :signin_animation, wrapper: :layouts_input_file,
+            label: 'Анимация на странице авторизации'
+    p.help-block Размер болжен быть 800x600 px
+    = f.input :main_page_picture, wrapper: :layouts_input_file,
+            label: 'Изображение на главной'
+    p.help-block Размер болжен быть 650x290 px
+  p
+    = f.submit "Обновить", class: 'btn btn-info'
+    = link_to "Назад", all_settings_path, class: 'button'

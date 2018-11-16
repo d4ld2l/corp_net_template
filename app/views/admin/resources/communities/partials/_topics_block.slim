@@ -1,0 +1,19 @@
+.row
+  .col-md-12
+    .panel
+      .panel-body
+        .row
+          .col-md-12
+            h4 = link_to "Все обсуждения #{@resource_instance.topics.count}", [@resource_instance, :topics]
+            - @resource_instance.topics.last(5).reverse.each do |topic|
+              .row
+                .col-md-12
+                  = link_to topic.subject, [@resource_instance, topic]
+              .row
+                .col-md-6
+                  = "Количество сообщений #{topic.messages.count}"
+                .col-md-6
+                  - if topic.messages.any?
+                    = "Последнее от #{link_to topic.messages.last.account&.full_name, topic.messages.last.account, class: 'margin-right-10'}".html_safe
+                    = l(topic.messages.last.created_at)
+              hr

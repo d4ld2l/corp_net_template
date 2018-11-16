@@ -1,0 +1,28 @@
+h2 Список бизнес-функций
+- if can? :create, resource_class
+  p = link_to 'Создать', new_permission_path, :class => "btn btn-primary"
+table.table
+  thead
+    tr
+      th.col-md-2 = sortable_header 'Название', 'name'
+      th.col-md-2 Описание
+      th.col-md-2 Код
+      th.col-md-2 Дата создания
+      th.col-md-2 Дата обновления
+      th.col-md-2 Действия
+  tbody#index
+    - @collection.each do |p|
+      tr
+        td = link_to p.name, p
+        td = p.description
+        td = p.code
+        td = l(p.created_at)
+        td = l(p.updated_at)
+        td
+          - if can? :update, resource_class
+            = link_to [:edit, p], class: 'btn btn-success btn-simple btn-xs' do
+              i.fa.fa-edit
+          - if can? :delete, p
+            = link_to [p], method: :delete, class: 'btn btn-danger btn-simple btn-xs button_remove' do
+              i.fa.fa-remove
+= render 'shared/pagination'

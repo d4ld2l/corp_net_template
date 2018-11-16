@@ -1,0 +1,24 @@
+doctype html
+html
+  head
+    title Корпоративная Социальная Сеть
+    link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png"
+    link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png"
+    link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png"
+    = csrf_meta_tags
+    = stylesheet_link_tag 'application', media: 'all'
+    = javascript_include_tag 'https://www.gstatic.com/charts/loader.js'
+    = javascript_include_tag 'application'
+    javascript:
+      Chartkick.configure({language: "de"});
+  body
+    #gon_variables
+      = Gon::Base.render_data
+    = render 'layouts/head_navigation'
+    .container
+      - flash.each do |name, msg|
+        = content_tag(:div, msg.html_safe, class: flash_notice_class(name)) if msg.respond_to?(:html_safe)
+      .container-fluid
+        = yield
+      /p.notice = notice
+      /p.alert = alert

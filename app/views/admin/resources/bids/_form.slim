@@ -1,0 +1,30 @@
+= simple_form_for @resource_instance do |f|
+  = f.hidden_field :service_id, value: f.object&.service_id || @service&.id || Service.first&.id
+  = f.hidden_field :author_id, value: @resource_instance.author_id || current_account.id
+  h4 Работа с заявкой
+  hr style="height:1px!important;color:#333;background-color:#333;"
+  .row
+    .col-md-6
+      = f.input :manager_id, collection: @accounts
+      = f.input :assistant_id, collection: @accounts
+      = f.input :matching_user_id, collection: @accounts
+      = f.input :legal_unit_id, collection: LegalUnit.all.map {|lu| [lu.name, lu.id]}
+    .col-md-6
+      = f.simple_fields_for :bids_bid_stage do |b|
+        = b.hidden_field :id
+        = b.input :bid_stage_id,
+                collection: f.object.service.bid_stages_group.bid_stages.pluck(:name, :id),
+                selected: [f.object.bid_stage.name, f.object.bid_stage.id]
+        /collection: f.object.bid_stage.get_allowed_stages_with_id.uniq.unshift(current = [f.object.bid_stage.name, f.object.bid_stage.id]),
+  = render('representation_allowance_fields', f: f) if f.object.representation_allowance.present?
+  = render('byod_information_fields', f: f) if f.object.byod_information.present?
+  = f.input :creator_comment, label: 'Комментарий к заявке'
+  h4 Комментарии
+  //- current = f.object.comments.present? ? f.object.comments : f.object.comments.build
+  = f.simple_fields_for :comments do |c|
+    = render 'comment_fields', f: c
+  .links
+    = link_to_add_association 'Добавить', f, :comments, class: 'btn btn-success'
+
+  = f.submit 'Сохранить', class: 'btn bnt-default'
+  = link_to 'Отмена', [@resource_instance], class: 'btn bnt-default'

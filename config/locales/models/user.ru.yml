@@ -1,0 +1,12 @@
+ru:
+  activerecord:
+    models:
+      user: Пользователь
+    attributes:
+      statuses:
+        active: Активный
+        blocked: Заблокированный
+      users:
+        email: Email
+        login: Логин
+        password: Пароль

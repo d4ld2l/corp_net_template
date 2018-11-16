@@ -1,0 +1,4 @@
+p На вас назначена вакансия: #{@vacancy['name']}, блок #{@vacancy['block']}, практика #{@vacancy['practice']}.
+p Менеджер вакансии: #{@vacancy['manager']}.
+
+p Посмотреть вакансию можно <a href="#{ENV['FRONT_HOST']}/recruitment/vacancies/#{@vacancy['id']}">тут</a>

@@ -1,0 +1,27 @@
+= f.hidden_field :id
+- if @resource_instance&.role?(:admin) || current_account&.role?(:admin)
+  = f.input :legal_unit_id, collection: LegalUnit.all.map{|x| [x.name, x.id]}, label: 'Юридическое лицо', include_blank: false
+- else
+  = f.hidden_field :legal_unit_id, value: (@resource_instance.legal_unit&.id || LegalUnit.first&.id)
+
+= f.input :hired_at, as: :string, label: 'Дата приёма на работу', input_html: {'data-value': f.object.hired_at, class: 'datepicker-uicker'}, start_year: Date.today.year - 100
+= f.input :contract_end_at, as: :string, label: 'Дата окончания трудового договора', input_html: {'data-value': f.object.contract_end_at, class: 'datepicker-uicker'}, start_year: Date.today.year - 100
+
+= f.input :contract_type_id, collection: ContractType.all.map{|x| [x.name, x.id]}, label: 'Тип договора', include_blank: false
+
+= f.simple_fields_for :legal_unit_employee_position do |p|
+  = p.hidden_field :id
+  = p.input :department_code, as: :select, collection:  Department.all.map {|d| [d.name_ru, d.code]}, label: 'Блок / Практика', include_blank: false
+  = p.input :position_code, as: :select, collection: Position.all.map {|g| [g.name_ru, g.code]}, label: 'Должность', include_blank: false
+- if (@resource_instance&.role?(:admin) || current_account&.role?(:admin))
+  = f.simple_fields_for :legal_unit_employee_state do |s|
+    = s.hidden_field :id
+    = s.input :state, label: 'Статус'
+  = f.input :office_id, as: :select, collection: Office.all.collect {|o| [o.name, o.id]}, include_blank: false, label: 'Офис'
+= f.association :manager, collection: Account.where.not(id: @resource_instance.id).map {|p| [p.full_name, p.id]}, label: 'Руководитель'
+= f.input :structure_unit, label: 'Подразделение'
+
+/ = f.input :email_work, label: 'Email (рабочий)'
+/ = f.input :email_corporate, label: 'Email (корпоративный)'
+/ = f.input :phone_work, label: 'Телефон (рабочий)'
+/ = f.input :phone_corporate, label: 'Телефон (корпоративный)'

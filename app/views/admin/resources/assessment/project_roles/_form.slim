@@ -1,0 +1,14 @@
+= simple_form_for(@resource_instance, as: :project_role) do |f|
+  = f.input :name, required: true, label: 'Название'
+  = f.input :description, as: :ckeditor, label: 'Описание'
+  h4 Компетнеции
+  = f.simple_fields_for :project_role_skills do |i|
+    = render 'project_role_skill_fields', f: i
+  .links
+    = link_to_add_association 'Добавить', f, :project_role_skills, class: 'btn btn-success'
+  p
+    - if @resource_instance.new_record?
+      = f.submit "Добавить проектную роль", class: 'btn btn-info'
+    - else
+      = f.submit "Обновить", class: 'btn btn-info'
+    = link_to "Отмена", assessment_project_roles_path, class: 'button'

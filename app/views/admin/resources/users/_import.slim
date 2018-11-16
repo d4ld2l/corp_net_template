@@ -1,0 +1,20 @@
+#import.modal.fade role="dialog" aria-labelledby="import" aria-hidden="true"
+  .modal-dialog
+    .modal-content
+      .row
+        .col-md-12
+          = simple_form_for :uploaded_file, url: confirm_import_accounts_path do |f|
+            .modal-header
+              button type="button" class="close" data-dismiss="modal" &times
+              .modal-title Импорт пользователей
+            .modal-body
+              .row
+                .col-md-12
+                  = f.input :file, as: :file, wrapper: :layouts_input_file, label: 'Файл .XLSX'
+                .col-md-12
+                  = f.input :legal_unit_id, collection: LegalUnit.all.map{|x| [x.name, x.id]}, include_blank: false, label: 'Юридическое лицо'
+                .col-md-12
+                  = f.input :company_domain, input_html:{value: 'socialhr.ru'}, label: 'Домен для email'
+              .row
+                .col-md-12
+                  = f.submit 'Импортировать', class: 'btn btn-default pull-right'

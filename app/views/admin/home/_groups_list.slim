@@ -13,7 +13,7 @@
         - @communities.each do |c|
           tr
             td = link_to c.name, c
-            td = c.users.count
+            td = c.accounts.count
             td = c.topics.count
             td = l(c.created_at)
 = link_to 'Все группы', Community

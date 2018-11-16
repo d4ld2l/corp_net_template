@@ -1,0 +1,24 @@
+h2 Список офисов
+- if can? :create, resource_class
+  p = link_to 'Создать', new_office_path, :class => "btn btn-primary"
+table.table
+  thead
+    tr
+      th.col-md-6 = sortable_header 'Название', 'name'
+      th.col-md-2 Дата создания
+      th.col-md-2 Дата удаления
+      th.col-md-2 Действия
+  tbody#index
+    - @collection.each do |office|
+      tr
+        td= link_to office.name, [office]
+        td = l(office.created_at)
+        td = l(office.updated_at)
+        td
+          - if can? :update, resource_class
+            = link_to [:edit, office], class: 'btn btn-success btn-simple btn-xs' do
+              i.fa.fa-edit
+          - if can? :delete, office
+            = link_to [office], method: :delete, class: 'btn btn-danger btn-simple btn-xs button_remove' do
+              i.fa.fa-remove
+= render 'shared/pagination'

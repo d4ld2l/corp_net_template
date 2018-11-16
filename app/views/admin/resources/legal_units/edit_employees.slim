@@ -1,0 +1,10 @@
+h2 = "Редактирование сотрудников юридического лица '#{@resource_instance.name}'"
+= simple_form_for @resource_instance, url: update_employees_legal_unit_path, method: :patch do |f|
+  #employee-fields
+    = f.simple_fields_for :legal_unit_employees do |p|
+      = render 'saved_legal_unit_employee_fields', f: p, legal_unit_employee: p.object
+    .links
+      = link_to_add_association 'Добавить', f, :legal_unit_employees, class: 'btn btn-success', partial: 'legal_unit_employee_fields'
+  p
+    = f.submit "Сохранить", class: 'btn btn-info'
+    = link_to "Отмена", legal_units_path, class: 'button'

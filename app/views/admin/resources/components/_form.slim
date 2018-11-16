@@ -1,0 +1,7 @@
+= simple_form_for(@resource_instance) do |f|
+  p
+    = f.input :name, disabled: true, label: 'Название'
+    = f.input :enabled, label: 'Включен?'
+  p
+    = f.submit "Обновить", class: 'btn btn-info'
+    = link_to "Отмена", components_path, class: 'button'

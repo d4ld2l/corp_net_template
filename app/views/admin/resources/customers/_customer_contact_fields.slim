@@ -1,0 +1,46 @@
+.nested-fields
+  .panel
+    .panel-body
+      .row
+        .col-md-11
+          .row
+            = f.hidden_field :id
+            .col-md-12
+              = f.input :name, label: 'ФИО'
+            .col-md-12
+              = f.input :position, label: 'Должность'
+            .col-md-12
+              = f.input :city, label: 'Город'
+            .col-md-12
+              = f.input :description, label: 'Описание'
+            .col-md-12#customer_contacts
+              h4 Номера телефонов
+              = f.simple_fields_for :contact_phones do |cp|
+                = render 'admin/resources/customers/customer_contacts/contact_phone_fields', f: cp
+              .links
+                = link_to_add_association 'Добавить', f, :contact_phones,
+                        class: 'btn btn-success',
+                        partial: 'admin/resources/customers/customer_contacts/contact_phone_fields'
+
+              h4 Адреса электронной почты
+              = f.simple_fields_for :contact_emails do |cp|
+                = render 'admin/resources/customers/customer_contacts/contact_email_fields', f: cp
+              .links
+                = link_to_add_association 'Добавить', f, :contact_emails,
+                        class: 'btn btn-success',
+                        partial: 'admin/resources/customers/customer_contacts/contact_email_fields'
+
+              h4 Мессенджеры
+              = f.simple_fields_for :contact_messengers do |cp|
+                = render 'admin/resources/customers/customer_contacts/contact_messenger_fields', f: cp
+              .links
+                = link_to_add_association 'Добавить', f, :contact_messengers,
+                        class: 'btn btn-success',
+                        partial: 'admin/resources/customers/customer_contacts/contact_messenger_fields'
+            .col-md-12
+              = f.input :skype
+            .col-md-12
+              = f.input :social_urls_string, label: 'Социальные сети'
+        .col-md-1
+          = link_to_remove_association f, class: 'btn btn-simple btn-danger button_remove' do
+            i.fa.fa-remove

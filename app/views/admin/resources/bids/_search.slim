@@ -1,0 +1,21 @@
+= simple_form_for :query, method: :get do |f|
+  /button.btn.btn-primary type="button" data-toggle="collapse" data-target="#enhanced" style="cursor:pointer" Развернуть поиск
+  /div.collapse#enhanced
+  .row
+    .col-md-6
+      = f.input :service_id, collection: Service.all.collect { |c| [c.name, c.id] }, input_html: { multiple: true, include_blank: false, class: 'selectpicker', 'data-label' => 'Ничего не выбрано' }, label: 'Сервис'
+    .col-md-6
+      = f.input :stage_id, collection: BidStage.all.collect { |c| [c.name, c.id] }, input_html: { multiple: true, include_blank: false, class: 'selectpicker', 'data-label' => 'Ничего не выбрано' }, label: 'Статус'
+  .row
+    .col-md-6
+      = f.input :author_id, collection: Account.all.collect { |c| [c.full_name, c.id] }.uniq, input_html: { multiple: true, include_blank: false, class: 'selectpicker', 'data-label' => 'Ничего не выбрано' }, label: 'Автор'
+    .col-md-6
+      = f.input :manager_id, collection: Account.all.collect { |c| [c.full_name, c.id] }.uniq, input_html: { multiple: true, include_blank: false, class: 'selectpicker', 'data-label' => 'Ничего не выбрано' }, label: 'Исполнитель'
+  .row
+    .col-md-6
+      = f.input :created_at_from, as: :string, input_html: { 'data-value': params.dig(:query, 'created_at_from').blank? ? '' : Date.strptime(params[:query]['created_at_from'], '%d.%m.%Y'), class: 'datepicker-uicker' }, label: 'Дата создания с'
+    .col-md-6
+      = f.input :created_at_to, as: :string, input_html: { 'data-value': params.dig(:query, 'created_at_to').blank? ? '' : Date.strptime(params[:query]['created_at_to'], '%d.%m.%Y'), class: 'datepicker-uicker' }, label: 'Дата создания по'
+  = f.submit 'Найти', class: 'btn btn-primary'
+  = link_to 'Сбросить', bids_path, class: 'btn' if params[:query]
+

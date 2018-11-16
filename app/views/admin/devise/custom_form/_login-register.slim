@@ -28,15 +28,20 @@
                 .line.r
               .error
               .form.loginBox
-                = form_for(:user, url: user_session_path, :html => {:id => "sign_in_user"},:format => :json, :remote => true) do |f|
+                = form_for(:account, url: account_session_path, :html => {:id => "sign_in_account"},:format => :json, :remote => true) do |f|
+                  = f.label 'Поддомен (опционально)', for: :subdomain
+                  = f.text_field :subdomain, label: 'Введите домен'
+                  = f.label 'Логин', for: :email
                   = f.email_field :email, id: 'email', class: 'form-control', placeholder: 'Email', type: 'text'
+                  = f.label 'Пароль', for: :password
                   = f.password_field :password, id: 'password', class: 'form-control', placeholder: 'Password', type: 'password'
                   = f.submit 'Войти', class: 'btn btn-default btn-login'
           .box
             .content.registerBox style="display:none;"
               .form
-                = form_for(:user, url: registration_path(User), :html => {:id => "sign_up_user"}, :format => :json, :remote => true) do |f|
+                = form_for(:account, url: registration_path(Account), :html => {:id => "sign_up_account"}, :format => :json, :remote => true) do |f|
                   = f.email_field :email, id: 'email', class: 'form-control', placeholder: 'Email', type: 'text'
+                  = f.text_field :login, id: 'login', class: 'form-control', placeholder: 'Логин', type: 'text'
                   = f.password_field :password, id: 'password', class: 'form-control', placeholder: 'Password', type: 'password'
                   = f.password_field :password_confirmation, id: 'password_confirmation', class: 'form-control', placeholder: 'Repeat Password', type: 'password'
                   = f.submit 'Зарегистрироваться', class: 'btn btn-default btn-login'

@@ -6,3 +6,4 @@ ru:
       notification:
         body: Запись
         dispatch: 'Оповестить всех?'
+        show_notification: Отображать оповещения?

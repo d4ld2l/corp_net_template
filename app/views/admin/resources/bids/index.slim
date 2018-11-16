@@ -1,0 +1,56 @@
+h2 Список заявок
+- if can? :create, resource_class
+  .btn-group
+    button.btn.btn-default.dropdown-toggle aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" type="button"
+      | Создать
+      span.caret
+    ul.dropdown-menu
+      li
+        = link_to 'Оформление представительских расходов', [:new, :bid, service_id: Service.find_by(name: "Оформление представительских расходов")&.id]
+      li
+        = link_to 'BYOD', [:new, :bid, service_id: Service.find_by(name: "Bring your own device")&.id]
+  .btn-group
+    = link_to 'Импорт', '#import', class: 'btn btn-default', data: {toggle: 'modal', target: '#import'}
+.btn-group
+  button.btn.btn-default.dropdown-toggle aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" type="button"
+    | Выгрузить отчёт
+    span.caret
+  ul.dropdown-menu
+    li
+      = link_to 'Представительские расходы', representation_allowance_report_bids_path(service_id: Service.find_by(name: "Оформление представительских расходов")&.id), method: :get
+    li
+      = link_to 'BYOD', byod_report_bids_path(service_id: Service.find_by(name: "Bring your own device")&.id), method: :get
+= render 'import'
+= render 'search'
+
+table.table
+  thead
+    tr
+      th.col-md-1 
+        = sortable_header 'Номер заявки', 'id' 
+      th.col-md-2 
+        = sortable_header 'Сервис', 'service_name' 
+      th.col-md-1 
+        = sortable_header 'Дата и время создания', 'created_at' 
+      th.col-md-2 
+        = sortable_header 'Статус', 'status' 
+      th.col-md-2 
+        = sortable_header 'Автор', 'author_name' 
+      th.col-md-2 
+        = sortable_header 'Исполнитель', 'manager_name' 
+      th.col-md-2 Действия
+  tbody#index
+    - @collection.each do |bid|
+      tr
+        td = link_to bid.id, bid
+        td = link_to bid.service&.name, bid.service
+        td = l(bid.created_at)
+        td = bid.bid_stage&.name
+        td = bid.author&.full_name
+        td = bid.manager&.full_name
+        td
+          = index_edit_button(bid) if can? :update, resource_class
+          - if can? :manage, resource_class
+            = link_to [bid], method: :delete, class: 'btn btn-danger btn-simple btn-xs button_remove', 'data-toggle': 'tooltip', 'data-original-title': 'Удалить' do
+              i.fa.fa-remove
+= render 'shared/pagination'

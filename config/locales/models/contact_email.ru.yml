@@ -1,0 +1,15 @@
+ru:
+  activerecord:
+    models:
+      contact_email: Адрес электронной почты
+      contact_emails: Адреса электронной почты
+    attributes:
+      contact_email:
+        kind: Тип
+        email: Адрес
+        preferable: Предпочитаемый тип связи
+    enum:
+      kind:
+        personal: Личный
+        work: Рабочий
+        other: Другой

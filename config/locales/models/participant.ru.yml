@@ -1,0 +1,10 @@
+ru:
+  activerecord:
+    models:
+      participant: Участники
+    attributes:
+      participant:
+        user_id: Участник
+        account_id: Участник
+        position: Должность
+        name: ФИО участника

@@ -1,0 +1,57 @@
+#community_show
+  - if @resource_instance.opened? || current_account.in?(@resource_instance.account_communities.accounts_in_status(:accepted))
+    .row
+      .col-md-12
+        .panel
+          .panel-heading
+            = link_to 'Все уведомления в группе', [:notifications, resource_params: { association: :community, id: @resource_instance.id }]
+          .panel-body
+            .row
+              .col-md-12
+                - if !@resource_instance.notifications.first.new_record?
+                  .alert.alert-success.text-center = @resource_instance.notifications.first.body
+            .row
+              .col-md-12
+                = render 'admin/resources/notifications/form'
+
+  .row
+    .col-md-8
+      - if @resource_instance.opened? || current_account.in?(@resource_instance.account_communities.accounts_in_status(:accepted))
+        = render 'admin/resources/communities/partials/topics_block'
+
+        .row
+          .col-md-12
+            .panel
+              .panel-heading
+                h4.text-center Новости
+              .panel-body
+                - if @community.account == current_account
+                  = render 'admin/resources/communities/partials/admin_feed'
+                - elsif current_account.in?(@community.account_communities.accounts_in_status(:accepted))
+                  = render 'admin/resources/communities/partials/account_communities_feed'
+                - else
+                  = render 'admin/resources/communities/partials/n_index', news: @resource_instance.news_items.state_order(:published, :desc).limit(3)
+                .pagination.hidden data-pagination-endpoint="#{news_index_community_path}" data-pagination-news-count="#{@resource_instance.news_items.where(state: :published).count}"
+                  = image_tag 'loading.gif'
+      - else
+        = render 'admin/resources/communities/partials/account_communities_block'
+
+    .col-md-4
+      .row
+        .col-md-12
+          .panel
+            .panel-body
+              .margin-bottom-10.text-center
+                = image_tag @resource_instance.photo.for_community.url
+              - if current_account.in?(@resource_instance.account_communities.accounts_in_status(:accepted))
+                = link_to 'Отписаться', [:unsubscribe, @resource_instance, from: :show],  method: :post, remote: true, class: 'btn btn-primary max_width'
+              - elsif @resource_instance.closed? && current_account.account_communities.where(community: @resource_instance).empty?
+                = link_to 'Подать заявку', [:apply, @resource_instance, from: :show], method: :post, class: 'btn btn-primary max_width', remote: true
+              - elsif @resource_instance.opened?
+                = link_to 'Подписаться', [:subscribe, @resource_instance, from: :show], method: :post, remote: true, class: 'btn btn-primary max_width'
+      - if @resource_instance.opened? || current_account.in?(@resource_instance.account_communities.accounts_in_status(:accepted))
+        = render 'admin/resources/communities/partials/account_communities_block'
+
+        = render 'admin/resources/communities/partials/document_block'
+
+      = render 'admin/resources/communities/partials/admin_block'

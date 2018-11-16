@@ -1,0 +1,18 @@
+.chat
+  iframe#chat src="#{ENV['ROCKETCHAT_URL']}"
+
+javascript:
+  function authorize () {
+      console.log("#{session[:rocket_chat_token]}")
+      document.querySelector('iframe').contentWindow.postMessage({
+          externalCommand: 'login-with-token',
+          token: "#{session[:rocket_chat_token]}"
+      }, '*');
+  }
+
+  $(document).ready(function () {
+      $("#chat").load(function () {
+          setTimeout(authorize, 2000)
+      });
+  });
+

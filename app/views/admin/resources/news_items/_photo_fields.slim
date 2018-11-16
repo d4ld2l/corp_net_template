@@ -1,0 +1,21 @@
+.row
+  .col-md-6
+    .nested-fields
+      .panel
+        .panel-body
+          .row
+            .col-md-10
+              - if f.object&.persisted?
+                .row
+                  .col-md-12
+                    = f.input :name, label:'Название', autocomplete: 'off'
+                    .text-center
+                      = image_tag f.object.file.for_community&.url
+              - else
+                .row
+                  .col-md-12
+                    = f.input :name, label:'Название'
+                    = f.input :file, wrapper: :layouts_input_file, label: 'Выберите файл'
+            .col-md-1
+              = link_to_remove_association f, class: 'btn btn-simple btn-danger button_remove' do
+                i.fa.fa-remove

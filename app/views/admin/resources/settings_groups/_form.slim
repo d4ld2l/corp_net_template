@@ -1,0 +1,7 @@
+= simple_form_for(@resource_instance) do |f|
+  p
+    = f.input :code, disabled: true
+    = f.input :label
+  p
+    = f.submit f.object.persisted? ? "Обновить" : "Создать", class: 'btn btn-info'
+    = link_to "Отмена", settings_path, class: 'button'

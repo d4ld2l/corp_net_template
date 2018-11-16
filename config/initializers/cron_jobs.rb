@@ -1,0 +1,2 @@
+Sidekiq::Cron::Job.create(name: 'PersonalNotificationsDestroyWorker - every day at 7am', cron: '0 7 */1 * *', class: 'PersonalNotificationsDestroyWorker')
+Sidekiq::Cron::Job.create(name: 'ElasticReindexerWorker - every day at 3am', cron: '0 3 */1 * *', class: 'ElasticReindexerWorker')

@@ -1,0 +1,16 @@
+#new_assessment_session.modal.fade role="dialog" aria-labelledby="import" aria-hidden="true"
+  .modal-dialog
+    .modal-content
+      .row
+        .col-md-12
+          .modal-header
+            button type="button" class="close" data-dismiss="modal" &times
+            .modal-title Создание сессии оценки
+            .modal-body
+              = simple_form_for :assessment_session, url: new_assessment_session_path, method: :get do |f|
+                .row
+                  .col-md-12
+                    = f.input :kind, collection:[ ['Оценка 360', :a360] ], label: 'Инструмент оценки', include_blank: false
+                .row
+                  .col-md-12
+                    = f.submit 'Далее', class: 'btn btn-primary pull-right'

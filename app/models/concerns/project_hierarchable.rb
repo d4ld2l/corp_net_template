@@ -16,11 +16,7 @@ module ProjectHierarchable
     end
 
     def is_managed_by_on_project?(manager, project)
-      UserProject.find_by(user_id: manager.user.id, project_id: project.id, project_role_id: ProjectRole.find_by_name('Руководитель')).present?&& self.user.projects.includes?(project)
-    end
-
-    def managed_projects
-      Project.includes(:user_projects).where(user_project: {user_id: manager.user.id, project_id: project.id, project_role_id: ProjectRole.find_by_name('Руководитель')})
+      AccountProject.where(account_id: manager.id, project_id: project.id, project_role_id: ProjectRole.find_by_name('Руководитель')).exists? && projects.includes?(project)
     end
 
     def subordination_chain
@@ -35,14 +31,7 @@ module ProjectHierarchable
     end
 
     def departments_chain
-      chain = []
-      x = self.default_legal_unit_employee&.legal_unit_employee_position&.department
-      while x
-        chain << x
-        x = x&.parent
-        break if chain.size > 5
-      end
-      chain.reverse
+      default_legal_unit_employee&.departments_chain
     end
 
     def subordinates_count
@@ -50,25 +39,25 @@ module ProjectHierarchable
     end
 
     def subordinates
-      Profile.includes(:default_legal_unit_employee).where(legal_unit_employees: {manager_id: self.id})
+      Account.includes(:default_legal_unit_employee).where(legal_unit_employees: {manager_id: id})
     end
 
     def subordinates_deep
-      sql = "WITH RECURSIVE subordinates_deep(profile_id) AS (
-               SELECT p.id AS profile_id
-               FROM profiles AS p INNER JOIN legal_unit_employees AS l ON l.profile_id = p.id
-               WHERE l.default = TRUE AND l.manager_id = #{self.id}
+      sql = "WITH RECURSIVE subordinates_deep(account_id) AS (
+               SELECT a.id AS account_id
+               FROM accounts AS a INNER JOIN legal_unit_employees AS l ON l.account_id = a.id
+               WHERE l.default = TRUE AND l.manager_id = #{id}
                UNION
-               SELECT p.id AS profile_id
-               FROM profiles AS p INNER JOIN legal_unit_employees AS l ON l.profile_id = p.id
-                 INNER JOIN subordinates_deep AS s ON l.manager_id = s.profile_id
-               WHERE l.legal_unit_id = #{self.default_legal_unit_employee&.legal_unit&.id}
+               SELECT a.id AS account_id
+               FROM accounts AS a INNER JOIN legal_unit_employees AS l ON l.account_id = a.id
+                 INNER JOIN subordinates_deep AS s ON l.manager_id = s.account_id
+               WHERE l.legal_unit_id = #{default_legal_unit_employee&.legal_unit&.id}
              )
-             SELECT profiles.*
-             FROM profiles
-             WHERE profiles.id IN (SELECT * FROM subordinates_deep)"
-      ids = Profile.find_by_sql(sql).map(&:id)
-      Profile.includes(:default_legal_unit_employee).where(id: ids)
+             SELECT accounts.*
+             FROM accounts
+             WHERE accounts.id IN (SELECT * FROM subordinates_deep)"
+      ids = Account.find_by_sql(sql).map(&:id)
+      Account.includes(:default_legal_unit_employee).where(id: ids)
     end
 
     def subordinates_deep_count

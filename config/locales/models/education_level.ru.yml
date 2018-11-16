@@ -1,0 +1,7 @@
+ru:
+  activerecord:
+    models:
+      education_level: Уровень образования
+    attributes:
+      education_level:
+        name: Название

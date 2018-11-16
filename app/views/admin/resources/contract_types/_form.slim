@@ -1,0 +1,7 @@
+= simple_form_for(@resource_instance) do |f|
+  = f.input :name, required: true
+  - if @resource_instance.new_record?
+    = f.submit "Добавить тип", class: 'btn btn-info'
+  - else
+    = f.submit "Обновить", class: 'btn btn-info'
+  = link_to "Отмена", contract_types_path, class: 'btn btn-default'

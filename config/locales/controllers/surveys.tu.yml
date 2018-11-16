@@ -1,0 +1,13 @@
+ru:
+  admin:
+    resources:
+      surveys:
+        publish:
+          flash:
+            notice: Опрос опубликован
+        unpublish:
+          flash:
+            notice: Опрос снят с публикации
+        archived:
+          flash:
+            notice: опрос удален

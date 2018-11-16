@@ -1,0 +1,64 @@
+back_rails:
+  image: gitlab.akb-it.ru:4567/social_hr/social/image
+  command: sh start.sh
+  volumes:
+    - ./back_rails/.env:/usr/src/app/.env
+  env_file:
+    - ./back_rails/.env
+  links:
+    - db
+  environment:
+    RAILS_ENV: "${RAILS_ENV}"
+  ports:
+    - 3000:3000
+  restart: always
+
+
+db:
+  image: postgres
+  restart: always
+  environment:
+    - POSTGRES_USER=social
+  volumes:
+    - ~/postgres-data:/var/lib/postgresql/data
+
+
+front_nodejs:
+  image: richarvey/nginx-nodejs
+  restart: always
+  volumes:
+    - ./front_nodejs:/var/www/app
+  ports:
+    - 80:80
+  links:
+    - back_rails
+
+
+fake_ldap_server:
+  image: gitlab.akb-it.ru:4567/social_hr/social/image
+  command: rails ldap_server:start
+  ports:
+    - 389:389
+  volumes:
+    - ./back_rails/.env:/usr/src/app/.env
+  env_file:
+    - ./back_rails/.env
+  environment:
+    RAILS_ENV: "${RAILS_ENV}"
+  links:
+    - db
+
+mongo:
+  image: mongo:3.0
+  command: "--smallfiles --logpath=/dev/null"
+  restart: always
+
+
+rocket_chat_app:
+  image: rocketchat/rocket.chat:latest
+  env_file:
+    - ./rocket_chat/.env
+  ports:
+    - 8080:3000
+  links:
+    - mongo

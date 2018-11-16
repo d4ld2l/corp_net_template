@@ -1,0 +1,18 @@
+.nested-fields
+  .panel
+    .panel-body
+      .row
+        .col-md-10
+          .row
+            .col-md-12
+              = f.hidden_field :id
+              = f.hidden_field :type_of_participant, value: type
+              = f.input :responsible, value: f.object&.responsible?, label: 'Ответственный'
+              - if type == :belong_to_company
+                = f.input :account_id, collection: @accounts, input_html: { class: 'account_participants' }
+              - else
+                = f.input :name
+              = f.input :position, input_html: { class: 'account_position' }
+        .col-md-1
+          = link_to_remove_association f, class: 'btn btn-simple btn-danger button_remove' do
+            i.fa.fa-remove

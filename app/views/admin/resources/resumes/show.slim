@@ -1,0 +1,120 @@
+= resource_page_header("Просмотр резюме")
+.row
+  .col-md-12
+    table.table.table-bordered
+      tbody
+        tr
+          td ФИО
+          td = @resource_instance.account&.full_name
+        tr
+          td Дата создания
+          td = @resource_instance.created_at
+        tr
+          td Последнее обновление
+          td = @resource_instance.updated_at
+        tr
+          td Профессиональная область
+          td
+            ul
+            - @resource_instance&.professional_specializations&.each do |ps|
+              li
+                = ps&.professional_area&.name + '/' + ps&.name
+        tr
+          td Навыки
+          td = @resource_instance.skill_list
+.row
+  .col-md-12
+    h3 Опыт работы
+    table.table.table-bordered
+      thead
+        tr
+          th Должность
+          th Название компании
+          th Регион
+          th Сайт
+          th Период работы
+          th Обязанности и достижения
+      tbody
+        - @resource_instance.resume_work_experiences.each do |exp|
+          tr
+            td = exp.position
+            td = exp.company_name
+            td = exp.region
+            td = exp.website
+            td = distance_of_time_in_words(exp.start_date, exp.end_date || Date.current, only: [:years, :months])
+            td = exp.experience_description
+.row
+  .col-md-12
+    h3 Образование
+    table.table.table-bordered
+      thead
+        tr
+          th Уровень
+          th Название учебного заведения
+          th Факультет
+          th Специальность
+          th Год окончания
+      tbody
+        - @resource_instance.resume_educations.each do |ed|
+          tr
+            td = ed.education_level&.name
+            td = ed.school_name
+            td = ed.faculty_name
+            td = ed.speciality
+            td = ed.end_year
+.row
+  .col-md-12
+    h3 Повышение квалификации
+    table.table.table-bordered
+      thead
+        tr
+          th Название
+          th Проводившая организация
+          th Специализация
+          th Год окончания
+      tbody
+        - @resource_instance.resume_qualifications.each do |ed|
+          tr
+            td = ed.name
+            td = ed.company_name
+            td = ed.speciality
+            td = ed.end_year
+.row
+  .col-md-12
+    h3 Сертификаты
+    table.table.table-bordered
+      thead
+        tr
+          th Название
+          th Проводившая организация
+          th Год окончания
+      tbody
+        - @resource_instance.resume_certificates.each do |cert|
+          tr
+            td = cert.name
+            td = cert.company_name
+            td = cert.end_date
+.row
+  .col-md-12
+    h3 Рекомендации
+    table.table.table-bordered
+      thead
+        tr
+          th ФИО
+          th Компания и должность
+          th Телефон
+          th Email
+      tbody
+        - @resource_instance.resume_recommendations.each do |rec|
+          tr
+            td = rec.recommender_name
+            td = rec.company_and_position
+            td = rec.phone
+            td = rec.email
+.row
+  .col-md-12
+    = link_to "К списку резюме", resumes_path, class: 'btn btn-default'
+    - if can? :update, resource_class
+      = link_to "Редактировать", edit_resume_path(@resource_instance), class: 'btn btn-info'
+    - if can? :manage, @resource_instance
+      = link_to 'Удалить', [@resource_instance], method: :delete, class: 'btn btn-info button_remove'

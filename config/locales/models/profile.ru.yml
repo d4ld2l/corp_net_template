@@ -20,16 +20,25 @@ ru:
         office: Офис
         skype: Skype
         telegram: Telegram
-        vk_url: Ссылка на профиль в Vk
-        fb_url: Ссылка на профиль в Facebook
-        linkedin_url: Ссылка на профиль в LinkedIn
+        vk_url: ВКонтакте
+        fb_url: Facebook
+        linkedin_url: LinkedIn
+        instagram_url: Instagram
         manager: Менеджер
         department_code: Код подразделения
         position_code: Позиция
         department_head: Глава подразделения
         sex: Пол
         city: Город
+        social_urls: Ссылки на соцсети
+        kids: Количество детей
+        marital_status: Семейное положение
       profile/sex:
         male: Мужской
         female: Женский
-        undefined: Не указан
+    enum:
+      marital_status:
+        single: Холост/незамужем
+        married: Женат/замужем
+        divorced: Разведен(а)
+        widowed: Вдова/вдовец

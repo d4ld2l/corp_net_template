@@ -1,0 +1,34 @@
+h4 Детали заявки
+table.table.table-bordered
+  tbody
+    tr
+      td Тип заявки
+      td = t("activerecord.attributes.byod_information.byod_type.#{byod_information.byod_type}")
+    tr
+      td Сотрудник
+      td = @resource_instance.creator&.full_name
+    tr
+      td Юридическое лицо
+      td = @resource_instance.legal_unit&.name
+    tr
+      td Должность
+      td = @resource_instance&.creator_position
+    tr
+      td Код проекта
+      td = byod_information&.project&.charge_code
+    tr
+      td Модель ноутбука
+      td = byod_information.device_model
+    tr
+      td Инвентаризационный номер
+      td = byod_information.device_inventory_number
+    tr
+      td Сумма компенсации
+      td = byod_information.compensation_amount
+    tr
+      td Документы
+      td
+        ul
+          - byod_information.documents.each do |d|
+            li
+              = link_to d.name, d.file.url

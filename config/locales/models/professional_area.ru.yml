@@ -1,0 +1,7 @@
+ru:
+  activerecord:
+    models:
+      professional_area: Профессиональная область
+    attributes:
+      professional_area:
+        name: Название

@@ -1,0 +1,4 @@
+= simple_form_for @resource_instance do |f|
+  = f.input :account_id, collection: Account.all.map { |account| [account.full_name, account.id] }
+  = f.submit 'Сохранить', class: 'btn bnt-default'
+  = link_to 'Отмена', [@resource_instance], class: 'btn bnt-default'

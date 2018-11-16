@@ -1,0 +1,25 @@
+h2 Список наград
+table.table
+  thead
+    tr
+      th.col-md-2 = sortable_header 'Название', 'name'
+      th.col-md-1 = sortable_header 'Группа', 'achievement_group_id'
+      th.col-md-1 = sortable_header 'Вознаграждение', 'pay'
+      th.col-md-1 = sortable_header 'Включено?', 'enabled'
+      th.col-md-1 = sortable_header 'Повторяемое?', 'can_achieve_again'
+      th.col-md-2 = sortable_header 'Дата создания', 'created_at'
+      th.col-md-2 = sortable_header 'Последнее обновление', 'updated_at'
+      th.col-md-2 Действия
+  tbody#index
+    - @collection.each do |ach|
+      tr
+        td = link_to ach.name, [ach]
+        td = ag = ach.achievement_group; ag ? link_to(ag&.name, [ag]) : nil
+        td = ach.pay
+        td = ach.enabled? ? 'Да' : 'Нет'
+        td = ach.can_achieve_again? ? 'Да' : 'Нет'
+        td = l(ach.created_at)
+        td = l(ach.updated_at)
+        td
+          = index_edit_button(ach) if can? :update, resource_class
+= render 'shared/pagination'

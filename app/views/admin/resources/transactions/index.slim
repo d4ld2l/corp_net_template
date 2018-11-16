@@ -1,0 +1,26 @@
+h2 Список транзакций
+- if can? :create, resource_class
+    p = link_to 'Создать', new_transaction_path, :class => "btn btn-primary"
+table.table
+  thead
+    tr
+      th.col-md-1 = sortable_header 'ID', 'id'
+      th.col-md-2 = sortable_header 'Получатель', 'recipient_id'
+      th.col-md-2 = sortable_header 'Тип', 'kind'
+      th.col-md-1 = sortable_header 'Сумма', 'value'
+      th.col-md-2 = sortable_header 'Дата создания', 'created_at'
+      th.col-md-2 = sortable_header 'Последнее обновление', 'updated_at'
+      th.col-md-2 Действия
+  tbody#index
+    - @collection.each do |tr|
+      tr
+        td = link_to tr.id, [tr]
+        td = tr.recipient&.full_name
+        td = t("activerecord.attributes.transaction.kind.#{tr.kind}")
+        td = tr.value
+        td = l(tr.created_at)
+        td = l(tr.updated_at)
+        td
+          = index_edit_button(tr) if can? :update, resource_class
+          = index_delete_button(tr) if can? :delete, tr
+= render 'shared/pagination'

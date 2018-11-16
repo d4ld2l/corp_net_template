@@ -1,0 +1,46 @@
+= resource_page_header("Просмотр подразделения #{@resource_instance.name_ru}")
+.row
+  .col-md-12
+    table.table.table-bordered
+      tbody
+        tr
+          td Компания
+          td = @resource_instance.company&.name
+        tr
+          td Руководитель
+          td = @resource_instance.manager&.full_name
+        tr
+          td Лого
+          td = image_tag(@resource_instance.logo&.url) if @resource_instance.logo.present?
+        tr
+          td Юрлицо
+          td
+            - if @resource_instance.legal_unit
+              = link_to @resource_instance.legal_unit&.name, @resource_instance.legal_unit
+        tr
+          td Родительское подразделение
+          td = @resource_instance.parent&.name_ru
+        tr
+          td Код
+          td = @resource_instance.code
+        tr
+          td Название
+          td = @resource_instance.name_ru
+        tr
+          td Регион
+          td = @resource_instance.region
+        tr
+          td Дата создания
+          td = @resource_instance.created_at
+        tr
+          td Последнее обновление
+          td = @resource_instance.updated_at
+.row
+  .col-md-12
+    = link_to "Все подразделения", departments_path, class: 'btn btn-default'
+    - if can? :manage, MailingList
+      = link_to "Создать/обновить команду", department_to_mailing_list_path(@resource_instance), method: :post, class: 'btn btn-info'
+    - if can? :update, resource_class
+      = link_to "Редактировать", edit_department_path(@resource_instance), class: 'btn btn-info'
+    - if can? :manage, @resource_instance
+      = link_to 'Удалить', [@resource_instance], method: :delete, class: 'btn btn-info button_remove'

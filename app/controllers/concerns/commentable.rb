@@ -5,13 +5,14 @@ module Commentable
     comment_hash = comment_params
     @resource_instance = resource_class.find(params[:id])
     if comment_hash && @resource_instance
-      comment_hash[:user_id] = current_user.id
+      # comment_hash[:user_id] = current_user.id
+      comment_hash[:account_id] = current_account.id
       comment_hash[:parent_comment_id] = comment_params[:parent_comment_id]
       comment = Comment.new(comment_hash)
       comment.commentable_id = @resource_instance.id
       comment.commentable_type = @resource_instance.class.to_s
       if comment.save
-        render json: { success: true }
+        render json: { success: true, comment: comment.as_json(includes: { account: { methods: [:full_name] } }) }
       else
         render json: { success: false, errors: comment.errors }
       end

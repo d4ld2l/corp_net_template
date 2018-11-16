@@ -1,0 +1,19 @@
+h2 Список исполнителей заявок
+- if can? :create, resource_class
+  p = link_to 'Создать', [:new, :bids_executor], class: 'btn btn-primary'
+
+table.table
+  thead
+    tr
+      th.col-md-2 ID
+      th = sortable_header 'ФИО', 'accounts.surname'
+      th.col-md-2 Действия
+  tbody#index
+    - @collection.each do |executor|
+      tr
+        td = link_to executor.id, executor
+        td = link_to executor.account&.full_name, executor
+        td
+          = index_edit_button(executor) if can? :update, resource_class
+          = index_delete_button(executor) if can? :destroy, resource_class
+/= render 'shared/pagination'

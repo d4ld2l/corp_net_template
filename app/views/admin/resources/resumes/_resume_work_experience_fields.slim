@@ -1,0 +1,22 @@
+.nested-fields
+  .panel
+    .panel-body
+      .row
+        .col-md-11
+          = f.input :position, required: true
+          .row
+            .col-md-6
+              = f.input :company_name, required: true
+            .col-md-3
+              = f.input :region, required: true
+            .col-md-3
+              = f.input :website
+          .row
+            .col-md-3
+              = f.input :start_date, as: :string, input_html:{class: 'datepicker-uicker'}, required: true
+            .col-md-3
+              = f.input :end_date, as: :string, input_html:{class: 'datepicker-uicker'}, required: true
+          = f.input :experience_description, as: :text, input_html: {rows: 3}
+        .col-md-1
+          = link_to_remove_association f, class: 'btn btn-simple btn-danger button_remove' do
+            i.fa.fa-remove

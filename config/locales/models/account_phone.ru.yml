@@ -1,0 +1,16 @@
+ru:
+  activerecord:
+    models:
+      account_phone: Номер телефона сотрудника
+      account_phones: Номера телефонов сотрудника
+    attributes:
+      account_phone:
+        kind: Тип
+        number: Номер
+        preferable: Предпочитаемый тип связи
+    enum:
+      kind:
+        personal: Личный
+        work: Рабочий
+        home: Домашний
+        other: Другой

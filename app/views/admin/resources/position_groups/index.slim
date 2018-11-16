@@ -4,15 +4,15 @@ h2 Список групп позиций
 table.table
   thead
     tr
-      th.col-md-2 Код
-      th.col-md-4 Название
+      th.col-md-2 = sortable_header 'Код', 'code'
+      th.col-md-4 = sortable_header 'Название', 'name_ru'
       th.col-md-2 Дата создания
       th.col-md-2 Дата удаления
       th.col-md-2 Действия
   tbody#index
     - @collection.each do |position_group|
       tr
-        td = position_group.code
+        td = link_to position_group.code, [position_group]
         td = position_group.name_ru
         td = l(position_group.created_at)
         td = l(position_group.updated_at)
@@ -21,6 +21,6 @@ table.table
             = link_to [:edit, position_group], class: 'btn btn-success btn-simple btn-xs' do
               i.fa.fa-edit
           - if can? :delete, position_group
-            = link_to [position_group], method: :delete, class: 'btn btn-danger btn-simple btn-xs' do
+            = link_to [position_group], method: :delete, class: 'btn btn-danger btn-simple btn-xs button_remove' do
               i.fa.fa-remove
 = render 'shared/pagination'

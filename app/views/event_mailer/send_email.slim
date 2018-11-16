@@ -1,0 +1,7 @@
+p = @greeting
+p = 'Название: ' + @title
+p = 'Тип: ' + @event_type
+p = 'Время проведения: ' + "#{l(@starts_at&.in_time_zone('Moscow'))} - #{l(@ends_at&.in_time_zone('Moscow'))}"
+p = "Место проведения:  #{@place}"
+p = 'Инициатор: ' + @creator
+= link_to('Перейти к просмотру мероприятия', @link) unless @type == 'destroy'

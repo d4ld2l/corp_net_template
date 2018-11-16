@@ -1,0 +1,36 @@
+table.table
+  thead
+    tr
+      th
+      th = sortable_header 'Название группы', 'name'
+      th Тип
+      th = sortable_header 'Количество человек', 'active_accounts'
+      th.text-right Действия
+  tbody#index
+    - @collection.each do |community|
+      tr
+        td = image_tag community.photo.thumb.url if community.photo.present?
+        td = link_to community&.name, [community]
+        td = t(".#{community.c_type}")
+        td = community.account_communities.where(status: :accepted).count
+        td.td-actions.text-right
+          - if current_account.in?(community.account_communities.accounts_in_status(:accepted))
+            = link_to [:unsubscribe, community], method: :post, class: 'btn btn-info btn-simple btn-xs', remote: true, 'data-toggle': 'tooltip', 'data-original-title': 'Выйти из группы' do
+              i.fa.fa-trash
+          - elsif community.closed? && current_account.account_communities.where(community: community).empty?
+            = link_to [:apply, community], method: :post, class: 'btn btn-info btn-simple btn-xs', remote: true, 'data-toggle': 'tooltip', 'data-original-title': 'Подать заявку' do
+              i.fa.fa-check-square
+          - elsif community.opened?
+            = link_to [:subscribe, community], method: :post, class: 'btn btn-info btn-simple btn-xs', remote: true, 'data-toggle': 'tooltip', 'data-original-title': 'Вступить в группу' do
+              i.fa.fa-sign-in
+
+          - if community.account == current_account
+            = link_to [:edit, community], class: 'btn btn-success btn-simple btn-xs' do
+              i.fa.fa-edit
+            = link_to [community], method: :delete, class: 'btn btn-danger btn-simple btn-xs button_remove' do
+              i.fa.fa-remove
+    - if @collection.empty?
+      tr
+        td.text-center colspan='5'
+          h4 Не найдено ни одной группы
+= render 'shared/pagination'

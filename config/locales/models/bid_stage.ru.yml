@@ -1,0 +1,9 @@
+ru:
+  activerecord:
+    models:
+      bid_stage: Статус
+    attributes:
+      bid_stage:
+        name: Название
+        code: Код
+        initial: Начальный

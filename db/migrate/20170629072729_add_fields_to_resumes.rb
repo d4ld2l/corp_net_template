@@ -20,5 +20,7 @@ class AddFieldsToResumes < ActiveRecord::Migration[5.0]
     add_column :resumes, :employment_type, :json
     add_column :resumes, :working_schedule, :json
     add_column :resumes, :comment, :text
+
+    add_reference :resumes, :vacancy, index: true
   end
 end

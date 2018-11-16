@@ -1,0 +1,25 @@
+h1 Кандидат 360
+h3 = @candidate.full_name
+hr
+h4 GitHub
+- if @candidate.info360.info360_source_github
+  p
+    = 'Аккаунт: '
+    = link_to @candidate.info360.info360_source_github.account_url, @candidate.info360.info360_source_github.account_url, target: '_blank'
+  p
+    = 'Количество публичныйх репозиториев: '
+    = @candidate.info360.info360_source_github.info360_source_github_repositories.count
+  p
+    = 'Ищет работу: '
+    - if @candidate.info360.info360_source_github.hire_able.present?
+      = @candidate.info360.info360_source_github.hire_able ? 'Да' : 'Нет'
+  p
+    = 'Дата последней активности: '
+    - if @candidate.info360.info360_source_github.last_events_date
+      = @candidate.info360.info360_source_github.last_events_date&.strftime('%d.%m.%Y')
+    - else
+      = 'Больще 2-х месяцев назад'
+- else
+  p Информация не найдена
+hr
+= link_to 'Назад', candidate_path(@candidate)

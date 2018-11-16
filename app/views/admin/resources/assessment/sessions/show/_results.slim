@@ -1,0 +1,56 @@
+#session-results.tab-pane.fade.in
+  h3 Заполнили анкету
+  table.table.table-bordered
+    thead
+      td ФИО
+      td Дата заполнения
+    tbody
+      - @evaluations.to_a.uniq{|x| x.account_id}.each do |pp|
+        tr
+          td = link_to pp&.account&.full_name, pp&.account
+          td = l(pp.created_at)
+  p
+    | Общее количество оценок:
+    = @result[:evaluations_count]
+  hr
+  - @result[:skills].each do |s|
+    .panel.panel-default
+      .panel-heading
+        = s['name']
+      .panel-body
+        .row
+          .col-md-3
+            table
+              tr
+                td Общая оценка
+                td = s[:avg_score_common]
+              tr
+                td Самооценка
+                td = s[:avg_score_self]
+              tr
+                td Все оценки, кроме самостоятельной
+                td = s[:avg_score_not_self]
+              tr
+                td Оценка руководителей
+                td = s[:avg_score_manager]
+              tr
+                td Оценка коллег
+                td = s[:avg_score_associate]
+              tr
+                td Оценка подчиненных
+                td = s[:avg_score_subordinate]
+              tr
+                td Комментарии
+                td
+                  ul
+                    - s[:comments].each do |c|
+                      li = c.html_safe
+          .col-md-9
+             canvas id="skill_chart_#{s['id']}"
+  .panel.panel-default
+    .panel-heading
+      span Общий график
+    .panel-body
+      canvas#common-skill-chart
+  - if can? :update, resource_class
+    = link_to "Редактировать", edit_assessment_session_path(@resource_instance, results: true), class: 'btn btn-info'

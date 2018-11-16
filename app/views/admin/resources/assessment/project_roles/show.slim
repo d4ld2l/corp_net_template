@@ -1,0 +1,29 @@
+= resource_page_header("Просмотр проектной роли \"#{@resource_instance.name}\"")
+.row
+  .col-md-12
+    table.table.table-bordered
+      tbody
+        tr
+          td Название
+          td = @resource_instance.name
+        tr
+          td Описание
+          td = @resource_instance.description&.html_safe
+        tr
+          td Дата создания
+          td = @resource_instance.created_at
+        tr
+          td Последнее обновление
+          td = @resource_instance.updated_at
+.row
+  .col-md-12
+    h4 Компетенции
+    ul
+      - @resource_instance.skills.each do |i|
+        li = link_to i.name, i
+        br
+.row
+  .col-md-12
+    = link_to "Все роли", assessment_project_roles_path, class: 'btn btn-default'
+    - if can? :update, resource_class
+      = link_to "Редактировать", edit_assessment_project_role_path(@resource_instance), class: 'btn btn-info'

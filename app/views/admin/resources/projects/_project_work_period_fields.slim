@@ -1,0 +1,18 @@
+.nested-fields
+  .panel
+    .panel-body
+      .row
+        .col-md-11
+          .row
+            = f.hidden_field :id
+            .col-md-6
+              = f.input :begin_date, as: :string, size: 20, label: 'Дата начала', input_html: {'data-value': @resource_instance.begin_date, class: 'datepicker-uicker'}
+            .col-md-6
+              = f.input :end_date, as: :string, size: 20, label: 'Дата завершения', input_html: {'data-value': @resource_instance.end_date, class: 'datepicker-uicker'}
+            .col-md-12
+              = f.input :role, label: 'Роль'
+            .col-md-12
+              = f.input :duties, label: 'Обязанности'
+        .col-md-1
+          = link_to_remove_association f, class: 'btn btn-simple btn-danger button_remove' do
+            i.fa.fa-remove

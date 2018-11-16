@@ -1,0 +1,19 @@
+= simple_form_for :q, method: :get do |f|
+  /button.btn.btn-primary type="button" data-toggle="collapse" data-target="#enhanced" style="cursor:pointer" Развернуть поиск
+  /div.collapse#enhanced
+  .row
+    .col-md-6
+      = f.input :service_group_id, collection: ServiceGroup.all.collect { |c| [c.name, c.id] }, input_html: { multiple: true, include_blank: false, class: 'selectpicker', 'data-label' => 'Ничего не выбрано' }, label: 'Категория сервиса'
+    .col-md-6
+      = f.input :state, collection: Service.aasm.states.collect { |c| [t("activerecord.attributes.news_item.state.#{c.name}"), c.name] }, input_html: { multiple: true, include_blank: false, class: 'selectpicker', 'data-label' => 'Ничего не выбрано' }, label: 'Статус'
+  .row
+    .col-md-3
+      = f.input :created_at_from, as: :string, input_html: { 'data-value': params.dig(:q, 'created_at_from').blank? ? '' : Date.strptime(params[:q]['created_at_from'], '%d.%m.%Y'), class: 'datepicker-uicker' }, label: 'Дата создания с'
+    .col-md-3
+      = f.input :created_at_to, as: :string, input_html: { 'data-value': params.dig(:q, 'created_at_to').blank? ? '' : Date.strptime(params[:q]['created_at_to'], '%d.%m.%Y'), class: 'datepicker-uicker' }, label: 'Дата создания по'
+    .col-md-3
+      = f.input :published_at_from, as: :string, input_html: { 'data-value': params.dig(:q, 'published_at_from').blank? ? '' : Date.strptime(params[:q]['published_at_from'], '%d.%m.%Y'), class: 'datepicker-uicker' }, label: 'Дата публикации с'
+    .col-md-3
+      = f.input :published_at_to, as: :string, input_html: { 'data-value': params.dig(:q, 'published_at_to').blank? ? '' : Date.strptime(params[:q]['published_at_to'], '%d.%m.%Y'), class: 'datepicker-uicker' }, label: 'Дата публикации по'
+  = f.submit "Найти", class: 'btn btn-primary'
+  = link_to 'Сбросить', services_path, class: 'btn' if params[:q]

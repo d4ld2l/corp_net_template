@@ -1,7 +1,7 @@
-FROM ruby:2.4.1
+FROM ruby:2.5.1
 ENV LANG C.UTF-8
 
-RUN apt-get update && apt-get install -y postgresql-client nodejs --no-install-recommends nano nfs-kernel-server nfs-common && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y postgresql-client nodejs nano nfs-kernel-server nfs-common cups-pdf libreoffice libreoffice-writer imagemagick-6.q16 libmagick++-6.q16-dev libmagickcore-dev libmagickwand-dev gsfonts ghostscript --no-install-recommends && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app

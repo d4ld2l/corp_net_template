@@ -1,0 +1,44 @@
+table.table.table-bordered
+  tbody
+    tr
+      td Активный цвет
+      td = pretty_value(:color, @ui.active_color)
+    tr
+      td Активный цвет (светлый)
+      td = pretty_value(:color, @ui.active_color_light)
+    tr
+      td Активный цвет (темный)
+      td = pretty_value(:color, @ui.active_color_dark)
+    tr
+      td Базовый цвет
+      td = pretty_value(:color, @ui.base_color)
+    tr
+      td Цвет меню
+      td = pretty_value(:color, @ui.menu_color)
+    tr
+      td Цвет бокового меню
+      td = pretty_value(:color, @ui.side_menu_color)
+    tr
+      td Цвет кнопки верхнего меню
+      td = pretty_value(:color, @ui.head_menu_item)
+    tr
+      td Активный цвет верхнего меню
+      td = pretty_value(:color, @ui.head_menu_item_active)
+    tr
+      td Цвет верхнего меню при выделении
+      td = pretty_value(:color, @ui.head_menu_item_hover)
+    tr
+      td Логотип (пункт меню для перехода на главную страницу)
+      td = image_tag(@ui.main_logo&.url || asset_path('no-image-available.png'))
+    tr
+      td Логотип для страницы авторизации
+      td = image_tag(@ui.signin_logo&.url || asset_path('no-image-available.png'))
+    tr
+      td Изображение для страницы авторизации
+      td = image_tag(@ui.signin_picture&.url || asset_path('no-image-available.png'))
+    tr
+      td Анимация на странице авторизации
+      td = image_tag(@ui.signin_animation&.url || asset_path('no-image-available.png'))
+    tr
+      td Изображение на главной
+      td = image_tag(@ui.main_page_picture&.url || asset_path('no-image-available.png'))

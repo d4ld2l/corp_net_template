@@ -1,0 +1,10 @@
+ru:
+  activerecord:
+    models:
+      setting: Настройка
+    attributes:
+      setting:
+        kind: Тип
+        value: Значение параметра
+        code: Код параметра
+        label: Отображаемое значение

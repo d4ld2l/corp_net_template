@@ -4,9 +4,9 @@ $ ->
   $(".show_login").click showLoginForm
   $(".show_register").click showRegisterForm
 
-  $("form#sign_up_user, form#sign_in_user").bind "ajax:success", (e, data, status, xhr) ->
+  $("form#sign_up_account, form#sign_in_account").bind "ajax:success", (e, data, status, xhr) ->
     if data.success
-      window.location.replace("/");
+      window.location = window.location
     else
       shakeModal(data.errors)
 
@@ -53,9 +53,9 @@ shakeModal =(errors) ->
   html_errors = ''
   if errors
     $.map errors, (value, index) ->
-      html_errors += '<strong>'+index.toString()+'</strong>:</br>'+value.toString()+'</br>'
+      html_errors += '<strong>'+value.toString()+'<strong></br>'
   else
-    html_errors = 'Invalid email/password combination'
+    html_errors = 'Неправильный логин или пароль'
   $('#loginModal .modal-dialog').addClass 'shake'
   $('.error').addClass('alert alert-danger').html html_errors
   $('input[type="password"]').val('');

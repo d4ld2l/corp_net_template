@@ -1,0 +1,15 @@
+= simple_form_for(@resource_instance) do |f|
+  = f.input :legal_unit_id, collection: LegalUnit.all.map{|x| [x.name, x.id]}, label: 'Юридическое лицо', include_blank: false
+  /= f.input :company_id, required: true, collection: Company.all.collect {|x| [x.name, x.id]}, allow_blank: false
+  = f.input :parent_id, collection: Department.where.not(id: @resource_instance.id).collect {|x| [x.name_ru, x.id]}
+  = f.input :manager_id, collection: Account.where.not(id: @resource_instance.id).order(:surname).map {|p| [p.full_name, p.id]}, label: 'Руководитель'
+  = f.input :code, required: true
+  = f.input :name_ru, required: true
+  = f.input :region
+  = f.input :logo, wrapper: :layouts_input_file
+  p
+    - if @resource_instance.new_record?
+      = f.submit "Добавить подразделение", class: 'btn btn-info'
+    - else
+      = f.submit "Обновить", class: 'btn btn-info'
+    = link_to "Отмена", departments_path, class: 'button'

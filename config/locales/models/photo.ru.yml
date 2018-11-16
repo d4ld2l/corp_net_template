@@ -1,0 +1,8 @@
+ru:
+  activerecord:
+    models:
+      photo: Фото файл
+    attributes:
+      photo:
+        file: Файл
+        name: Название файла

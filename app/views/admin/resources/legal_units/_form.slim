@@ -1,0 +1,21 @@
+= simple_form_for(@resource_instance) do |f|
+  = f.input :name, required: true, label: 'Название (сокращенное)'
+  = f.input :full_name, label: 'Название (полное)'
+  = f.input :city, label: 'Город'
+  = f.input :code, label: 'Код юридического лица'
+  = f.input :uuid, label: 'Уникальный идентификатор'
+  = f.input :logo, wrapper: :layouts_input_file, label: 'Логотип'
+  = f.input :legal_address, label: 'Юридический адрес'
+  = f.input :inn_number, label: 'ИНН'
+  = f.input :kpp_number, label: 'КПП'
+  = f.input :ogrn_number, label: 'ОГРН'
+  = f.input :general_director, label: 'Генеральный директор'
+  = f.input :administrative_director, label: 'Заместитель генерального директора по административным вопросам'
+  = f.input :general_accountant, label: 'Главный бухгалтер'
+  = f.input :assistant_id, label: 'Ассистент', collection: Account.all.map {|u| [u.full_name, u.id]}
+  p
+    - if @resource_instance.new_record?
+      = f.submit "Создать юр.лицо", class: 'btn btn-info'
+    - else
+      = f.submit "Обновить", class: 'btn btn-info'
+    = link_to "Отмена", legal_units_path, class: 'button'

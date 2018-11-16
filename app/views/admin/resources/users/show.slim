@@ -1,0 +1,30 @@
+= resource_page_header("Просмотр пользователя #{@resource_instance.email}")
+.row
+  .col-md-12
+    table.table.table-bordered
+      tbody
+        tr
+          td Электронная почта
+          td = @resource_instance.email
+        tr
+          td ФИО
+          td = @resource_instance.full_name
+        tr
+          td Роли
+          td
+            ul
+              - @resource_instance.roles.map(&:name).each do |x|
+                li = x
+        tr
+          td Дата создания
+          td = l(@resource_instance.created_at)
+        tr
+          td Последнее обновление
+          td = l(@resource_instance.updated_at)
+.row
+  .col-md-12
+    = link_to "Все пользователи", accounts_path, class: 'btn btn-default'
+    - if can? :update, @resource_instance
+      = link_to "Редактировать", edit_accounts_path(@resource_instance, update:'data'), class: 'btn btn-info'
+    - if can? :change_password, @resource_instance
+      = link_to "Сменить пароль", edit_accounts_path(@resource_instance, update: 'password'), class: 'btn btn-info'

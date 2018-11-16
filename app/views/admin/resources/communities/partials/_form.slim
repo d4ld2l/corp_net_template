@@ -1,0 +1,18 @@
+= simple_form_for @resource_instance do |f|
+  = f.input :name
+  = f.input :description
+
+  = f.input :tag_list, input_html: { id: 'resource_tag_list' }
+
+  = f.input :c_type, collection: Community.c_types.keys.map { |t| [t(".#{t}"), t]}
+
+  = f.input :photo,
+          wrapper: :layouts_input_file
+  = f.hidden_field :account_id, value: current_account.id
+
+  .pull-right
+    - if @resource_instance.new_record?
+      = f.submit "Создать группу", class: 'btn btn-info'
+    - else
+      = f.submit "Обновить", class: 'btn btn-info'
+    = link_to "Отмена", [:communities], class: 'button'

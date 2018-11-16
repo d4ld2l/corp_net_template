@@ -1,0 +1,48 @@
+<header id="content-header">
+  <h1>Создание резюме</h1>
+</header>
+
+<%= form_for(@resume_exp) do |f| %>
+  <%= render "shared/errors"%>
+  <fieldset>
+    <ol>
+
+    <li class="required">
+        <%= f.label :company_id %>
+        <%= f.select :company_id, Company.all.collect {|c| [c.name, c.id]}, include_blank: false %>
+      </li>
+
+    <li>
+      <%= f.label :position %>
+      <%= f.text_field :position, size: 50 %>
+    </li>
+
+    <li>
+      <%= f.label :start_date %>
+      <%= f.text_field :start_date, size: 50, "class" => 'datepicker' %>      
+    </li>
+
+    <li>
+      <%= f.label :end_date %>
+      <%= f.text_field :end_date, size: 50, "class" => 'datepicker' %>
+    </li>
+
+    <li>
+      <%= f.label :tasks %>
+      <%= f.text_area :tasks %>
+    </li>
+
+    <%= f.hidden_field(:resume_id, :value => @resume_id) %>
+
+    </ol>
+
+    <p>
+      <% if @resume_exp.new_record? %>
+        <%= f.submit "Добавить место работы" %>
+      <% else %>
+        <%= f.submit "Обновить" %>
+      <% end %>
+      <%= link_to "Отмена", resume_experiences_path, class: 'button' %>
+    </p>
+  </fieldset>
+<% end %>

@@ -1,0 +1,28 @@
+<header id="content-header">
+  <h1>Добавить навык</h1>
+</header>
+
+<%= form_for(@skill) do |f| %>
+  <%= render "shared/errors"%>
+  <fieldset>
+    <ol>
+
+    <li class="required">
+        <%= label_tag :skill_id %>
+        <%= f.select :skill_id, options_from_collection_for_select(Skill.all.collect, "id", "name"), {}, {:multiple => true, :class => "chzn-select", :style => "width:450px;" } %>      
+    </li>
+
+    <%= f.hidden_field(:resume_id, :value => @resume_id) %>
+
+    </ol>
+
+    <p>
+      <% if @skill.new_record? %>
+        <%= f.submit "Добавить навык" %>
+      <% else %>
+        <%= f.submit "Обновить" %>
+      <% end %>
+      <%= link_to "Отмена", resumes_path, class: 'button' %>
+    </p>
+  </fieldset>
+<% end %>

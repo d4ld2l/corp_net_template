@@ -1,0 +1,28 @@
+.nested-fields
+  .panel
+    .panel-body
+      .row
+        .col-md-11
+          .row
+            = f.hidden_field :id
+            .col-md-12
+              = f.input :status, collection:  [['Активный', :active], ['Ушел с проекта', :gone]], include_blank: false
+            .col-md-12
+              = f.input :account_id, collection: Account.all.map {|x| [x.full_name, x.id]}, include_blank: false, disabled: f.object&.persisted?
+            .col-md-3
+              = f.input :worked_hours, label: 'Отработанные часы', input_html: {min: 0, step: 1}
+            .col-md-3
+              = f.input :rating, as: :range, label: 'Оценка', input_html:{min:0, max:5, step:1, value:f.object.rating || 0}
+            .col-md-12
+              h4 Периоды работы
+            .col-md-12#project_work_periods
+              = f.simple_fields_for :project_work_periods do |pwp|
+                = render 'project_work_period_fields', f: pwp
+              .links
+                = link_to_add_association 'Добавить период работы', f, :project_work_periods, class: 'btn btn-success'
+          .row
+            .col-md-12
+              = f.input :feedback, label: 'Отзыв'
+        .col-md-1
+          = link_to_remove_association f, class: 'btn btn-simple btn-danger button_remove' do
+            i.fa.fa-remove

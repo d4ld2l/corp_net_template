@@ -1,4 +1,4 @@
-= resource_page_header("Просмотр навыка")
+= resource_page_header('Просмотр компетенции')
 .row
   .col-md-12
     table.table.table-bordered
@@ -7,6 +7,9 @@
           td Название
           td = @resource_instance.name
         tr
+          td Описание
+          td = @resource_instance.description&.html_safe
+        tr
           td Дата создания
           td = @resource_instance.created_at
         tr
@@ -14,6 +17,14 @@
           td = @resource_instance.updated_at
 .row
   .col-md-12
-    = link_to "Все навыки", skills_path, class: 'btn btn-default'
+    h4 Индикаторы
+    ul
+      - @resource_instance.indicators.each do |i|
+        li = i.name
+    br
+
+.row
+  .col-md-12
+    = link_to "Все компетенции", skills_path, class: 'btn btn-default'
     - if can? :update, resource_class
       = link_to "Редактировать", edit_skill_path(@resource_instance), class: 'btn btn-info'

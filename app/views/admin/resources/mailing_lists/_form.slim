@@ -1,0 +1,16 @@
+= simple_form_for(@resource_instance) do |f|
+  = f.input :name, size: 200, label: 'Название'
+  = f.input :description, as: :ckeditor, label: 'Описание'
+  h3 Сотрудники
+  #accounts_mailing_lists
+    = f.simple_fields_for :account_mailing_lists do |cp|
+      = render 'admin/resources/mailing_lists/account_mailing_list_fields', f: cp
+    .links
+      = link_to_add_association 'Добавить', f, :account_mailing_lists, class: 'btn btn-success'
+  /= f.association :accounts, label_method: :full_name, value_method: :id, label: false
+  p
+    - if @resource_instance.new_record?
+      = f.submit "Создать команду", class: 'btn btn-info'
+    - else
+      = f.submit "Обновить", class: 'btn btn-info'
+    = link_to "Отмена", mailing_lists_path, class: 'button'

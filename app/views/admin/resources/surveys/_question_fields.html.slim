@@ -1,0 +1,39 @@
+.nested-fields.survey_question
+  .row.head-container
+    .col-md-4.wrapper.text-left
+      span.head-question
+        span.question_title
+          h4 = 'Вопрос '
+
+    .col-md-8.wrapper.text-right
+      span.head-question
+        = link_to_remove_association f, class: 'btn btn-simple btn-danger icons_head button_remove' do
+          i.fa.fa-remove
+        i.icons_head.toggle-fa-question.fa.fa-chevron-up
+  .slide-up-or-down
+    .row
+      .col-md-12
+        .head-for-span
+          = f.input :wording, as: :ckeditor
+          = f.input :position, as: :hidden, input_html: {value: f.object.position || '1'}
+
+
+    .row
+      .col-md-4
+        .margin-top-10.margin-bottom-30
+          = f.input :image, wrapper: :layouts_input_file
+      .col-md-4
+        = f.input :ban_own_answer
+      .col-md-4
+        = f.input :question_type, collection: i18n_enum(Question.question_types, :question_type), include_blank: false, input_html: {class: 'select_question_type'}
+
+    hr
+    = errors_for f.object, :offered_variants_count
+    #offered_variants.offered_variants
+      = f.simple_fields_for :offered_variants do |offered_variant|
+        = render 'offered_variant_fields', f: offered_variant
+      .links.margin-bottom-10
+        = link_to_add_association 'Добавить вариант ответа', f, :offered_variants, class: 'btn btn-success btn-xs'
+    = errors_for f.object, :offered_variants
+
+  hr

@@ -1,0 +1,28 @@
+= simple_form_for(@resource_instance) do |f|
+  = f.input :name, size: 200, label: 'Название'
+  = f.input :description, as: :ckeditor, label: 'Описание'
+  = f.input :starts_at, as: :string, size: 20, label: 'Дата начала', input_html: {'data-value': @resource_instance&.starts_at, class: 'datetimepicker-uicker'}
+  = f.input :ends_at, as: :string, size: 20, label: 'Дата окончания', input_html: {'data-value': @resource_instance&.ends_at, class: 'datetimepicker-uicker'}
+  = f.input :event_type_id, collection: EventType.all.map{|x| [x.name, x.id]}, label: 'Тип события', include_blank: false
+  = f.input :place, size: 255, label: 'Место проведения'
+  = f.input :available_for_all, as: :boolean, inline_label: true, label: 'Все участники'
+  =
+  h3 Документы
+  #documents.row
+    .col-md-7
+      = f.simple_fields_for :documents do |d|
+        = render 'document_fields', f: d, document: f.object
+      .links
+        = link_to_add_association 'Добавить', f, :documents, class: 'btn btn-success'
+  h3 Участники
+  #accounts
+    = f.simple_fields_for :event_participants do |ep|
+      = render 'event_participant_fields', f: ep, event: f.object
+    .links
+      = link_to_add_association 'Добавить', f, :event_participants, class: 'btn btn-success'
+  p
+    - if @resource_instance.new_record?
+      = f.submit "Создать событие", class: 'btn btn-info'
+    - else
+      = f.submit "Обновить", class: 'btn btn-info'
+    = link_to "Отмена", events_path, class: 'button'

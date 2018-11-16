@@ -1,0 +1,8 @@
+h4 Компетенции
+#skills-container
+  = f.simple_fields_for :session_skills do |i|
+    div.sortable id="#{i.object.position}"
+      = render 'session_skill_fields', f: i
+  - if @resource_instance.status == 'created'
+    .links
+      = link_to_add_association 'Добавить', f, :session_skills, class: 'btn btn-success', id: 'add-skills'

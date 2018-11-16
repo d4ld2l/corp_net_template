@@ -1,28 +1,31 @@
 class EventDecorator < Draper::Decorator
   delegate_all
 
-  def participants
+  def participants_list
     event_participants.map do |ep|
-      profile = ep&.participant&.profile
+      account = ep&.participant
       {
-          email:  ep.email || ep&.participant&.email,
-          photo: profile&.photo,
-          fullname: profile&.full_name,
-          position_name: ep&.participant&.profile&.default_legal_unit_employee&.position&.position&.name_ru,
-          departments_chain: profile&.departments_chain
+          event_participant_id: ep.id, # TODO: delete
+          id: ep.id,
+          account_id: ep&.participant&.id,
+          email:  ep&.email || ep&.participant&.email,
+          photo: account&.photo,
+          fullname: account&.full_name,
+          position_name: account&.default_legal_unit_employee&.position&.position&.name_ru,
+          departments_chain: account&.departments_chain
       }
     end
   end
 
   def created_by
-    user = object.created_by
-    return nil unless user
+    account = object.created_by
+    return nil unless account
     {
-        email:  user&.email,
-        photo: user&.profile&.photo,
-        fullname: user&.profile&.full_name,
-        position_name: user&.profile&.default_legal_unit_employee&.position&.position&.name_ru,
-        departments_chain: user&.profile&.departments_chain
+        email:  account&.email,
+        photo: account&.photo,
+        fullname: account&.full_name,
+        position_name: account&.default_legal_unit_employee&.position&.position&.name_ru,
+        departments_chain: account&.departments_chain
     }
   end
 

@@ -1,0 +1,20 @@
+doctype html
+html
+  head
+    title Корпоративная Социальная Сеть
+    = csrf_meta_tags
+    = stylesheet_link_tag 'application', media: 'all'
+    = javascript_include_tag 'application'
+  body
+    #gon_variables
+      = Gon::Base.render_data
+    = render 'layouts/head_navigation'
+    .container
+      - flash.each do |name, msg|
+        = content_tag(:div, msg, class: "alert alert-info")
+    .custom-container
+      = yield
+  coffee:
+    $ ->
+      $('.datepicker').datepicker({ format: 'dd.mm.yyyy' })
+

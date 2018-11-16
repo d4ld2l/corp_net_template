@@ -1,0 +1,14 @@
+= simple_form_for(@resource_instance) do |f|
+  = f.input :legal_unit_id, collection: LegalUnit.all.map {|x| [x.name, x.id]}, label: 'Юридическое лицо', include_blank: false
+  = f.input :code, required: true
+  = f.input :name_ru, required: true
+  = f.input :description, as: :text
+  = f.input :position_group_code, collection: PositionGroup.all.collect{|x| [x.name_ru, x.code]}
+  = f.input :salary_from
+  = f.input :salary_up
+  p
+    - if @resource_instance.new_record?
+      = f.submit "Добавить должность", class: 'btn btn-info'
+    - else
+      = f.submit "Обновить", class: 'btn btn-info'
+    = link_to "Отмена", positions_path, class: 'button'

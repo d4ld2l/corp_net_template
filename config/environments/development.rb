@@ -13,12 +13,19 @@ Rails.application.configure do
   config.consider_all_requests_local = true
 
   # Enable/disable caching. By default caching is disabled.
-  if Rails.root.join('tmp/caching-dev.txt').exist?
+  # Run rails dev:cache to toggle caching.
+  if Rails.root.join('tmp', 'caching-dev.txt').exist?
     config.action_controller.perform_caching = true
 
     config.cache_store = :memory_store
     config.public_file_server.headers = {
-      'Cache-Control' => 'public, max-age=172800'
+      'Cache-Control' => "public, max-age=#{2.days.to_i}"
+    }
+  elsif ENV['REDIS_URL']
+    config.cache_store = :redis_store, "#{ENV['REDIS_URL']}/0/cache_dev", { expires_in: 90.minutes }
+    config.action_dispatch.rack_cache = {
+        metastore: "#{ENV['REDIS_URL']}/1/metastore",
+        entitystore: "#{ENV['REDIS_URL']}/1/entitystore"
     }
   else
     config.action_controller.perform_caching = false
@@ -26,12 +33,15 @@ Rails.application.configure do
     config.cache_store = :null_store
   end
 
+  # Store uploaded files on the local file system (see config/storage.yml for options)
+  config.active_storage.service = :local
+
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 
   config.action_mailer.perform_caching = false
   config.action_mailer.default_url_options = { host: 'localhost:3000' }
-  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.delivery_method = :letter_opener
   config.action_mailer.smtp_settings = { address: 'localhost', port: 1025 }
 
   # Print deprecation notices to the Rails logger.
@@ -39,6 +49,9 @@ Rails.application.configure do
 
   # Raise an error on page load if there are pending migrations.
   config.active_record.migration_error = :page_load
+
+  # Highlight code that triggered database queries in logs.
+  config.active_record.verbose_query_logs = true
 
   # Debug mode disables concatenation and preprocessing of assets.
   # This option may cause significant delays in view rendering with a large
@@ -55,5 +68,12 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
-  config.action_dispatch.tld_length = 0
+  config.action_dispatch.tld_length = ENV['TLD_LENGHT'].to_i
+
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.bullet_logger = true
+    Bullet.console = true
+  end
+
 end

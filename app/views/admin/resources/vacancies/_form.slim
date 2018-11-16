@@ -1,0 +1,4 @@
+= simple_form_for @resource_instance do |f|
+  = f.input :owner_id, collection: Account.not_blocked.map {|x| [x.full_name, x.id]}, label: 'Исполнитель', include_blank: false
+  = f.submit "Обновить", class: 'btn btn-info'
+  = link_to "Отмена", [@resource_instance], class: 'btn'

@@ -1,0 +1,8 @@
+= resource_page_header("Просмотр исполнителя №#{@resource_instance.id}")
+
+= render 'contact_info_tab', account: @resource_instance.account
+.row
+  .col-md-12
+    = link_to "Все исполнители", [@resource_collection], class: 'btn btn-default'
+    - if can? :update, resource_class
+      = link_to "Редактировать", [:edit, @resource_instance], class: 'btn btn-info'

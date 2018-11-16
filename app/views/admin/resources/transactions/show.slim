@@ -1,0 +1,38 @@
+= resource_page_header("Просмотр транзакции #{@resource_instance.id}")
+
+.row
+  .col-md-12
+    table.table.table-bordered
+      tbody
+        tr
+          td ID
+          td = @resource_instance.id
+        tr
+          td Получатель
+          td = @resource_instance.recipient&.full_name
+        tr
+          td Тип
+          td = t("activerecord.attributes.transaction.kind.#{@resource_instance.kind}")
+        tr
+          td Сумма
+          td = @resource_instance.value
+        tr
+          td Комментарий
+          td = @resource_instance.comment
+        tr
+          td Награда за
+          td = @resource_instance.account_achievement ? @resource_instance.account_achievement&.achievement&.name : '-'
+        tr
+          td Дата создания
+          td = @resource_instance.created_at
+        tr
+          td Последнее обновление
+          td = @resource_instance.updated_at
+
+.row
+  .col-md-12
+    = link_to "Все транзакции", transactions_path, class: 'btn btn-default'
+    - if can? :update, resource_class
+      = link_to "Редактировать", edit_transaction_path(@resource_instance), class: 'btn btn-info'
+    - if can? :manage, @resource_instance
+      = link_to 'Отменить', [@resource_instance], method: :delete, class: 'btn btn-info button_remove'

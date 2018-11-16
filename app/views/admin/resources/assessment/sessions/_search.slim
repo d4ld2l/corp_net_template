@@ -1,0 +1,15 @@
+= simple_form_for :q, method: :get do |f|
+  .row
+    .col-md-12
+      = f.input :q, label: 'Поиск'
+  .row
+    .col-md-6
+      = f.input :kind,
+              collection: [['Оценка 360', 'a360']],
+              input_html: {multiple: true, include_blank: false, class: 'selectpicker', 'data-label' => 'Ничего не выбрано'}, label: 'Тип оценочной сессии'
+    .col-md-6
+      = f.input :state,
+              collection: Assessment::Session.aasm.states.collect {|c| [t("activerecord.attributes.assessment_session.status.#{c.name}"), c.name]},
+              input_html: {multiple: true, include_blank: false, class: 'selectpicker', 'data-label' => 'Ничего не выбрано'}, label: 'Статус'
+  = f.submit "Найти", class: 'btn btn-primary'
+  = link_to 'Сбросить', assessment_sessions_path, class: 'btn' if params[:q]

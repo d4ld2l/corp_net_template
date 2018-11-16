@@ -1,0 +1,47 @@
+---
+- login: atest_user
+  email: atest_user@phoenix.ru
+  roles:
+    - finance
+  name: Сгибальщик
+  surname: Бендер
+  middlename: Родригес
+  password: qwerty$4
+  password_confirmation: qwerty$4
+  confirmed_at: Time.current
+  status: :active
+- login: atest_recruiter
+  email: atest_recruiter@phoenix.ru
+  roles:
+    - recruitment_general_recruiter
+    - assistant
+  name: Вселенский
+  surname: Аннигилятор
+  middlename: Ландшафтный
+  password: qwerty$4
+  password_confirmation: qwerty$4
+  confirmed_at: Time.current
+  status: :active
+- login: atest_manager
+  email: atest_manager@phoenix.ru
+  roles:
+    - recruitment_manager
+    - assistant
+  name: Алекс
+  surname: Робокоп
+  middlename: Мерфи
+  password: qwerty$4
+  password_confirmation: qwerty$4
+  confirmed_at: Time.current
+  status: :active
+- login: atest_admin
+  email: atest_admin@phoenix.ru
+  roles:
+    - admin
+  name: Громозека
+  surname: Лиловый
+  middlename: Шар
+  password: qwerty$4
+  password_confirmation: qwerty$4
+  confirmed_at: Time.current
+  status: :active

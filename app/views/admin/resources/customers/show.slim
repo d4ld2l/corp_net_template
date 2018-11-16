@@ -14,6 +14,54 @@
           td = @resource_instance.updated_at
 .row
   .col-md-12
+    h2 Контрагенты
+    table.table
+      thead
+        tr
+          th.col-md-4 ФИО
+          th.col-md-4 Должность
+          th.col-md-4 Ответственный
+      tbody
+        - @resource_instance.counterparties.each do |u|
+          tr
+            td = u.name
+            td = u.position
+            td = u.responsible? ? "Да" : ""
+.row
+  .col-md-12
+    h2 Контактные лица
+    table.table
+      thead
+        tr
+          th.col-md-2 ФИО
+          th.col-md-1 Должность
+          th.col-md-1 Город
+          th.col-md-2 Телефоны
+          th.col-md-2 Электронная почта
+          th.col-md-2 Месседжеры
+          th.col-md-1 Скайп
+          th.col-md-1 Комментарий
+      tbody
+        - @resource_instance.customer_contacts.each do |u|
+          tr
+            td = u.name
+            td = u.position
+            td = u.city
+            td = u.contact_phones.map(&:number).join(', ')
+            td = u.contact_emails.map(&:email).join(', ')
+            td = u.contact_messengers.map{|x| x.phones.map {|y| "#{y}(#{x.name})"}}.join(', ')
+            td = u.skype
+            td
+              ul
+                - u.comments.each do |c|
+                  li
+                    = c.account&.full_name
+                    = ": "
+                    = c.body
+.row
+  .col-md-12
     = link_to "Все заказчики", customers_path, class: 'btn btn-default'
     - if can? :update, resource_class
       = link_to "Редактировать", edit_customer_path(@resource_instance), class: 'btn btn-info'
+    - if can? :manage, @resource_instance
+      = link_to 'Удалить', [@resource_instance], method: :delete, class: 'btn btn-info button_remove'

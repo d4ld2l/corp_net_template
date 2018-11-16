@@ -1,0 +1,41 @@
+= resource_page_header("Просмотр должности #{@resource_instance.name_ru}")
+.row
+  .col-md-12
+    table.table.table-bordered
+      tbody
+        tr
+          td Название
+          td = @resource_instance.name_ru
+        tr
+          td Юрлицо
+          td
+            - if @resource_instance.legal_unit
+              = link_to @resource_instance.legal_unit&.name, @resource_instance.legal_unit
+        tr
+          td Код
+          td = @resource_instance.code
+        tr
+          td Описание
+          td = @resource_instance.description
+        tr
+          td Группа позиций
+          td = @resource_instance.position_group&.name_ru
+        tr
+          td Зарплатная вилка
+          td
+            = @resource_instance.salary_from || '...'
+            |  -
+            = @resource_instance.salary_up || '...'
+        tr
+          td Дата создания
+          td = l(@resource_instance.created_at)
+        tr
+          td Последнее обновление
+          td = l(@resource_instance.updated_at)
+.row
+  .col-md-12
+    = link_to "Все должности", positions_path, class: 'btn btn-default'
+    - if can? :update, resource_class
+      = link_to "Редактировать", edit_position_path(@resource_instance), class: 'btn btn-info'
+    - if can? :manage, @resource_instance
+      = link_to 'Удалить', [@resource_instance], method: :delete, class: 'btn btn-info button_remove'

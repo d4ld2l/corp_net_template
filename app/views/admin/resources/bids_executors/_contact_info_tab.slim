@@ -1,0 +1,25 @@
+h4 Контактные данные
+table.table.table-th-block
+  thead
+    tr
+      th.col-md-4
+      th
+  tbody
+    tr
+      td.active ФИО
+      td = account&.full_name
+    tr
+      td.active = Account.human_attribute_name(:email)
+      td = account&.email_address
+    tr
+      td.active = resource_class.human_attribute_name(:email_work)
+      td = account&.default_legal_unit_employee&.email_work
+    tr
+      td.active = resource_class.human_attribute_name(:email_private)
+      td = account&.preferred_email
+    tr
+      td.active = resource_class.human_attribute_name(:phone_number_private)
+      td = account&.preferred_phone
+    tr
+      td.active = resource_class.human_attribute_name(:skype)
+      td = account&.skype

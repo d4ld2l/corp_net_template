@@ -1,0 +1,44 @@
+h4 Участники от Лиги
+table.table.table-bordered
+  tbody
+    tr
+      td Название организации
+      td = @resource_instance.legal_unit&.full_name
+    tr
+      td Код проекта
+      td = @resource_instance.information_about_participant.project&.charge_code
+    tr
+      td Участники
+      td
+        table.table.table-bordered
+          thead
+            th ФИО
+            th Должность
+            th Ответственный
+          tbody
+            - @resource_instance.information_about_participant.participants.each do |p|
+              tr
+                td = p.account&.full_name
+                td = p.position
+                td = p.responsible? ? 'Да' : 'Нет'
+
+h4 Приглашенные участники
+table.table.table-bordered
+  tbody
+    tr
+      td Название организации
+      td = @resource_instance.information_about_participant.organization_name
+    tr
+      td Участники
+      td
+        table.table.table-bordered
+          thead
+            th ФИО
+            th Должность
+            th Ответственный
+          tbody
+            - @resource_instance.information_about_participant.counterparties.each do |p|
+              tr
+                td = p.name
+                td = p.position
+                td = p.responsible? ? 'Да' : 'Нет'

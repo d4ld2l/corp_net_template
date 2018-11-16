@@ -1,0 +1,23 @@
+ru:
+  activerecord:
+    models:
+      assessment_session: Оценочная сессия
+      assessment_sessions: Оценочные сессии
+    attributes:
+      assessment_session:
+        name: Название
+        account_id: Оцениваемый
+        project_role_id: Проектная роль
+        description: Описание
+        final_step_text: Текст завершающего шага
+        logo: Эмблема
+        color: Фон
+        status:
+          created: Создана
+          in_progress: Проводится
+          completed: Завершена
+          closed: Закрыта
+        kind:
+          a360: Оценка 360
+        rating_scale:
+          six: 6 баллов

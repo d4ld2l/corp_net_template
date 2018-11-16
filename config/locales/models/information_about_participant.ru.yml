@@ -1,0 +1,8 @@
+ru:
+  activerecord:
+    models:
+      information_about_participant: Информация об участниках
+    attributes:
+      information_about_participant:
+        organization_name: Название организации
+        project_id: Код проекта

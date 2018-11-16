@@ -4,8 +4,14 @@
     table.table.table-bordered
       tbody
         tr
-          td Название
+          td Название (для отображения)
           td = @resource_instance.name
+        tr
+          td Название (полное)
+          td = @resource_instance.full_name
+        tr
+          td Город
+          td = @resource_instance.city
         tr
           td Код
           td = @resource_instance.code
@@ -13,8 +19,29 @@
           td Иникальный идентификатор
           td = @resource_instance.uuid
         tr
-          td Лого
-          td = image_tag(@resource_instance.logo)
+          td Логотип
+          td = image_tag(@resource_instance.logo&.url) if @resource_instance.logo.present?
+        tr
+          td Юридический адрес
+          td = @resource_instance.legal_address
+        tr
+          td ИНН
+          td = @resource_instance.inn_number
+        tr
+          td КПП
+          td = @resource_instance.kpp_number
+        tr
+          td ОГРН
+          td = @resource_instance.ogrn_number
+        tr
+          td Генеральный директор
+          td = @resource_instance.general_director
+        tr
+          td Заместитель генерального директора по административным вопросам
+          td = @resource_instance.administrative_director
+        tr
+          td Главный бухгалтер
+          td = @resource_instance.general_accountant
         tr
           td Дата создания
           td = l(@resource_instance.created_at)
@@ -32,7 +59,7 @@
       tbody
         - @resource_instance.legal_unit_employees.each do |x|
           tr
-            td = link_to(x&.profile&.full_name || '', x&.profile)
+            td = link_to(x&.account&.full_name || '', x&.account)
             td = x&.legal_unit_employee_position&.position&.name_ru
 .row
   .col-md-12
@@ -40,3 +67,5 @@
     - if can? :update, resource_class
       = link_to "Редактировать", [:edit, @resource_instance], class: 'btn btn-info'
       = link_to "Редактировать сотрудников", [:edit_employees, @resource_instance], class: 'btn btn-info'
+    - if can? :manage, @resource_instance
+      = link_to 'Удалить', [@resource_instance], method: :delete, class: 'btn btn-info button_remove'

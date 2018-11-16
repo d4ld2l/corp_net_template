@@ -8,7 +8,7 @@ class Admin::Resources::CommunitiesController < Admin::ResourceController
                                       :create_news, :update_news, :render_form, :apply]
   before_action :set_resource, only: [:edit, :update, :show, :destroy,
                                       :subscribe, :unsubscribe, :news_index, :create_news,
-                                      :allowed_states, :change_state, :user_index, :render_form,
+                                      :allowed_states, :change_state, :accounts_index, :render_form,
                                       :update_news, :apply, :search_news_by_tag]
   before_action :set_collection, only: [:index, :subscribe, :unsubscribe, :apply]
   before_action :init_news, only: [:show, :create_news]
@@ -17,13 +17,30 @@ class Admin::Resources::CommunitiesController < Admin::ResourceController
 
   include Paginatable
   def create
-    @resource_instance = current_user.communities.build(resource_params)
-    @resource_instance.communities_users.build(user: current_user)
+    @resource_instance = current_account.communities.build(resource_params)
+    @resource_instance.account_communities.build(account: current_account)
     super
   end
 
+  def index 
+    if params[:sort_by] and not params[:q]
+
+      if params[:sort_by] == 'active_accounts'
+        @collection = @collection
+          .left_joins(:account_communities)
+          .where("account_communities.status = ?", 'accepted')
+          .group(:id)
+          .reorder("COUNT(account_communities.id) #{@sort_order}")
+      else 
+        order_settings = params[:sort_by] + ' ' + @sort_order
+        @collection = @collection.reorder(order_settings)
+      end
+
+    end  
+  end 
+
   def subscribe
-    sub = current_user.communities_users.where(community: @resource_instance).first_or_initialize
+    sub = current_account.account_communities.where(community: @resource_instance).first_or_initialize
     sub.assign_attributes(status: :accepted)
     sub.save
 
@@ -31,12 +48,12 @@ class Admin::Resources::CommunitiesController < Admin::ResourceController
   end
 
   def unsubscribe
-    current_user.communities_users.where(community: @resource_instance).first.update(status: :deleted)
+    current_account.account_communities.where(community: @resource_instance).first.update(status: :deleted)
     respond_with @collection
   end
 
   def apply
-    sub = @resource_instance.communities_users.where(user: current_user).first_or_initialize
+    sub = @resource_instance.account_communities.where(account: current_account).first_or_initialize
     sub.assign_attributes(status: :expected)
     sub.save
     flash[:notice] = 'Заявка подана, ожидайте'
@@ -44,7 +61,7 @@ class Admin::Resources::CommunitiesController < Admin::ResourceController
   end
 
   def create_news
-    @news = @resource_instance.news_items.build(news_item_params.merge(user: current_user))
+    @news = @resource_instance.news_items.build(news_item_params.merge(account: current_account))
     @news.save
     render
   end
@@ -67,9 +84,9 @@ class Admin::Resources::CommunitiesController < Admin::ResourceController
     render
   end
 
-  def user_index
-    @users = @resource_instance.users
-    respond_with @users
+  def accounts_index
+    @accounts = @resource_instance.accounts
+    respond_with @accounts
   end
 
   def search_news_by_tag
@@ -93,23 +110,23 @@ class Admin::Resources::CommunitiesController < Admin::ResourceController
   private
 
   def permitted_attributes
-    [:name, :description, :c_type, :photo, :user_id, :tag_list, { documents: [] }]
+    [:name, :description, :c_type, :photo, :account_id, :tag_list, { documents: [] }]
   end
 
   def association_chain
-    super.includes(:users).order(created_at: :desc)
+    super.includes(:accounts).reorder(created_at: :desc)
   end
 
   def init_news
-    @news = @resource_instance.news_items.build(user: current_user)
+    @news = @resource_instance.news_items.build(author: current_account)
   end
 
   def init_notification
-    @notification = @resource_instance.notifications.build(user: current_user)
+    @notification = @resource_instance.notifications.build(account: current_account)
   end
   
   def init_comment
-    @comment = current_user.comments.build
+    @comment = current_account.comments.build
   end
 
   def news_item_params

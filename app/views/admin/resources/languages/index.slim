@@ -1,0 +1,26 @@
+h2 Список языков
+- if can? :create, resource_class
+  p = link_to 'Создать', new_language_path, :class => "btn btn-primary"
+table.table
+  thead
+    tr
+      th.col-md-3 = sortable_header 'Название', 'name'
+      / th.col-md-3 = sortable_header 'Кол-во специализаций', 'count_specs'
+      th.col-md-2 Дата создания
+      th.col-md-2 Дата обновления
+      th.col-md-2 Действия
+  tbody#index
+    - @collection.each do |lang|
+      tr
+        td = link_to lang.name, lang
+        / td = area.professional_specializations.count
+        td = l(lang.created_at)
+        td = l(lang.updated_at)
+        td
+          - if can? :update, resource_class
+            = link_to [:edit, lang], class: 'btn btn-success btn-simple btn-xs' do
+              i.fa.fa-edit
+          - if can? :delete, lang
+            = link_to [lang], method: :delete, class: 'btn btn-danger btn-simple btn-xs button_remove' do
+              i.fa.fa-remove
+= render 'shared/pagination'

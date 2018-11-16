@@ -15,12 +15,16 @@ ru:
       long: "%d.%m.%Y %H:%M"
       default: "%d.%m.%Y"
       without_year: "%d.%m"
+      long_date: "«%d» %B %Y"
+      with_and: "%d.%m.%Y в %H:%M"
   time:
     formats:
       time: "%H:%M"
       date: "%d.%m.%Y"
       default: "%d.%m.%Y %H:%M"
       without_year: "%d.%m"
+      long_date: "«%d» %B %Y"
+      with_and: "%d.%m.%Y в %H:%M"
   edit: Редактировать
   create: Создать
 

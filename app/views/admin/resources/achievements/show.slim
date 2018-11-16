@@ -1,0 +1,38 @@
+= resource_page_header("Просмотр наград #{@resource_instance.name}")
+
+.row
+  .col-md-12
+    table.table.table-bordered
+      tbody
+        tr
+          td Название
+          td = @resource_instance.name
+        tr
+          td Код
+          td = @resource_instance.code
+        tr
+          td Вознаграждение
+          td = @resource_instance.pay
+        tr
+          td Включено?
+          td = @resource_instance.enabled? ? 'Да' : 'Нет'
+        tr
+          td Можно получить несколько раз?
+          td = @resource_instance.can_achieve_again? ? 'Да' : 'Нет'
+        tr
+          td Дата создания
+          td = l(@resource_instance.created_at)
+        tr
+          td Последнее обновление
+          td = l(@resource_instance.updated_at)
+
+- if flash[:seeds].is_a? Array
+  ul.text-success
+    - flash[:seeds].each do |seed_result|
+      li= seed_result
+
+.row
+  .col-md-12
+    = link_to "Все награды", achievements_path, class: 'btn btn-default'
+    - if can? :update, resource_class
+      = link_to "Редактировать", edit_achievement_path(@resource_instance), class: 'btn btn-info'

@@ -1,0 +1,19 @@
+.nested-fields
+  .panel
+    .panel-body
+      .row
+        .col-md-10
+          .row
+            .col-md-12
+              - if f.object&.persisted? && f.object&.file&.present?
+                = link_to 'Скачать', f.object&.file.url
+                = f.hidden_field :file
+              - else
+                = f.input :file, wrapper: :layouts_input_file, label: 'Файл'
+              = f.input :name, label: 'Название файла'
+              /= f.hidden_field :document_attachable_id, value: f.object&.document_attachable&.id
+              /= f.hidden_field :document_attachable_type, value: f.object&.document_attachable&.model_name.to_s
+              = f.hidden_field :id
+        .col-md-1
+          = link_to_remove_association f, class: 'btn btn-simple btn-danger button_remove' do
+            i.fa.fa-remove

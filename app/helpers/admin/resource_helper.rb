@@ -26,7 +26,7 @@ module Admin::ResourceHelper
     end
   end
 
-  def link_to_profile(label, object, html = {})
+  def link_to_account(label, object, html = {})
     if link ||= object.last && link_to(label, object, html)
       link
     else

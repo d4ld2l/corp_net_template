@@ -1,0 +1,23 @@
+h2 Модули
+table.table
+  thead
+    tr
+      th Название
+      th Включен?
+      th Корневой модуль
+      th Действия
+  tbody
+    - @collection.each do |setting|
+      tr
+        td = setting.name
+        td = setting.enabled? ? 'Да' : 'Нет'
+        td = setting.core_component_name
+        td
+          - if can? :update, resource_class
+            = link_to [:edit, setting], class: 'btn btn-success btn-simple btn-xs' do
+              i.fa.fa-edit
+            = link_to [:toggle, setting], method: :post, class: 'btn btn-success btn-simple btn-xs' do
+              - if setting.enabled?
+                i.fa.fa-toggle-on
+              - else
+                i.fa.fa-toggle-off

@@ -1,0 +1,96 @@
+nav.navbar.navbar-default role="navigation"
+  .container-fluid
+    .navbar-header
+      button.navbar-toggle data-target="#bs-example-navbar-collapse-1" data-toggle="collapse" type="button"
+        span.sr-only Toggle navigation
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      = link_to 'Реактор', root_path, :class => "navbar-brand"
+    .collapse.navbar-collapse
+      .nav.navbar-nav
+        - if account_signed_in? && current_account.supervisor?
+          = form_tag set_tenant_path do
+            = select_tag :company_id, options_from_collection_for_select(Company.all, :id, :name, current_tenant&.id), include_blank: false, class: 'selectpicker', id: 'supervisor_company_id'
+      ul.nav.navbar-nav.navbar-right
+        li.dropdown
+          a.dropdown-toggle data-toggle="dropdown" href="#"
+            i.material-icons account_circle
+            | Профиль
+            b.caret
+          ul.dropdown-menu
+            - if account_signed_in?
+              li
+                = link_to 'Мой профиль', my_account_path
+              li
+                = link_to 'Выйти', destroy_account_session_path, :method => :delete
+            - else
+              li
+                = link_to 'Войти', '#', class: 'btn_login'
+              li
+                = link_to 'Зарегистрироваться', '#', class: 'btn_register'
+    #bs-example-navbar-collapse-1.collapse.navbar-collapse
+      ul.nav.navbar-nav
+        - if account_signed_in?
+          - if ce?(:shr_news)
+            = head_navigation_dropdown('Новости') do
+              = head_navigation_element(NewsItem, 'Новости', [:news_items])
+              = head_navigation_element(NewsCategory, 'Категории новостей', [:news_categories])
+          - if ce?(:shr_services)
+            = head_navigation_dropdown('Сервисы') do
+              = head_navigation_element(Service, 'Сервисы', [:services])
+              = head_navigation_element(Bid, 'Заявки', [:bids]) if ce?(:shr_bids)
+              = head_navigation_element(BidStagesGroup, 'Статусная модель', [:bid_stages_groups]) if ce?(:shr_bids)
+              = head_navigation_element(BidsExecutor, 'Исполнители заявок', [:bids_executors]) if ce?(:shr_bids)
+              = head_navigation_element(ServiceGroup, 'Категории сервисов', [:service_groups])
+          = head_navigation_element(Survey, 'Опросы', [:surveys]) if ce?(:shr_surveys)
+          = head_navigation_dropdown('Компания') do
+            = head_navigation_element(Account, 'Сотрудники', [:accounts])
+            = head_navigation_element(Project, 'Проекты', [:projects]) if ce?(:shr_projects)
+            = head_navigation_element(Customer, 'Заказчики', [:customers]) if ce?(:shr_projects)
+            = head_navigation_element(LegalUnit, 'Юридические лица', [:legal_units]) if ce?(:shr_org)
+            = head_navigation_element(Office, 'Офисы', [:offices]) if ce?(:shr_core)
+            = head_navigation_element(PositionGroup, 'Группы позиций', [:position_groups]) if ce?(:shr_org)
+            = head_navigation_element(Position, 'Должности', [:positions]) if ce?(:shr_org)
+            = head_navigation_element(Department, 'Подразделения', [:departments]) if ce?(:shr_org)
+            = head_navigation_element(ContractType, 'Типы договоров', [:contract_types], true)
+            = head_navigation_element(Skill, 'Навыки', [:skills], true)
+          - if can?(:access_submodule, :assessment) && ce?(:shr_assessment)
+            = head_navigation_dropdown('Оценка') do
+              = head_navigation_element(Assessment::Session, 'Оценочные сессии', [:assessment_sessions], true)
+              = head_navigation_element(Skill, 'Компетенции', [:skills], true)
+              = head_navigation_element(Assessment::ProjectRole, 'Проектные роли', [:assessment_project_roles], true)
+          - if can?(:access_submodule, :gamification) && ce?(:shr_game)
+            = head_navigation_dropdown('Геймификация') do
+              = head_navigation_element(Achievement, 'Награды', [:achievements], true)
+              = head_navigation_element(AchievementGroup, 'Группы наград', [:achievement_groups], true)
+              = head_navigation_element(Transaction, 'Операции', [:transactions], true)
+          - if can?(:access_submodule, :hr) && ce?(:recruitment_core)
+            = head_navigation_dropdown('Рекрутинг') do
+              = head_navigation_element(Vacancy, 'Вакансии', [:vacancies], true)
+              = head_navigation_element(Candidate, 'Кандидаты', [:candidates], true)
+              = head_navigation_element(Language, 'Языки', [:languages], true)
+              = head_navigation_element(LanguageLevel, 'Уровни владения языками', [:language_levels], true)
+              = head_navigation_element(ProfessionalArea, 'Профессиональные области', [:professional_areas])
+              = head_navigation_element(ResumeSource, 'Источники резюме', [:resume_sources], true)
+              = head_navigation_element(EducationLevel, 'Уровни образования', [:education_levels], true)
+              = head_navigation_element(Skill, 'Компетенции', [:skills], true)
+          - if ce?(:shr_calendar)
+            = head_navigation_dropdown('Календарь') do
+              = head_navigation_element(Event, 'События', [:events])
+              = head_navigation_element(EventType, 'Категории событий', [:event_types])
+          - if ce?(:shr_communities)
+            = head_navigation_dropdown('Сообщества') do
+              = head_navigation_element(Community, 'Группы', [:communities])
+          = head_navigation_dropdown('Администрирование') do
+            = head_navigation_element(Permission, 'Бизнес-функции', [:permissions])
+            = head_navigation_element(Role, 'Роли', [:roles])
+            = head_navigation_element(MailingList, 'Команды', [:mailing_lists]) if ce?(:shr_teams)
+            = head_navigation_element(nil, 'Настройки', all_settings_path)
+            = head_navigation_element(SettingsGroup, 'Группы настроек', [:settings_groups])
+            = head_navigation_element(nil, 'Администрирование сервера', [:server_administration])
+          - if can? :see_menu, :superadmin
+            = head_navigation_dropdown('Суперадминка') do
+              = head_navigation_element(Company, 'Компании', [:companies])
+              = head_navigation_element(Component, 'Включение модулей', [:components])
+              = head_navigation_element(AdminSetting, 'Настройки кластера', [:admin_settings])

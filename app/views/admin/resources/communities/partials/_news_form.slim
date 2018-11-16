@@ -1,0 +1,6 @@
+= simple_form_for [@community, @news], url: [:create_news, @community], remote: true do |f|
+  = f.input :title
+  = f.input :body
+  = f.input :preview
+  = f.input :tag_list, input_html: { id: 'resource_tag_list' }
+  = f.button :submit, @community.account == current_account ? 'Создать новость' : 'Предложить новость', class: 'btn btn-primary btn-xs'

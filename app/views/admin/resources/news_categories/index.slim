@@ -2,13 +2,13 @@ h2 Список категорий
 - if can? :create, resource_class
   p = link_to 'Создать', [:new, :news_category], class: 'btn btn-primary'
 /p
-/  = render 'shared/quick_search', path: users_admin_index_path
+/  = render 'shared/quick_search', path: accounts_path
 
 table.table
   thead
     tr
       th.col-md-1.text-center #
-      th.col-md-8 Название
+      th.col-md-8 = sortable_header 'Название', 'name'
       th.col-md-3.text-right Действия
   tbody#index
     - @collection.each do |category|
@@ -16,12 +16,10 @@ table.table
         td.text-center= category.id
         td = link_to category.name, [category]
         td.td-actions.text-right
-          = link_to [category], class: 'btn btn-info btn-simple btn-xs-lnk' do
-            i.fa.fa-user
           - if can? :update, category
             = link_to [:edit, category], class: 'btn btn-success btn-simple btn-xs-lnk' do
               i.fa.fa-edit
           - if can? :destroy, category
-            = link_to [category], method: :delete, class: 'btn btn-danger btn-simple btn-xs-lnk' do
+            = link_to [category], method: :delete, data: {confirm: "Все новости в этой категории будут удалены. Вы уверены?"}, class: 'btn btn-danger btn-simple btn-xs-lnk button_remove' do
               i.fa.fa-remove
 = render 'shared/pagination'

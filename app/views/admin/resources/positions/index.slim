@@ -1,0 +1,30 @@
+h2 Список должностей
+- if can? :create, resource_class
+  p = link_to 'Создать', new_position_path, :class => "btn btn-primary"
+table.table
+  thead
+    tr
+      th.col-md-3 = sortable_header 'Код', 'code'
+      th.col-md-3 = sortable_header 'Название', 'name_ru'
+      th.col-md-1 Дата создания
+      th.col-md-1 Дата обновления
+      th.col-md-2 Юрлицо
+      th.col-md-2 Действия
+  tbody#index
+    - @collection.each do |position|
+      tr
+        td = link_to position.code, position
+        td = position.name_ru
+        td = l(position.created_at)
+        td = l(position.updated_at)
+        td
+          - if position.legal_unit
+            = link_to position.legal_unit&.name, position.legal_unit
+        td
+          - if can? :update, resource_class
+            = link_to [:edit, position], class: 'btn btn-success btn-simple btn-xs' do
+              i.fa.fa-edit
+          - if can? :delete, position
+            = link_to [position], method: :delete, class: 'btn btn-danger btn-simple btn-xs button_remove' do
+              i.fa.fa-remove
+= render 'shared/pagination'

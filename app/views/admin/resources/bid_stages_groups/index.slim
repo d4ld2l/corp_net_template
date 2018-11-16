@@ -1,0 +1,22 @@
+h2 Список статусных групп заявок
+- if can? :create, resource_class
+  p = link_to 'Создать', [:new, :bid_stages_group], class: 'btn btn-primary'
+
+table.table
+  thead
+    tr
+      th.col-md-1 ID
+      th = sortable_header 'Название', 'name'
+      th Дата создания
+      th.col-md-3 Действия
+  tbody#index
+    - @collection.each do |bid_stage_group|
+      tr
+        td = link_to bid_stage_group.id, bid_stage_group
+        td = link_to bid_stage_group.name, bid_stage_group
+        td = l(bid_stage_group.created_at, format: :date)
+        td
+          = index_edit_button(bid_stage_group) if can? :update, resource_class
+          = index_delete_button(bid_stage_group) if can? :destroy, resource_class
+
+/= render 'shared/pagination'

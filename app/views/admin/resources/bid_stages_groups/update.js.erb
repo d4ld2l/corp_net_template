@@ -1,0 +1,2 @@
+$('#form-wrapper').html('<%=j render "step_#{@current_step}", options: { url: url_for([@resource_instance, from: @current_step, validate: true]), method: :patch } %>');
+$('#form-wrapper').trigger('form_changed', { step: '<%=j "step_#{@current_step}" %>' });

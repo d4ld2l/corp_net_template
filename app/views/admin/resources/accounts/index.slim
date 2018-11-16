@@ -1,0 +1,45 @@
+h2 Список сотрудников
+p
+  = link_to 'Создать', [:new, :account], class: 'btn btn-primary'
+  = link_to 'Импорт', '#import',  data: { toggle: 'modal', target: '#import'}, class: 'btn btn-primary'
+  = link_to 'Экспорт', '#export',  data: { toggle: 'modal', target: '#export'}, class: 'btn btn-primary'
+  = render 'shared/quick_search', path: accounts_path
+  = render 'status_tabs'
+
+table.table
+  thead
+    tr
+      th.col-md-1 Фото сотрудника
+      th.col-md-3
+        = sortable_header "ФИО", 'surname'
+      th.col-md-2
+        = sortable_header "Email", 'accounts.email'
+      th.col-md-2
+        = sortable_header "Юр. лицо", 'legal_units.name'
+      th.col-md-1 Роли
+      - if can? :block, Account
+        th.col-md-2 Действия
+  tbody#index
+    - @collection.each do |account|
+      tr
+        td = link_to(image_tag(account&.photo&.thumb&.url), [account])
+        td = link_to(account.full_name, [account])
+        td = mail_to account.email
+        td = link_to account&.default_legal_unit_employee&.legal_unit&.name if account&.default_legal_unit_employee&.legal_unit
+        td
+          ul
+            - account.roles.each do |role|
+              li = role.name
+        td.td-actions.text-right
+          nobr
+            - if can? :update, Account
+              = link_to edit_account_path(account, update: 'password'), class: 'btn btn-info btn-simple btn-xs', rel: "tooltip", title: "Сменить пароль" do
+                i.fa.fa-account-secret
+              = link_to edit_account_path(account), class: 'btn btn-success btn-simple btn-xs' do
+                i.fa.fa-edit
+            - if can? :block, Account
+              = change_account_status_button(account)
+
+= render 'shared/pagination'
+= render 'import'
+= render 'export'

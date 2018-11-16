@@ -1,0 +1,24 @@
+h2 Список категорий сервисов
+- if can? :create, resource_class
+  p = link_to 'Создать', [:new, :service_group], class: 'btn btn-primary'
+table.table
+  thead
+    tr
+      th.col-md-2 ID
+      th.col-md-4 Название категори сервиса
+      th.col-md-2 Дата и время создания
+      th.col-md-2 Действия
+  tbody#index
+    - @collection.each do |service_group|
+      tr
+        td = service_group.id
+        td = link_to service_group&.name, service_group
+        td = l(service_group.created_at) if service_group.created_at
+        td
+          - if can? :update, service_group
+            = link_to [:edit, service_group], class: 'btn btn-success btn-simple btn-xs', 'data-toggle': 'tooltip', 'data-original-title': 'Редактировать' do
+              i.fa.fa-edit
+            - if can? :manage, service_group
+              = link_to [service_group], method: :delete, class: 'btn btn-danger btn-simple btn-xs button_remove', 'data-toggle': 'tooltip', 'data-original-title': 'Удалить' do
+                i.fa.fa-remove
+= render 'shared/pagination'

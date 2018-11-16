@@ -1,0 +1,12 @@
+ul#settingsTab.nav.nav-pills
+  li.active
+    a data-toggle="tab" href="#all" Все
+  - @common_groups.each do |g|
+    li
+      a data-toggle="tab" href="##{g.code}" = g.label
+#settingsTabContent.tab-content
+  #all.tab-pane.fade.active.in
+    = render 'common_table', collection: @common
+  - @common_groups.each do |g|
+    = content_tag(:div, class:'tab-pane fade in', id: g.code) do
+      = render 'common_table', collection: g.settings

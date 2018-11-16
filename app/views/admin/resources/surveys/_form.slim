@@ -1,0 +1,59 @@
+= simple_form_for @resource_instance do |f|
+  .row.margin-bottom-10
+    .col-md-6
+      = f.input :name
+    .col-md-3
+      = f.input :survey_type, collection: i18n_enum(resource_class.survey_types, :survey_type), include_blank: false
+    .col-md-3
+      = f.input :ends_at, as: :string, input_html: {'data-value': @resource_instance&.ends_at, class: 'datepicker-uicker' }, label: 'Дата завершения опроса'
+  .row
+    .col-md-3.text-left
+      = f.input :document, wrapper: :layouts_input_file
+    .col-md-3.text-center
+      = f.input :symbol, wrapper: :layouts_input_file
+      = errors_for f.object, :symbol
+    .col-md-3.text-center
+      = f.input :anonymous
+    .col-md-3.text-right
+      = f.input :available_to_all, input_html: {checked: @resource_instance.available_to_all}
+
+  .row
+    .col-md-12
+      .margin-bottom-10
+        = f.input :background, as: :colorpicker
+  .row
+    .col-md-12.margin-bottom-10
+      = f.input :note, as: :ckeditor
+  = errors_for f.object, :survey_participants
+
+  #participants
+    h2 Участники
+    = f.simple_fields_for :survey_participants do |sp|
+      = render 'survey_participant_fields', f: sp
+    .links.margin-bottom-10
+      = link_to_add_association 'Добавить участника', f, :survey_participants, class: 'btn btn-success btn-xs btn-add-participant'
+    h2 Команды
+    = f.input :mailing_list_ids, as: :fake_select, collection: MailingList.all.collect { |c| [c.name, c.id] }, input_html: { multiple: true, include_blank: false, class: 'selectpicker', 'data-label' => 'Ничего не выбрано'}, label: 'Команды', selected: params[:mailing_list_ids]
+  = errors_for f.object, :questions
+
+  #questions
+    h2 Вопросы
+    = f.simple_fields_for :questions do |q|
+      div.sortable id="#{q.object.position}"
+        = render 'question_fields', f: q
+    .links.margin-bottom-10
+      = link_to_add_association 'Добавить вопрос', f, :questions, class: 'btn btn-success btn-xs btn-add-question'
+
+  h3 Документы
+  #documents.row
+    .col-md-7
+      = f.simple_fields_for :documents do |d|
+        = render 'document_fields', f: d, document: f.object
+      .links
+        = link_to_add_association 'Добавить', f, :documents, class: 'btn btn-success'
+
+  .row.text-right
+
+    = f.button :button, 'Сохранить', class: 'btn btn-success'
+    = link_to 'Отмена', [resource_class] , class: 'btn btn-default'
+    /= button_tag 'Отмена изменений' , type: :reset, class: 'btn btn-secondary-default'

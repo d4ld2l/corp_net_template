@@ -3,7 +3,7 @@
     - @collection.each do |notification|
       .row
         .col-md-6
-          = link_to notification.user&.profile&.full_name, [notification.user&.profile]
+          = link_to notification.account&.full_name, [notification.account]
         .col-md-6
           = l(notification.created_at)
       .row

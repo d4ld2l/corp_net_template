@@ -1,0 +1,15 @@
+h1 Подтверждение импорта
+= simple_form_for :parsed_accounts, url: create_from_imported_accounts_path, validate: true do |f|
+  table.table.table-hover
+    thead
+      tr
+        th #
+        th ФИО
+        th Email и дата рождения
+        th Должность и подразделение
+        th Возможные дубликаты
+    tbody
+      - @parsed_accounts.each_with_index do |account, i|
+        = f.simple_fields_for i.to_s do |ff|
+          = render 'account_fields', ff:ff, account:account, index:i
+  = f.submit 'Сохранить', class: 'btn btn-info'

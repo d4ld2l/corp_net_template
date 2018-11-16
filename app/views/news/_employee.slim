@@ -1,0 +1,5 @@
+p #{Date.yesterday.strftime('%d.%m.%Y')} к нам присоединились
+ul style="list-style:none; margin:0; padding:0;"
+  - accounts.each do |p|
+    li
+      a href="#{ENV['FRONT_HOST']}/employees/#{p.id}" = p.full_name

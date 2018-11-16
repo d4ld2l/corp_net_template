@@ -1,0 +1,17 @@
+= simple_form_for(@resource_instance) do |f|
+  = f.input :name, required: true
+  = f.input :subdomain
+  = f.input :domain
+
+  - if (seed_error = @resource_instance.errors[:seeds]).present?
+    p.text-danger
+      | Произошла ошибка при создании компании (seeds):
+      ul
+        li.text-danger= seed_error.join(', ')
+
+  p
+    - if @resource_instance.persisted?
+      = f.submit "Обновить", class: 'btn btn-info'
+    - else
+      = f.submit "Создать компанию", class: 'btn btn-info'
+    = link_to "Отмена", companies_path, class: 'button'

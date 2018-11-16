@@ -1,0 +1,44 @@
+ru:
+  activerecord:
+    models:
+      account: Аккаунт
+      accounts: Аккаунты
+    attributes:
+      account:
+        surname: Фамилия
+        name: Имя
+        middlename: Отчество
+        photo: Фото
+        birthday: Дата рождения
+        position: Позиция
+        email_work: Рабочий email
+        email_private: Личный email
+        phone_number_landline: Стационарный телефон
+        phone_number_corporate: Корпоративный телефон
+        phone_number_private: Личный телефон
+        office_id: Офис
+        office: Офис
+        skype: Skype
+        telegram: Telegram
+        vk_url: ВКонтакте
+        fb_url: Facebook
+        linkedin_url: LinkedIn
+        instagram_url: Instagram
+        manager: Менеджер
+        department_code: Код подразделения
+        position_code: Позиция
+        department_head: Глава подразделения
+        sex: Пол
+        city: Город
+        social_urls: Ссылки на соцсети
+        kids: Количество детей
+        marital_status: Семейное положение
+      account/sex:
+        male: Мужской
+        female: Женский
+    enum:
+      marital_status:
+        single: Холост/незамужем
+        married: Женат/замужем
+        divorced: Разведен(а)
+        widowed: Вдова/вдовец

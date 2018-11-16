@@ -1,9 +1,12 @@
 class Admin::Resources::UsersController < Admin::ResourceController
   include Autocompletable
   include Paginatable
+  respond_to :html, :json
+
+  before_action :set_resource, only: [:edit, :update, :show, :destroy, :to_active, :to_blocked]
 
   def index
-    gon.controller_name = 'users_admin'
+    gon.controller_name = 'account'
   end
   
   def autocomplete
@@ -17,23 +20,16 @@ class Admin::Resources::UsersController < Admin::ResourceController
 
   def create
     if @resource_instance.save
-      redirect_to users_admin_index_path, notice: "Сущность успешно создана"
+      redirect_to accounts_path, notice: "Сущность успешно создана"
     else
       render :new
     end
   end
 
-  def confirm_import
-    require 'parsers/xlsx/users_from_1c_parser'
-    @file = params.dig(:uploaded_file, :file)&.tempfile
-    # begin
-    @parsed_users = Parsers::XLSX::UsersFrom1CParser.parse(@file,
-                                                               company_domain:params[:uploaded_file][:company_domain],
-                                                               legal_unit_id: params[:uploaded_file][:legal_unit_id])
-    # rescue
-    #   flash[:alert] = "Неверный формат файла. Пожалуйста, загрузите корректный файл."
-    #   redirect_to users_admin_index_path
-    # end
+  def edit
+    @update_type = params[:update]
+    session[:referer] = request.referer
+    respond_with @resource_instance
   end
 
   def create_from_imported
@@ -51,21 +47,50 @@ class Admin::Resources::UsersController < Admin::ResourceController
       user.update_attributes!(user_hash)
       @parsed_users << user
     end
-    redirect_to users_admin_index_path
+    redirect_to account_path
+  end
+
+  def to_active
+    if @resource_instance.may_to_active?
+      @resource_instance.to_active!
+      redirect_to account_path, notice: 'Пользователь разблокирован'
+    else
+      redirect_to account_path, error: 'Невозможно разблокировать пользователя'
+    end
+  end
+
+  def to_blocked
+    if @resource_instance.may_to_blocked?
+      @resource_instance.to_blocked!
+      redirect_to account_path, notice: 'Пользователь заблокирован'
+    else
+      redirect_to account_path, error: 'Невозможно заблокировать пользователя'
+    end
   end
 
   def update
-    if @resource_instance.update_attributes(resource_params.merge(tokens: {}))
-      redirect_to root_path, notice: "Сущность успешно обновлена"
+    if @resource_instance.update_attributes(resource_params)
+      redirect_to profile_path(id: @resource_instance.profile.id), notice: "Пароль успешно обновлён"
     else
+      @update_type = 'password'
       render :edit
     end
   end
-  
+
+  def destroy
+    @resource_instance.destroy if @resource_instance
+    redirect_to account_path, notice: "Сущность успешно удалена"
+  end
+
+  def show_user_position
+    position_name = User.find(params[:id]).profile&.position_name
+    render json: { position_name: position_name }.as_json, layout: false
+  end
+
   private
 
   def permitted_attributes
-    [:email, :password, :password_confirmation, :role_id, :legal_unit_id,
+    [:email, :login, :password, :password_confirmation, :legal_unit_id, role_ids:[],
      profile_attributes:
          [:name, :surname, :middlename, :birthday, :department_code, :position_code, :city,
           default_legal_unit_employee_attributes:
@@ -77,6 +102,10 @@ class Admin::Resources::UsersController < Admin::ResourceController
   end
 
   def association_chain
-    super.order(created_at: :desc).only_with_profile.not_admins#.where('sign_in_count > 0')
+    result = super.reorder(created_at: :desc)
+    if params[:status]
+      result = result.where(status: params[:status])
+    end
+    result
   end
 end

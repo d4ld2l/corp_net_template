@@ -35,11 +35,11 @@ class Admin::Resources::TopicsController < Admin::ResourceController
   end
 
   def init_message
-    @message = resource_class.find(params[:id]).messages.build(user: current_user)
+    @message = resource_class.find(params[:id]).messages.build(user: current_account)
   end
 
   def association_chain
-    super.order(created_at: :desc)
+    super.reorder(created_at: :desc)
   end
 
   def message_params

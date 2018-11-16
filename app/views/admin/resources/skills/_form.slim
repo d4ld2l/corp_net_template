@@ -1,13 +1,13 @@
-= form_for(@resource_instance) do |f|
-  = render "shared/errors"
-  fieldset
-    ol
-      li.required
-        = f.label :name
-        = f.text_field :name, size: 80
-    p
-      - if @resource_instance.new_record?
-        = f.submit "Добавить навык", class: 'btn btn-info'
-      - else
-        = f.submit "Обновить", class: 'btn btn-info'
-      = link_to "Отмена", skills_path, class: 'button'
+= simple_form_for(@resource_instance) do |f|
+  = f.input :name, required: true
+  = f.input :description, as: :ckeditor
+  h4 Индикаторы
+  = f.simple_fields_for :indicators do |i|
+    = render 'indicator_fields', f: i
+  .links
+    = link_to_add_association 'Добавить', f, :indicators, class: 'btn btn-success'
+  - if @resource_instance.new_record?
+    = f.submit "Добавить компетенцию", class: 'btn btn-info'
+  - else
+    = f.submit "Обновить", class: 'btn btn-info'
+  = link_to "Отмена", skills_path, class: 'btn btn-default'

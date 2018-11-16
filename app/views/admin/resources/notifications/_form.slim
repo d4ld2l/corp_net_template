@@ -1,7 +1,7 @@
 = simple_form_for @notification do |f|
   = f.hidden_field :notice_id, value: @notification.notice.id
   = f.hidden_field :notice_type, value: @notification.notice.model_name.to_s
-  = f.hidden_field :user_id, value: current_user.id
+  = f.hidden_field :account_id, value: current_account.id
   .row
     .col-md-8
       = f.input :body

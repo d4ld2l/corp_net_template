@@ -1,0 +1,17 @@
+= simple_form_for(@resource_instance, as: :session) do |f|
+  = f.simple_fields_for :session_evaluations do |se|
+    = se.hidden_field :id
+    .panel.panel-default
+      .panel-heading
+        = se.object.account.full_name
+      .panel-body
+        = se.simple_fields_for :skill_evaluations do |ske|
+          = ske.hidden_field :id
+          .panel.panel-default
+            .panel-heading
+              = ske.object.skill.name
+            .panel-body
+              = ske.input :comment, as: :ckeditor, label: 'Комментарий'
+  p
+    = f.submit "Сохранить", class: 'btn btn-info'
+    = link_to "Отмена", assessment_session_path(@resource_instance.id), class: 'button'

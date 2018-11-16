@@ -1,0 +1,6 @@
+- if @update_type.eql?('password')
+  = resource_page_header("Смена пароля для #{@resource_instance.email}")
+- else
+  = resource_page_header("Редактирование пользователя #{@resource_instance.email}")
+= simple_form_for @resource_instance, url: accounts_path do |f|
+  = render 'form', f:f

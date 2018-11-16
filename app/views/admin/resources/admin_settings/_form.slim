@@ -1,0 +1,8 @@
+= simple_form_for(@resource_instance) do |f|
+  - if @resource_instance.kind == 'boolean'
+    = f.check_box :value
+  - else
+    = f.input :value, required: true
+  p
+    = f.submit "Обновить", class: 'btn btn-info'
+    = link_to "Отмена", admin_settings_path, class: 'button'

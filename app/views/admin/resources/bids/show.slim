@@ -1,0 +1,28 @@
+= resource_page_header("Просмотр заявки №#{@resource_instance.id}")
+ul#bidTab.nav.nav-pills
+  li.active
+    a data-toggle="tab" href="#general" Основная информация
+  li
+    a data-toggle="tab" href="#history" История изменений
+  - if @resource_instance.representation_allowance.present?
+    li
+      a data-toggle="tab" href="#report" Отчет
+#bidTabContent.tab-content
+  hr
+    #general.tab-pane.fade.active.in
+      = render 'admin/resources/bids/show/general_tab'
+    #history.tab-pane
+      = render 'admin/resources/bids/show/history_tab'
+    - if @resource_instance.representation_allowance.present?
+      #report.tab-pane
+        = render 'admin/resources/bids/show/report_tab'
+
+= render 'admin/resources/bids/show/comment_form'
+
+.row
+  .col-md-12
+    = link_to 'Все заявки', bids_path, class: 'btn btn-default'
+    - if can? :update, resource_class
+      = link_to 'Редактировать', edit_bid_path(@resource_instance), class: 'btn btn-info'
+    - if can? :manage, @resource_instance
+      = link_to 'Удалить', [@resource_instance], method: :delete, class: 'btn btn-info button_remove'

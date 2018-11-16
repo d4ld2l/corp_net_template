@@ -2,8 +2,7 @@ module AasmStates
   extend ActiveSupport::Concern
 
   included do
-    before_action :set_resource, only: [:update, :show, :destroy,
-                                        :allowed_states, :change_state]
+    before_action :set_resource, only: %i[update show destroy allowed_states change_state]
 
     def states
       render json: resource_collection.aasm.states.map{ |s| s.name.to_s }

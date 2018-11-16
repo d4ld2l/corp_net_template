@@ -4,8 +4,8 @@ h2 Список профессиональных областей
 table.table
   thead
     tr
-      th.col-md-3 Название
-      th.col-md-3 Кол-во специализаций
+      th.col-md-3 = sortable_header 'Название', 'name'
+      th.col-md-3 = sortable_header 'Кол-во специализаций', 'count_specs'
       th.col-md-2 Дата создания
       th.col-md-2 Дата обновления
       th.col-md-2 Действия
@@ -21,6 +21,6 @@ table.table
             = link_to [:edit, area], class: 'btn btn-success btn-simple btn-xs' do
               i.fa.fa-edit
           - if can? :delete, area
-            = link_to [area], method: :delete, class: 'btn btn-danger btn-simple btn-xs' do
+            = link_to [area], method: :delete, class: 'btn btn-danger btn-simple btn-xs button_remove' do
               i.fa.fa-remove
 = render 'shared/pagination'

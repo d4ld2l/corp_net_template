@@ -1,0 +1,22 @@
+.nested-fields
+  .panel
+    .panel-body
+      .row
+        .col-md-10
+          .row
+            .col-md-12
+              - unless f.object&.persisted?
+                = f.hidden_field :id
+                = f.hidden_field :account_id, value: current_account.id
+                = f.input :body, label: 'Комментарий'
+                = f.hidden_field :_destroy
+              - else
+                p = f.object&.account&.full_name
+                = f.input :body, label: 'Комментарий'
+              = f.simple_fields_for :documents do |s|
+                = render 'document_fields', f: s
+              .links
+                = link_to_add_association 'Добавить документ', f, :documents, class: 'btn btn-primary btn-xs'
+        .col-md-1
+          = link_to_remove_association f, class: 'btn btn-simple btn-danger button_remove' do
+            i.fa.fa-remove

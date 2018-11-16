@@ -1,0 +1,42 @@
+body
+  header#content-header
+    h1
+      | Команда #{@resource_instance.name}
+  table.table.table-bordered
+    tbody
+      tr
+        td Название
+        td = @resource_instance.name
+      tr
+        td Описание
+        td = @resource_instance.description.html_safe
+      tr
+        td Создатель
+        td = "#{@resource_instance&.creator&.full_name}/#{@resource_instance&.creator&.email}"
+      tr
+        td Дата создания
+        td = l(@resource_instance&.created_at&.localtime)
+      tr
+        td Дата последнего редактирования
+        td = l(@resource_instance&.updated_at&.localtime)
+
+  h2 Сотрудники
+
+  table.table.table-bordered
+    thead
+      tr
+        th ФИО
+        th Email
+    tbody
+      - @resource_instance.accounts.each do |p|
+        tr
+          td = link_to(p&.full_name || '', account_path(p&.id), target: "_blank")
+          td = mail_to p&.email
+
+.row
+  .col-md-12
+    = link_to "Все команды", mailing_lists_path, class: 'btn btn-default'
+    - if can? :update, resource_class
+      = link_to "Редактировать", edit_mailing_list_path(@resource_instance), class: 'btn btn-info'
+    - if can? :manage, @resource_instance
+      = link_to 'Удалить', [@resource_instance], method: :delete, class: 'btn btn-info button_remove'

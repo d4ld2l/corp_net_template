@@ -1,0 +1,11 @@
+= simple_form_for(@resource_instance) do |f|
+  = f.input :kind, collection: [['Покупка', :purchase], ['Пополнение', :refill], ['Штраф', :penalty]], required: true, label: 'Тип'
+  = f.input :recipient_id, collection: Account.all.map{|x| [x&.full_name, x.id]}, required: true, label: 'Получатель'
+  = f.input :value, required: true, label: 'Сумма'
+  = f.input :comment, label: 'Комментарий'
+  p
+    - if @resource_instance.persisted?
+      = f.submit "Обновить", class: 'btn btn-info'
+    - else
+      = f.submit "Создать", class: 'btn btn-info'
+    = link_to "Отмена", transactions_path, class: 'button'

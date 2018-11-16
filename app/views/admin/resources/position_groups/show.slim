@@ -36,3 +36,5 @@
     = link_to "Все группы позиций", position_groups_path, class: 'btn btn-default'
     - if can? :update, resource_class
       = link_to "Редактировать", edit_position_group_path(@resource_instance), class: 'btn btn-info'
+    - if can? :manage, @resource_instance
+      = link_to 'Удалить', [@resource_instance], method: :delete, class: 'btn btn-info button_remove'

@@ -1,0 +1,9 @@
+ru:
+  activerecord:
+    models:
+      byod_information: Информация о заявке
+    attributes:
+      byod_information:
+        byod_type:
+          buy_out: Выкуп ноутбука из helpDesk
+          new_device: Покупка нового ноутбука

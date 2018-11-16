@@ -1,0 +1,7 @@
+= resource_page_header("Редактирование оценочной сессии \"#{@resource_instance.name}\"")
+- if params[:results] == 'true'
+  = render 'results'
+- elsif params[:conclusion] == 'true'
+  = render 'conclusion'
+- else
+  = render 'form'

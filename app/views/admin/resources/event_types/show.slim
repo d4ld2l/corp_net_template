@@ -17,3 +17,5 @@
     = link_to "Все типы событий", [:event_types], class: 'btn btn-default'
     - if can? :update, @resource_instance
       = link_to "Редактировать", [:edit, @resource_instance], class: 'btn btn-info'
+    - if can? :manage, @resource_instance
+      = link_to 'Удалить', [@resource_instance], method: :delete, class: 'btn btn-info button_remove'

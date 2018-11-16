@@ -6,11 +6,26 @@ ru:
       project:
         title: Название
         description: Описание
-        manager: Менеджер
+        manager_id: Менеджер
         customer_id: Заказчик
         begin_date: Дата начала
         end_date: Дата окончания
         status: Статус
         charge_code: Код проекта
-      user_project:
-        user_id: Сотрудник
+        technology_list: Технологии
+        technologies: Технологии
+        product_list: Продукты
+        products: Продукты
+        methodology_list: Методологии
+        methodologies: Методологии
+        statuses:
+          active: Активный
+          closed: Закрыт
+      profile_project:
+        profile_id: Сотрудник
+        status: Статус
+        statuses:
+          active: Активный
+          gone: Ушел с проекта
+      customer_project:
+        customer_id: Заказчик

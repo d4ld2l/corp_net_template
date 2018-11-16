@@ -1,0 +1,75 @@
+- current = f.object.representation_allowance.present? ? f.object.representation_allowance : f.object.build_representation_allowance
+= f.simple_fields_for :representation_allowance, current do |q|
+  = q.hidden_field :id
+  - current = q.object.information_about_participant.present? ? q.object.information_about_participant : q.object.build_information_about_participant
+  = q.simple_fields_for :information_about_participant, current do |s|
+    = s.hidden_field :id, value: s.object&.id
+    = s.input :project_id, collection: Project.all.map {|p| [p.charge_code, p.id]}
+
+    h4 Ответственный из лиги
+    /- current = s.object.participants_manager.present? ? s.object.participants_manager : s.object.build_participants_manager
+    /= s.simple_fields_for :participants_manager, current do |p|
+    /  = p.hidden_field :id
+    /  = p.hidden_field :type_of_participant, value: :manager_belong_to_company
+    /  = p.input :account_id, collection: Account.all.map { |u| [u.full_name, u.id] }, label: 'ФИО отвественного'
+    /  = p.input :position, label: 'Должность отвественного'
+
+    #participants.margin-top-10
+      h4 Участники из этой компании
+      - current = s.object.participants.present? ? s.object.participants : s.object.participants.build
+      = s.simple_fields_for :participants, current do |p|
+        = render 'participant_fields', f: p, type: :belong_to_company
+      .links
+        = link_to_add_association 'Добавить', s, :participants, render_options: {locals: {type: :belong_to_company}}, class: 'btn btn-success'
+
+    h4 Другие участники
+    = s.input :customer_id, collection: Customer.all.map {|x| [x.name, x.id]}, label: 'Организация заказчика', include_blank: false
+    /, disabled: f.object.persisted?
+    - if f.object.persisted?
+      - current = s.object.other_participants.present? ? s.object.other_participants : s.object.build_other_participants_by_customer(s.object&.customer)
+      #other_participants.margin-top-10
+        h5 Приглашённые участники
+        = s.simple_fields_for :other_participants, current do |p|
+          = render 'other_participant_fields', f: p, customer: s.object&.customer
+        .links
+          = link_to_add_association 'Добавить', s,
+                  :other_participants,
+                  partial: 'other_participant_fields',
+                  render_options: {locals: {customer: s.object&.customer}},
+                  class: 'btn btn-success'
+
+  - current = q.object.meeting_information.present? ? q.object.meeting_information : q.object.build_meeting_information
+  = q.simple_fields_for :meeting_information, current do |s|
+    = s.hidden_field :id
+    = s.input :starts_at, as: :string, size: 20, input_html: {'data-value': s.object&.starts_at, class: 'datetimepicker-uicker'}
+    /, s.object&.starts_at
+    = s.input :place
+    = s.input :address
+    = s.input :aim
+    = s.input :result
+    /, as: :ckeditor, input_html: { ckeditor: { toolbar: 'Full' } }
+    = s.input :amount
+    /div Чек
+    /- current = s.object.check.present? ? s.object.check : s.object.check.build
+    /= s.simple_fields_for :check, current do |d|
+    /  = d.hidden_field :id
+    /  = d.input :name
+    /  - if d.object&.persisted? && d.object&.file
+    /    = link_to 'Скачать', d.object&.file.url
+    /  - else
+    /    = d.input :file
+        /= d.hidden_field :photo_attachable_id, value: f.object&.id
+        /= d.hidden_field :photo_attachable_type, value: f.object.model_name.to_s
+    div Документы
+    hr
+    - current = s.object.base64_document.present? ? s.object.base64_document : s.object.base64_document.build
+    = s.simple_fields_for :base64_document, current do |d|
+      = d.hidden_field :id
+      /= d.input :name
+      - if d.object&.persisted? && d.object&.file&.present?
+        = link_to 'Скачать', d.object&.file.url
+      - else
+        = d.input :file, wrapper: :layouts_input_file
+          /= d.hidden_field :base64_doc_attachable_id, value: f.object&.id
+          /= d.hidden_field :base64_doc_attachable_type, value: f.object.model_name.to_s
+    hr

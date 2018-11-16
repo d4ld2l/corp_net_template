@@ -1,0 +1,13 @@
+ru:
+  surveys:
+    state:
+      draft: Не опубликован
+      published: Опубликован
+      unpublished: Снят с публикации
+      archived: Удален
+    result_for_simple_survey:
+      'true': Выбран
+      'false': Не выбран
+    anonymous:
+      true: Да
+      false: Нет

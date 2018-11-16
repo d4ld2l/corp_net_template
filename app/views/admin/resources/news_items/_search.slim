@@ -1,0 +1,20 @@
+= simple_form_for :q, method: :get do |f|
+
+  = f.input :q, class: 'string form-control', placeholder: 'Поиск', label: false, input_html: {'value': params.dig(:q, :q).present? ? params[:q][:q] : ""}
+
+  div.collapse#enhanced
+
+    - html_for_type = {value: params.dig(:q, 'on_top') == "1" ? 1 : 0}
+    - html_for_type[:checked] = true if params.dig(:q, 'on_top') == "1"
+    = f.input :on_top, as: :boolean, label: false, inline_label: 'Топ', input_html: html_for_type
+
+    = f.input :news_category_id, collection: NewsCategory.all.collect {|c| [c.name, c.id]}, input_html: {multiple: true, include_blank: false, class: 'selectpicker', 'data-label' => 'Ничего не выбрано'}, label: 'Категории'
+    = f.input :state, collection: NewsItem.aasm.states.collect{|c| [t("activerecord.attributes.news_item.state.#{c.name}"), c.name]}, input_html: {multiple: true, include_blank: false, class: 'selectpicker', 'data-label' => 'Ничего не выбрано'}, label: 'Статус'
+    = f.input :account_id, collection: Account.joins(:news_items).collect{|c| [c.full_name, c.id]}.uniq, input_html: {multiple: true, include_blank: false, class: 'selectpicker', 'data-label' => 'Ничего не выбрано'}, label: 'Автор'
+    h6 Даты публикации
+    = f.input :published_at_from, as: :string, input_html: {'data-value': params.dig(:q, 'published_at_from').blank? ? '': Date.strptime(params[:q]['published_at_from'], '%d.%m.%Y'), class: 'datepicker-uicker'}, label: 'С'
+    = f.input :published_at_to, as: :string, input_html: {'data-value': params.dig(:q, 'published_at_to').blank? ? '': Date.strptime(params[:q]['published_at_to'], '%d.%m.%Y'), class: 'datepicker-uicker'}, label: 'По'
+
+  = f.submit "Найти", class: 'btn btn-primary'
+  button.btn.btn-primary type="button" data-toggle="collapse" data-target="#enhanced" style="cursor:pointer" Расширенный поиск
+  = link_to 'Сбросить', news_items_path, class: 'btn' if params[:q]

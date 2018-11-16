@@ -1,0 +1,8 @@
+ru:
+  activerecord:
+    models:
+      base64_document: Фото файл
+    attributes:
+      base64_document:
+        file: Файл
+        name: Название файла

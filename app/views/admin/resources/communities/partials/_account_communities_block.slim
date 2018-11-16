@@ -1,0 +1,16 @@
+.row
+  .col-md-12
+    .panel
+      .panel-heading
+        = link_to 'Все пользователи', [:account_index, @resource_instance]
+      .panel-body
+        - @resource_instance.show_accounts_for_block.each do |array|
+          .row
+            - array.each do |account|
+              - if account.present?
+                .col-md-3.account_image_in_group
+                  .account_block
+                    = link_to [account] do
+                      = image_tag account&.photo&.thumb&.url
+                      p
+                        = account&.name&.truncate(9)

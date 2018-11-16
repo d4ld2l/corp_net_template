@@ -1,0 +1,10 @@
+p
+  | В этом разделе вы можете отправить приглашение на регистрацию для сотрудника
+= simple_form_for @message, url: account_send_email_path, method: :post, remote: true do |f|
+  = f.input :surname, placeholder: 'Укажите фамилию'
+  = f.input :name, placeholder: 'Укажите имя'
+  = f.input :middle_name, placeholder: 'Укажите отчество'
+
+  = f.input :email, placeholder: 'Укажите E-mail'
+
+  = f.button :submit, 'Отправить', class: 'btn btn-success'

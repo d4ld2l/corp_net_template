@@ -1,4 +1,4 @@
-class UserMailer < ApplicationMailer
+class AccountMailer < ApplicationMailer
   include ActionView::Helpers::UrlHelper
   include Devise::Controllers::UrlHelpers
   
@@ -7,10 +7,11 @@ class UserMailer < ApplicationMailer
     full_name = user&.profile&.full_name
     email_with_name = "#{full_name}" + "<#{user.email}>"
     
-    user = User.create_new_user_by_invite_email(message)
+    user = Account.create_new_user_by_invite_email(message)
     
     _link = link_to 'Личном кабинете SHR' ,Rails.application.routes.url_helpers.cfem_url(token: user[:token]['access-token'], client: user[:token]['client'], email: user[:user].email, controller: 'auth/sessions', action: 'create_from_email_message', host: ENV['HOST'])
-
+    # "Пользователь #{full_name} приглашает вас зарегистрироваться в #{link_to 'Личном кабинете SHR', Rails.application.routes.url_helpers.root_path}. Для регистрации перейдите по ссылке, указанной ниже, и укажите пароль. Логином является адрес электронной почты <адрес, на который было отправлено письмо>."
+    #
     @body = "Уважаемый #{user[:user].profile&.full_name}!<br>
              Пользователь #{full_name} приглашает вас зарегистрироваться в #{_link}.<br>
              Логином является адрес электронной почты #{user[:user].email}.<br>

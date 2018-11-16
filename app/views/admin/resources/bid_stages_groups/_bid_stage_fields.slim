@@ -1,0 +1,17 @@
+.nested-fields
+  .panel
+    .panel-body
+      .row
+        .col-md-10
+          .row
+            .col-md-12
+              = f.input :initial, as: :boolean, input_html: { class: 'initial_field' }
+          .row
+            .col-md-6
+              = f.hidden_field :id, value: f.object&.id
+              = f.input :name
+            .col-md-6
+              = f.input :code
+        .col-md-1
+          = link_to_remove_association f, class: 'btn btn-simple btn-danger button_remove remove_bid_stage' do
+            i.fa.fa-remove

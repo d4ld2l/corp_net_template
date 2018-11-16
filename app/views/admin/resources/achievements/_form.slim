@@ -1,0 +1,13 @@
+= simple_form_for(@resource_instance) do |f|
+  = f.input :name, required: true, label: 'Название'
+  = f.input :achievement_group_id, label: 'Группа', collection: AchievementGroup.all.map{|x| [x.name, x.id]}, include_blank: false
+  = f.input :code, required: true, label: 'Код', disabled: true
+  = f.input :pay, required: true, label: 'Вознаграждение'
+  = f.input :enabled, label: 'Включено'
+  = f.input :can_achieve_again, label: 'Можно получить несколько раз'
+  p
+    - if @resource_instance.persisted?
+      = f.submit "Обновить", class: 'btn btn-info'
+    - else
+      = f.submit "Создать награду", class: 'btn btn-info'
+    = link_to "Отмена", achievements_path, class: 'button'

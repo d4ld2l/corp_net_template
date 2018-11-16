@@ -1,4 +1,5 @@
 class Auth::RegistrationsController < Devise::RegistrationsController
+  skip_before_action :check_enabled, only: [:create, :sign_up]
 
   def create
     build_resource(sign_up_params)

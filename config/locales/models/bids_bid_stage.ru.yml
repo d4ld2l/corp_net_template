@@ -1,0 +1,7 @@
+ru:
+  activerecord:
+    models:
+      bids_bid_stage: Заявка
+    attributes:
+      bids_bid_stage:
+        bid_stage_id: Статус

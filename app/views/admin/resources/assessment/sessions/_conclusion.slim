@@ -1,0 +1,9 @@
+= simple_form_for(@resource_instance, as: :session) do |f|
+  = f.input :obvious_fortes, as: :ckeditor, label: 'Явные сильные стороны'
+  = f.input :hidden_fortes, as: :ckeditor, label: 'Скрытые сильные стороны'
+  = f.input :growth_direction, as: :ckeditor, label: 'Зоны развития'
+  = f.input :blind_spots, as: :ckeditor, label: 'Слепое пятно'
+  = f.input :conclusion, as: :ckeditor, label: 'Общий вывод'
+  p
+    = f.submit "Сохранить", class: 'btn btn-info'
+    = link_to "Отмена", assessment_session_path(@resource_instance.id), class: 'button'

@@ -1,0 +1,11 @@
+= simple_form_for current_bid_stages_group, options.merge(remote: true) do |f|
+
+  #bid_stages
+    = errors_for f.object, :bid_stages_initial
+    = errors_for f.object, :bid_stages_codes
+    = f.simple_fields_for :bid_stages do |p|
+      = render 'bid_stage_fields', f: p
+    .links
+      = link_to_add_association 'Добавить статус', f, :bid_stages, class: 'btn btn-success'
+
+  = render 'buttons', f: f

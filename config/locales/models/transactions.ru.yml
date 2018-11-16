@@ -1,0 +1,11 @@
+ru:
+  activerecord:
+    models:
+      transaction: Операция
+    attributes:
+      transaction:
+        value: Сумма
+        kind:
+          refill: 'Пополенение'
+          purchase: 'Покупка'
+          penalty: 'Штраф'

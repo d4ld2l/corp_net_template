@@ -1,0 +1,10 @@
+= render 'header'
+
+- @grouped.each do |answer|
+  .row
+    .col-md-12
+      h2 = answer.delete('question_wording').html_safe
+      = bar_chart answer, xtitle: 'Популярность ответа, %', label: 'Популярность ответа, %'
+
+
+h5 = "Количество человек, принявших участие в опросе: #{@parent_resource.participants_passed_count}"

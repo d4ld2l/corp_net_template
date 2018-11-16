@@ -13,3 +13,9 @@ $ ->
 
   $('#send_comment_in_news').click ->
     window.location.href = window.location.href
+
+  $('.button_remove').click ->
+    message = $(this).data('confirm')
+    if typeof message == "undefined"
+      message = 'Запись будет удалена. Вы уверены?'
+    return confirm(message)

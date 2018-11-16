@@ -1,0 +1,27 @@
+ul#communityTab.nav.nav-pills.margin-bottom-10
+  li.active
+    a data-toggle="tab" href="#published"
+      |Опубликованые
+      span.badge = @resource_instance.news_items.state_count(:published)
+  li
+    a data-toggle="tab" href="#draft"
+      |В черновике
+      span.badge = @resource_instance.news_items.state_count(:draft)
+  li
+    a data-toggle="tab" href="#unpublished"
+      |Сняты с публикации
+      span.badge = @resource_instance.news_items.state_count(:unpublished)
+  li
+    a data-toggle="tab" href="#archived"
+      |В архиве
+      span.badge = @resource_instance.news_items.state_count(:archived)
+  li
+    a data-toggle="tab" href="#create_news" Создать Новость
+#communityTabContent.tab-content
+  #published.tab-pane.fade.active.in
+    = render 'admin/resources/communities/partials/n_index', news: @resource_instance.news_items.state_order(:published, :desc).limit(3)
+  #draft.tab-pane.fade
+  #unpublished.tab-pane.fade
+  #archived.tab-pane.fade
+  #create_news.tab-pane.fade
+    = render 'admin/resources/communities/partials/news_form'

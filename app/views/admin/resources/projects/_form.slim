@@ -1,19 +1,32 @@
 = simple_form_for(@resource_instance) do |f|
-  = f.input :legal_unit_id, collection: LegalUnit.all.map{|x| [x.name, x.id]}, label: 'Юридическое лицо', include_blank: false
-  = f.input :title, size: 80
-  = f.input :charge_code
-  = f.input :description, size: 80
-  = f.input :manager, collection: User.only_with_profile.map{|x| [x.full_name, x.id]}, include_blank: false
-  = f.input :customer_id, collection: Customer.all.collect {|c| [c.name, c.id]}, include_blank: false
-  = f.input :begin_date, as: :string, size: 20, input_html: {'data-value': @resource_instance.begin_date, class: 'datepicker-uicker'}
-  = f.input :end_date, as: :string, size: 20, input_html: {'data-value': @resource_instance.begin_date, class: 'datepicker-uicker'}
-  = f.input :status, size: 80
-  h3 Сотрудники на проекте
-  #users
-    = f.simple_fields_for :user_projects do |user_p|
-      = render 'user_project_fields', f: user_p, project: f.object
+  h3 Общая информация
+  #common
+    = f.input :title, size: 80
+    = f.input :charge_code
+    = f.input :status, collection: [['Активный', :active], ['Закрыт', :closed]], include_blank: false
+    = f.input :description, size: 400
+    = f.input :technology_list
+    = f.input :product_list
+    = f.input :methodology_list
+  h3 Заказчики
+  #customer_projects
+    = f.simple_fields_for :customer_projects do |cp|
+      = render 'customer_project_fields', f: cp, project: f.object
     .links
-      = link_to_add_association 'Добавить', f, :user_projects, class: 'btn btn-success'
+      = link_to_add_association 'Добавить', f, :customer_projects, class: 'btn btn-success'
+  h3 Исполнитель
+  #executor
+    = f.input :legal_unit_id, collection: LegalUnit.all.map {|x| [x.name, x.id]}, label: 'Юридическое лицо', include_blank: false
+    = f.input :manager_id, collection: Account.all.map {|x| [x.full_name, x.id]}, label: 'Руководитель', include_blank: false
+    = f.input :department_id, collection: LegalUnit.all.map {|lu| [lu.name, lu.departments.map {|d| [d.name_ru, d.id]}]}, label: 'Подразделение', include_blank: true, as: :grouped_select, group_method: :last, group_label_method: :first
+    = f.input :begin_date, as: :string, size: 20, label: 'Дата начала', input_html: {'data-value': @resource_instance.begin_date, class: 'datepicker-uicker'}
+    = f.input :end_date, as: :string, size: 20, label: 'Дата завершения',  input_html: {'data-value': @resource_instance.end_date, class: 'datepicker-uicker'}
+  h3 Сотрудники на проекте
+  #account_projects
+    = f.simple_fields_for :account_projects do |pp|
+      = render 'account_project_fields', f: pp
+    .links
+      = link_to_add_association 'Добавить', f, :account_projects, class: 'btn btn-success'
   p
     - if @resource_instance.new_record?
       = f.submit "Добавить проект", class: 'btn btn-info'

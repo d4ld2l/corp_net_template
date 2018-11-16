@@ -1,0 +1,10 @@
+ul#communityOtherAccountTab.nav.nav-pills.margin-bottom-10
+  li.active
+    a data-toggle="tab" href="#published" Новости
+  li
+    a data-toggle="tab" href="#create_news" Предложить Новость
+#communityOtherAccountTabContent.tab-content
+  #published.tab-pane.fade.active.in
+    = render 'admin/resources/communities/partials/n_index', news: @resource_instance.news_items.state_order(:published, :desc).limit(3)
+  #create_news.tab-pane.fade
+    = render 'admin/resources/communities/partials/news_form'

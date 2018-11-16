@@ -1,0 +1,25 @@
+= simple_form_for(@resource_instance, as: :session) do |f|
+  = f.input :name, label: 'Название',
+          placeholder: "#{t("activerecord.attributes.assessment_session.kind.#{@resource_instance.kind}") || 'Инструмент оценки'}. #{@resource_instance.account&.full_name || 'Оцениваемый'}"
+  = f.input :account_id, collection: @accounts.map{|x| [full_name_and_email(x), x.id]}, include_blank: false, label: 'Оцениваемый'
+  = f.hidden_field :kind, value: params.dig(:assessment_session, :kind)&.present? ? params.dig(:assessment_session, :kind) : @resource_instance.kind
+  = f.input :project_role_id, collection: @project_roles.map{|x| [x.name, x.id]}, include_blank: true, label: 'Проектная роль'
+  = f.input :rating_scale, collection:[ ['6 Баллов', :six] ], label: 'Шкала', include_blank: false
+  = f.input :status,
+          collection: resource_class.aasm.states.collect{|c| [t("activerecord.attributes.assessment_session.status.#{c.name}"), c.name]},
+          label: 'Статус',
+          include_blank: false
+  = f.input :due_date, as: :string, input_html:{class: 'datepicker-uicker', data: {value: f.object.due_date}}, label: 'Срок прохождения'
+  = f.input :description, as: :ckeditor, label: 'Инструкция'
+  = f.input :final_step_text, as: :ckeditor, label: 'Текст завершающего шага'
+  = f.input :logo, wrapper: :layouts_input_file, label: 'Эмблема'
+  = f.input :color, as: :colorpicker, label: 'Фон'
+  = render 'participants', f: f
+  = render 'spectators', f: f
+  = render 'skills', f: f
+  p
+    - if @resource_instance.new_record?
+      = f.submit "Добавить сессию", class: 'btn btn-info'
+    - else
+      = f.submit "Обновить", class: 'btn btn-info'
+    = link_to "Отмена", assessment_sessions_path, class: 'button'

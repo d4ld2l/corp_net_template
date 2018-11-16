@@ -1,0 +1,9 @@
+h2 = t('.title')
+p
+  - if @resource_instance.nil? && can?(:create, @resource_instance)
+    = link_to t('create'), new_account_path, class: 'btn btn-primary'
+  - elsif can?(:update, @resource_instance) && @resource_instance.persisted?
+    = link_to t('edit'), edit_account_path(@resource_instance), class: 'btn btn-primary'
+    = link_to 'Изменить пароль', password_edit_path, class: 'btn btn-primary'
+  = link_to 'Вернуться', ENV['FRONT_HOST'], class: 'btn'
+= render 'account'

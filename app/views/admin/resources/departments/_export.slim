@@ -1,0 +1,21 @@
+#export.modal.fade role="dialog" aria-labelledby="export" aria-hidden="true"
+  .modal-dialog
+    .modal-content
+      .row
+        .col-md-12
+          .modal-header
+            button type="button" class="close" data-dismiss="modal" &times
+            .modal-title Экспорт подразделений
+          .modal-body
+            .row
+              .col-md-12
+                table.table.table-bordered
+                  thead
+                    tr
+                      th Юридическое лицо
+                      th Ссылка
+                  tbody
+                    - LegalUnit.all.each do |lu|
+                      tr
+                        td = lu.name
+                        td = link_to 'csv', [:as_csv, :departments, legal_unit_id: LegalUnit.all.first&.id]

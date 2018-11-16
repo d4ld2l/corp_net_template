@@ -1,0 +1,8 @@
+h2 Список групп
+p
+  = link_to 'Новая группа', [:new, :community], class: 'btn btn-primary'
+p
+  = render 'shared/quick_search', path: communities_path
+
+#rerender_table
+  = render 'admin/resources/communities/partials/index_table'

@@ -1,0 +1,24 @@
+h2 Список резюме
+- if can? :create, resource_class
+  p = link_to 'Создать', new_resume_path, :class => "btn btn-primary"
+table.table
+  thead#index
+    tr
+      th Дата создания
+      th Позиция
+      th Email
+      th Действия
+  tbody
+    - @resumes.each do |resume|
+      tr
+        td = link_to l(resume.created_at), resume
+        td = resume.position
+        td = resume.Account&.email
+        td
+          - if can? :update, resource_class
+            = link_to [:edit, resume], class: 'btn btn-success btn-simple btn-xs' do
+              i.fa.fa-edit
+          - if can? :delete, resume
+            = link_to [resume], method: :delete, class: 'btn btn-danger btn-simple btn-xs button_remove' do
+              i.fa.fa-remove
+= render 'shared/pagination'

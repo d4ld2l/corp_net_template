@@ -1,0 +1,42 @@
+h2 Список подразделений
+- if can? :create, resource_class
+  p = link_to 'Создать', new_department_path, :class => "btn btn-primary"
+  p
+    = link_to 'Импорт', '#import',  data: { toggle: 'modal', target: '#import'}
+    span = ' '
+    = link_to 'Экспорт', '#export',  data: { toggle: 'modal', target: '#export'}
+p
+  = render 'shared/quick_search', path: departments_path
+table.table
+  thead
+    tr
+      th.col-md-2 = sortable_header 'Код', 'code'
+      th.col-md-2 = sortable_header 'Название', 'name_ru'
+      th.col-md-2 Дата создания
+      th.col-md-2 Дата обновления
+      th.col-md-1 Родительское подразделение
+      th.col-md-1 = sortable_header 'Юрлицо', 'legal_units.name'
+      th.col-md-2.text-right Действия
+  tbody#index
+    - @collection.each do |department|
+      tr
+        td = link_to department.code, department
+        td = department.name_ru
+        td = l(department.created_at)
+        td = l(department.updated_at)
+        td
+          - if department.parent
+            = link_to department.parent&.code, department.parent
+        td
+          - if department.legal_unit
+            = link_to department.legal_unit&.name, department.legal_unit
+        td.text-right
+          - if can? :update, department
+            = link_to [:edit, department], class: 'btn btn-success btn-simple btn-xs', 'data-toggle': 'tooltip', 'data-original-title': 'Редактировать' do
+              i.fa.fa-edit
+          - if can? :delete, department
+            = link_to [department], method: :delete, class: 'btn btn-danger btn-simple btn-xs button_remove', 'data-toggle': 'tooltip', 'data-original-title': 'Удалить' do
+              i.fa.fa-remove
+= render 'shared/pagination'
+= render 'import'
+= render 'export'

@@ -1,0 +1,50 @@
+#detail.tab-pane.fade
+  table.table.table-th-block
+    thead
+      tr
+        th.col-md-4
+        th
+    tbody
+      tr
+        td.active Руководитель
+        td = @resource_instance&.default_legal_unit_employee&.manager&.full_name
+      tr
+        td.active Email (корпоративный)
+        td = @resource_instance.email
+      tr
+        td.active Прочие email'ы
+        td
+          - @resource_instance&.account_emails&.each do |x|
+            ul
+              li #{t("activerecord.enum.kind.#{x.kind}")} - #{x.email}#{' - приоритетный' if x.preferable?}
+      tr
+        td.active Телефоны
+        td
+          - @resource_instance&.account_phones&.each do |x|
+            ul
+              li #{t("activerecord.enum.kind.#{x.kind}")} - #{x.number} - #{x.messengers}#{' - приоритетный' if x.preferable?}
+      tr
+        td.active Мессенджеры
+        td
+          - @resource_instance&.account_messengers&.each do |x|
+            ul
+              li #{x.name} - #{x.phones.compact.join(' ')}
+      tr
+        td.active = resource_class.human_attribute_name(:skype)
+        td = @resource_instance.skype
+      tr
+        td.active Дата рождения
+        td = l(@resource_instance.birthday) if @resource_instance.birthday
+  h3 Проекты
+  table.table.table-th-block
+    thead
+      tr
+        th.col-md-3 Название
+        th.col-md-3 Роли
+        th.col-md-3 Активный
+    tbody
+      - @resource_instance.account_projects.each do |up|
+        tr
+          td = up.project.title
+          td = up&.project_work_periods&.map{|x| x.role}.join(', ')
+          td =

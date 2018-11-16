@@ -1,5 +1,7 @@
 class AdditionalContact < ApplicationRecord
-  enum type: [:vk, :linkedin, :github, :facebook, :other]
+  AdditionalContact.inheritance_column = 'itype'
 
-  belongs_to :resume
+  enum type: %i[vk linkedin github facebook moi_krug freelance livejournal personal other]
+
+  belongs_to :resume, touch: true
 end

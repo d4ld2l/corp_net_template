@@ -1,0 +1,7 @@
+ul.nav.nav-pills
+  li class=(params[:status].nil? ? 'active' : '')
+    = link_to 'Все', accounts_path
+  li class=(params[:status]=='active' ? 'active' : '')
+    = link_to 'Активные', accounts_path(status: 'active')
+  li class=(params[:status]=='blocked' ? 'active' : '')
+    = link_to 'Заблокированные', accounts_path(status: 'blocked')

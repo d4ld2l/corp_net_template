@@ -1,0 +1,38 @@
+.nested-fields
+  .panel
+    .panel-body
+      .row
+        .col-md-10
+          = errors_for f.object, :allowed_eql_current
+          .row
+            .col-md-6
+              = f.hidden_field :id
+              = f.input :allowed_stage_id,
+                      collection: parent_f.object.bid_stages.pluck(:name, :id).reject { |stage| stage == ["#{bid.object&.name}(#{bid.object&.code})", bid.object&.id] }
+              = f.hidden_field :current_stage_id
+            .col-md-6
+              = f.input :additional_executor_id,
+                      collection: BidsExecutor.all.map { |e| [e.full_name, e.id] }
+          .row
+            = errors_for f.object, :must_be_one_checkbox
+            .col-md-6
+              = f.input :executor,
+                      collection: AllowedBidStage.executors.map { |e, v| [t("activerecord.attributes.allowed_bid_stage.executors.#{e}"), e] }
+          .row
+            .col-md-3
+              = f.input :name_for_button
+            .col-md-3
+              = f.input :notification, as: :boolean
+            .col-md-3
+              = f.input :notifiable,
+                      collection: AllowedBidStage.executors.map { |e, v| [t("activerecord.attributes.allowed_bid_stage.executors.#{e}"), e] },
+                      input_html: { multiple: true, include_blank: false, class: 'selectpicker', 'data-label': 'Никого не выбрано' },
+                      label: 'Кому отправлять'
+            .col-md-3
+              = f.association :bids_executors,
+                      collection: BidsExecutor.all.map { |e| [e.full_name, e.id] },
+                      input_html: { multiple: true, include_blank: false, class: 'selectpicker', 'data-label': 'Никого не выбрано' },
+                      label: 'Кому дополнительно отправлять'
+        .col-md-1
+          = link_to_remove_association f, class: 'btn btn-simple btn-danger button_remove' do
+            i.fa.fa-remove

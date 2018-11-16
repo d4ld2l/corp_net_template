@@ -1,0 +1,28 @@
+h2 Список команд
+- if can? :update, resource_class
+  p = link_to 'Создать', new_mailing_list_path, :class => "btn btn-primary"
+table.table
+  thead
+    tr
+      th.col-md-2 = sortable_header 'Название', 'name'
+      th.col-md-2 = sortable_header 'Создатель', 'accounts.surname'
+      th.col-md-2 = sortable_header 'Количество участников', 'count_participants'
+      th.col-md-2 Дата создания
+      th.col-md-2 Дата последнего редактирования
+      th.col-md-2 Действия
+  tbody#index
+    - @collection.each do |mailing_list|
+      tr
+        td = link_to mailing_list.name, [mailing_list]
+        td = "#{mailing_list&.creator&.full_name}/#{mailing_list&.creator&.email}"
+        td = mailing_list.accounts_count
+        td = l(mailing_list&.created_at&.localtime)
+        td = l(mailing_list&.updated_at&.localtime)
+        td
+          - if can? :update, resource_class
+            = link_to [:edit, mailing_list], class: 'btn btn-success btn-simple btn-xs', 'data-toggle': 'tooltip', 'data-original-title': 'Редактировать' do
+              i.fa.fa-edit
+          - if can? :manage, resource_class
+            = link_to [mailing_list], method: :delete, class: 'btn btn-danger btn-simple btn-xs button_remove', 'data-toggle': 'tooltip', 'data-original-title': 'Удалить' do
+              i.fa.fa-remove
+= render 'shared/pagination'

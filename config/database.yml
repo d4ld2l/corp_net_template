@@ -24,30 +24,23 @@
 #  <<: *default
 #  database: db/production.sqlite3
 
-development:
+default: &default
   adapter: postgresql
   encoding: unicode
-  pool: 5
+  pool: 25
   host: <%= ENV['DATABASE_HOST'] %>
   database: <%= ENV['DATABASE_NAME'] %>
   username: <%= ENV['DATABASE_USER'] %>
   password: <%= ENV['POSTGRES_PASSWORD'] %>
+
+development:
+  <<: *default
 
 test:
-  adapter: postgresql
-  encoding: unicode
-  pool: 5
-  host: <%= ENV['DATABASE_HOST'] %>
-  database: <%= ENV['DATABASE_NAME'] %>
-  username: <%= ENV['DATABASE_USER'] %>
-  password: <%= ENV['POSTGRES_PASSWORD'] %>
+  <<: *default
 
 production:
-  adapter: postgresql
-  encoding: unicode
-  pool: 5
-  host: <%= ENV['DATABASE_HOST'] %>
-  database: <%= ENV['DATABASE_NAME'] %>
-  username: <%= ENV['DATABASE_USER'] %>
-  password: <%= ENV['POSTGRES_PASSWORD'] %>
+  <<: *default
 
+development_stand:
+  <<: *default

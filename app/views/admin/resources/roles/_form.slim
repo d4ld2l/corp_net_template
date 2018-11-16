@@ -1,0 +1,14 @@
+= simple_form_for(@resource_instance) do |f|
+  = f.input :name, required: true
+  h3 Разрешения
+  #accounts
+    = f.simple_fields_for :role_permissions do |r_permission|
+      = render 'role_permission_fields', f: r_permission, role: f.object
+    .links
+      = link_to_add_association 'Добавить разрешение', f, :role_permissions, class: 'btn btn-success'
+  p
+    - if @resource_instance.new_record?
+      = f.submit "Добавить роль", class: 'btn btn-info'
+    - else
+      = f.submit "Обновить", class: 'btn btn-info'
+    = link_to "Отмена", roles_path, class: 'button'

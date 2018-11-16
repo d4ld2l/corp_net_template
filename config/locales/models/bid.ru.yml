@@ -1,0 +1,12 @@
+ru:
+  activerecord:
+    models:
+      bid: Заявка
+    attributes:
+      bid:
+        manager_id: Исполнитель
+        manager_position: Должность
+        assistant_id: Ассистент
+        bid_stage: Статус
+        legal_unit_id: 'Юридическое лицо'
+        matching_user_id: Согласующий

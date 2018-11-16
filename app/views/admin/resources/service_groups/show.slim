@@ -1,0 +1,14 @@
+= resource_page_header("Просмотр категории сервисов '#{@resource_instance.name}'")
+.row
+  .col-md-12
+    table.table.table-bordered
+      tbody
+        tr
+          td Название категории сервисов
+          td = @resource_instance&.name
+
+.row
+  .col-md-12
+    = link_to "Все категории сервисов", service_groups_path, class: 'btn btn-default'
+    - if can? :update, resource_class
+      = link_to "Редактировать", edit_service_group_path(@resource_instance), class: 'btn btn-info'

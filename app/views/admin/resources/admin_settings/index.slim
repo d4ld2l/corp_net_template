@@ -1,0 +1,16 @@
+h2 Настройки
+table.table
+  thead
+    tr
+      th Параметр
+      th Значение параметра
+      th Действия
+  tbody
+    - @collection.each do |setting|
+      tr
+        td = setting.label
+        td = value_label(setting.kind, setting.value)
+        td
+          - if can? :update, resource_class
+            = link_to [:edit, setting], class: 'btn btn-success btn-simple btn-xs' do
+              i.fa.fa-edit

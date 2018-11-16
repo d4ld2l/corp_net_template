@@ -1,49 +1,39 @@
 class Api::V0::Resources::NewsController < Api::ResourceController
   include AasmStates
+  include Likable
   include Commentable
+  include Api::V0::Resources::News
 
   def index
-    render json: @collection.as_json(methods: [:comments_count, :tags, :author], include: { tags:{}, news_category:{}, community:{}, documents:{},
-                                                                                   photos:{}, comments:{
-            include: {user:{include:{profile:{}}}}
-        }})
+    render json: @collection.page(page).per(per_page).as_json(json_collection_inclusion)
   end
 
   def show
-    render json: @resource_instance.as_json(methods: [:comments_count, :tags], include: { tags:{}, news_category:{}, community:{}, documents:{},
-                                                      photos:{}, comments:{
-            include: {user:{include:{profile:{}}}}
-        }})
+    render json: @resource_instance.as_json(json_resource_inclusion)
   end
 
   def create
-    @resource_instance.user ||= current_user
+    @resource_instance.account ||= current_account
     if @resource_instance.save
-      render json: @resource_instance.as_json(methods: [:comments_count, :tags], include: { tags:{}, news_category:{}, community:{}, documents:{},
-                                                                                            photos:{}, comments:{
-              include: {user:{include:{profile:{}}}}
-          }})
+      render json: @resource_instance.as_json(json_resource_inclusion)
     else
-      render json: {success: false}
+      render json: { success: false }
     end
   end
 
   def update
-    @resource_instance.user ||= current_user
+    @resource_instance.account ||= current_account
     if @resource_instance.update_attributes(resource_params)
-      render json: @resource_instance.as_json(methods: [:comments_count, :tags], include: { tags:{}, news_category:{}, community:{}, documents:{},
-                                                                                            photos:{}, comments:{
-              include: {user:{include:{profile:{}}}}
-          }})
+      render json: @resource_instance.as_json(json_resource_inclusion)
     else
-      render json: {success: false}
+      render json: { success: false }
     end
   end
 
   private
 
   def association_chain
-    result = resource_collection
+    result = resource_collection.includes(chain_collection_inclusion)
     if news_items_scope
       if params[:community_id] && news_items_scope == 'only_by_community'
         result = result.send(news_items_scope).where(community_id: params[:community_id])
@@ -53,11 +43,11 @@ class Api::V0::Resources::NewsController < Api::ResourceController
     else
       result = result.only_not_by_community
     end
-    if news_items_status
-      result = result.send("only_#{news_items_status}")
-    else
-      result = result.only_published
-    end
+    result = if news_items_status
+               result.send("only_#{news_items_status}")
+             else
+               result.only_published
+             end
     if params[:news_category_id]
       result = result.where(news_category_id: params[:news_category_id])
     end
@@ -80,11 +70,11 @@ class Api::V0::Resources::NewsController < Api::ResourceController
   end
 
   def news_items_scope
-    %w(all only_by_community only_not_by_community).include?(params[:scope]) ? params[:scope] : nil
+    %w[all only_by_community only_not_by_community].include?(params[:scope]) ? params[:scope] : nil
   end
 
   def news_items_status
-    %w(published unpublished draft archived).include?(params[:state]) ? params[:state] : nil
+    %w[published unpublished draft archived].include?(params[:state]) ? params[:state] : nil
   end
 
   def collection_name
@@ -93,9 +83,11 @@ class Api::V0::Resources::NewsController < Api::ResourceController
 
   def permitted_attributes
     [
-        :user_id, :title, :preview, :body, :tags, :published_at,
-        :on_top, :news_category_id, news_groups: [],
-        photos: [:name, :file, :remote_file_url], documents: [:name, :file, :remote_file_url]
+      :account_id, :allow_commenting, :title, :preview, :body, :tags, :tag_list, :published_at,
+      :on_top, :news_category_id,
+      news_groups: [],
+      photos_attributes: %i[id name file remote_file_url _destroy],
+      documents_attributes: %i[id name file remote_file_url _destroy]
     ]
   end
 end

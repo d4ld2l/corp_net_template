@@ -1,0 +1,7 @@
+.row
+  .col-md-12.form-group.text-right.no-padding
+    = f.button :button, t('controls.back'), name: :goto, class: 'btn bnt-layout', value: previous_step, data: { disable_with: t('controls.back') } unless first_step?
+    = f.button :button, t('controls.save'), name: :save, class: 'btn btn-layout', value: @current_step, data: { disable_with: t('controls.save') }
+
+    - submit_name = last_step? ? :commit : :goto
+    = f.button :button, next_button_text, name: submit_name, value: @current_step + 1, class: 'btn btn-layout-custom', data: { disable_with: next_button_text }

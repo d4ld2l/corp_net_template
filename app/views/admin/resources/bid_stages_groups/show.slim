@@ -1,0 +1,26 @@
+/= resource_page_header("Просмотр статусной модели '#{@resource_instance.name}'")
+h1
+  = "Просмотр статусной модели '#{@resource_instance.name}'"
+  p
+    small =  l(@resource_instance.created_at, format: :date)
+
+h4 Переходы по статусам
+table.table.table-bordered
+  thead
+    tr
+      th Название статуса
+      th Разрешенные переходы
+  tbody
+    - @resource_instance.bid_stages.each do |bid_stage|
+      tr
+        td = bid_stage&.name
+        td
+          ul
+            - bid_stage.allowed_bid_stages.each do |allowed|
+              li = allowed.next_bid_stage&.name
+
+.row
+  .col-md-12
+    = link_to "Все модели", bid_stages_groups_path, class: 'btn btn-default'
+    - if can? :update, resource_class
+      = link_to "Редактировать", edit_bid_stages_group_path(@resource_instance), class: 'btn btn-info'

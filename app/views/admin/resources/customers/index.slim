@@ -4,14 +4,14 @@ h2 Список заказчиков
 table.table
   thead
     tr
-      th.col-md-4 Название
-      th.col-md-2 Дата создания
-      th.col-md-2 Дата удаления
+      th.col-md-4 = sortable_header 'Название', 'name'
+      th.col-md-2 = sortable_header 'Дата создания', 'created_at'
+      th.col-md-2 = sortable_header 'Дата обновления', 'updated_at'
       th.col-md-2 Действия
   tbody#index
     - @collection.each do |customer|
       tr
-        td = customer.name
+        td = link_to customer.name, customer
         td = l(customer.created_at)
         td = l(customer.updated_at)
         td
@@ -19,6 +19,6 @@ table.table
             = link_to [:edit, customer], class: 'btn btn-success btn-simple btn-xs' do
               i.fa.fa-edit
           - if can? :delete, customer
-            = link_to [customer], method: :delete, class: 'btn btn-danger btn-simple btn-xs' do
+            = link_to [customer], method: :delete, class: 'btn btn-danger btn-simple btn-xs button_remove' do
               i.fa.fa-remove
 = render 'shared/pagination'

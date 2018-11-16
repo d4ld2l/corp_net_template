@@ -1,0 +1,15 @@
+#transactions.tab-pane.fade
+  table.table.table-th-block
+    thead
+      tr
+        th.col-md-3 Дата
+        th.col-md-3 Операция
+        th.col-md-3 Сумма
+        th.col-md-3 Комментарий
+    tbody
+      - @resource_instance.transactions.order(created_at: :desc).each do |t|
+        tr
+          td = t.created_at
+          td = t("activerecord.attributes.transaction.kind.#{t.kind}")
+          td = t.value_with_sign
+          td = t.comment

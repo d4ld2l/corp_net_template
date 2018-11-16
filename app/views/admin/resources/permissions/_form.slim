@@ -1,0 +1,10 @@
+= simple_form_for(@resource_instance) do |f|
+  = f.input :name, required: true
+  = f.input :description, required: true
+  = f.input :code
+  p
+    - if @resource_instance.new_record?
+      = f.submit "Создать", class: 'btn btn-info'
+    - else
+      = f.submit "Обновить", class: 'btn btn-info'
+    = link_to "Отмена", permissions_path, class: 'button'

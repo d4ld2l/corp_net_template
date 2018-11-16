@@ -1,0 +1,18 @@
+ru:
+  activerecord:
+    models:
+      survey: Опрос
+    attributes:
+      survey:
+        name: Название
+        symbol: Эмблема
+        document: Правила прохождения
+        anonymous: Это будет анонимный опрос?
+        survey_type: Тип опроса
+        note: Описание
+        background: Фон
+        available_to_all: Доступен всем
+    enum:
+      survey_type:
+       simple: Опрос
+       complex: Голосование

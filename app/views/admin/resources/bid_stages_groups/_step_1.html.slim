@@ -1,0 +1,23 @@
+= simple_form_for current_bid_stages_group, options.merge(remote: true) do |f|
+
+  .row
+    .col-md-6
+      = f.input :name, required: true
+    .col-md-6
+      = f.input :code, required: true
+  .panel
+    .panel-body
+      .row
+        .col-md-10
+          .row
+            .col-md-6
+              = f.input :initial_executor, include_blank: true,
+                      collection: BidStagesGroup.initial_executors.map {|e, v| [t("activerecord.attributes.bid_stages_group.initial_executors.#{e}"), e]}
+            .col-md-3
+              = f.input :initial_notification, as: :boolean
+            .col-md-3
+              = f.input :initial_notifiable,
+                      collection: BidStagesGroup.initial_executors.map {|e, v| [t("activerecord.attributes.bid_stages_group.initial_executors.#{e}"), e]},
+                      input_html: {multiple: true, include_blank: false, class: 'selectpicker', 'data-label': 'Никого не выбрано'}
+
+  = render 'buttons', f: f

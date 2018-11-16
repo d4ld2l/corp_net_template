@@ -1,0 +1,11 @@
+h2  = t('.title')
+- if @resource_instance.nil? && can?(:create, @resource_instance)
+  = link_to t('create'), new_account_path, class: 'btn btn-primary'
+- elsif can?(:edit, @resource_instance)
+  = link_to t('edit'), [:edit, @resource_instance], class: 'btn btn-primary'
+  = link_to 'Редактировать пароль', edit_account_path(id: @resource_instance.id, update: :password), class: 'btn btn-primary'
+= render 'account'
+/.row
+/  .col-md-12
+/    - if can?(:update, @resource_instance)
+/      = link_to t('edit'), [:edit, @resource_instance], class: 'btn btn-info'

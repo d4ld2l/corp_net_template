@@ -5,5 +5,9 @@ class LegalUnitEmployeePosition < ApplicationRecord
 
   validates :department_code, :position_code, presence: true
 
+  def position_name
+    position&.name_ru
+  end
+
   has_paper_trail
 end

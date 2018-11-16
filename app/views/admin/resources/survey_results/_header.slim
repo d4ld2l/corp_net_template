@@ -1,0 +1,15 @@
+.row
+  .col-md-12
+    .clearfix
+      h2.pull-left = "Список результатов опроса #{@parent_resource&.name}"
+          /.pull-right.margin-top-30
+          /  = link_to 'Назад', [@parent_resource]
+      .btn-group.pull-right
+        button.btn.btn-primary.dropdown-toggle data-toggle="dropdown" type="button"
+          | Действия &nbsp;
+          span.caret
+          .ripple-container
+        ul.dropdown-menu
+          li = link_to 'XLSX', [:download, @parent_resource, :survey_results]
+          li = link_to 'Назад', [@parent_resource]
+hr

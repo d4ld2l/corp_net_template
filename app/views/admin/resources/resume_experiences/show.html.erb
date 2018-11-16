@@ -1,0 +1,69 @@
+<header id="content-header">
+  <h1>Резюме сотрудника <%= @resume.profile.getFullName %></h1>
+</header>
+  <p>
+  </p>
+  <% if !@resume.profile.nil? %>
+   
+   <div class="container-fluid">  
+     <div class="row">
+       <div class="col-sm-4" style="background-color:yellow;">
+        <p>ФИО</p>
+      </div>
+      <div class="col-sm-8" style="background-color:pink;">
+        <p><%= @resume.profile.getFullName %></p>
+      </div>
+     </div>
+   </div>
+
+   <div class="container-fluid">  
+     <div class="row">
+       <div class="col-sm-4" style="background-color:yellow;">
+        <p>Email</p>
+      </div>
+      <div class="col-sm-8" style="background-color:pink;">
+        <p><%= @resume.profile.email %></p>
+      </div>
+     </div>
+   </div>
+
+   <div class="container-fluid">  
+     <div class="row">
+       <div class="col-sm-4" style="background-color:yellow;">
+        <p>Фото</p>
+      </div>
+      <div class="col-sm-8" style="background-color:pink;">
+        <p><%= image_tag(@resume.profile.photo.url, :alt => "Фото", size: "100") %></p>
+      </div>
+     </div>
+   </div>
+
+   <% end %>
+<h2>Опыт работы</h2>
+<table class="table table-bordered">
+	<thead>
+	  <tr>
+	    <th>Компания</th>
+	    <th>Должность</th>
+	    <th>Стаж</th>
+	    <th>Задачи</th>
+	    <th>Навыки</th>
+	  </tr>
+	</thead>
+	<tbody>
+	<% @experiences.each do |exp| %>
+	  <tr>
+	    <td><%= exp.company.name %></td>
+	    <td><%= exp.position %></td>
+	    <td><%= exp.start_date.strftime("%d.%m.%Y") %> - <%= exp.end_date.strftime("%d.%m.%Y") %></td>
+	    <td><%= exp.tasks %></td>
+	    <td>
+	    	<% exp.resume.resume_skills.each do |rskill| %>
+	    	  <%= rskill.skill.name %><br>
+	    	<% end %>
+	    </td>
+	  </tr>
+	<% end %>      
+	</tbody>
+</table>
+

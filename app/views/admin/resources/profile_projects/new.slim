@@ -1,0 +1,17 @@
+body
+  header#content-header
+    h1 Привязка сотрудника к проекту
+  = form_for(@resource_instance) do |f|
+    = render "shared/errors"
+    fieldset
+      ol
+        li.required
+          = f.label :account_id
+          = f.select :account_id, Account.all.collect { |p| [p.full_name, p.account.id] }, include_blank: false
+        = f.hidden_field(:project_id, :value => @project_id)
+      p
+        - if @resource_instance.new_record?
+          = f.submit "Привязать"
+        - else
+          = f.submit "Перепривязать"
+        = link_to "Отмена", projects_path, class: 'button'

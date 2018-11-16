@@ -1,0 +1,107 @@
+= simple_form_for @resource_instance do |f|
+  .nested-fields
+    .panel
+      .panel-heading
+        h4.panel-title
+          a data-toggle="collapse" href="#collapse_account_info" = 'Персональная информация'
+      .panel-body id="collapse_account_info" data-toggle="false" class="collapse"
+        .row
+          .col-md-4
+            = f.input :surname
+          .col-md-4
+            = f.input :name
+          .col-md-4
+            = f.input :middlename
+        .row
+          .col-md-4
+            = f.hidden_field :id, value: @resource_instance.id
+            = f.input :role_ids, collection: Role.all.collect { |c| [c.name, c.id] }, input_html: { multiple: true, include_blank: false, class: 'selectpicker', 'data-selected-text-format' => 'count > 2', 'data-label' => 'Ничего не выбрано'}, label: 'Роли'
+            = f.input :email, label: 'E-Mail'
+            = f.input :login, label: 'Логин'
+            = f.input :status, label: 'Статус'
+        .row.margin-bottom-10
+          .col-md-3
+            = f.input :sex, as: :select,
+                    collection: [['Мужской', :male], ['Женский', :female]], include_blank: true
+          .col-md-9
+            = f.input :city
+        .row
+          .col-md-12
+            = f.input :photo, wrapper: :layouts_input_file
+            = f.input :birthday, as: :string, input_html: {'data-value': @resource_instance&.birthday, class: 'datepicker-uicker'}, start_year: Date.today.year - 100
+        .row
+          .col-md-6
+            = f.input :marital_status, as: :select, collection: i18n_enum(Account.marital_statuses, :marital_status)
+          .col-md-6
+            = f.input :kids, as: :integer
+
+
+  .nested-fields
+    .panel
+      .panel-heading
+        h4.panel-title
+          a data-toggle="collapse" href="#collapse_password_edit" = @password_panel_name
+      .panel-body id="collapse_password_edit" data-toggle="false" class="collapse"
+        - if @editing
+          = f.input :password, as: :password, label: 'Пароль', required: false
+          = f.input :password_confirmation, as: :password, label: 'Подтверждение пароля', required: false
+        - else
+          = f.input :password, as: :password, label: 'Пароль', required: true
+          = f.input :password_confirmation, as: :password, label: 'Подтверждение пароля', required: true
+
+
+  .nested-fields
+    .panel
+      .panel-heading
+        h4.panel-title
+          a data-toggle="collapse" href="#collapse_contact_info" = 'Контактная информация'
+      .panel-body id="collapse_contact_info" data-toggle="false" class="collapse"
+        #account_phones
+          h4 Номера телефонов
+          = f.simple_fields_for :account_phones do |cp|
+            = render 'admin/resources/accounts/account_phone_fields', f: cp
+          .links
+            = link_to_add_association 'Добавить', f, :account_phones, class: 'btn btn-success'
+
+          h4 Адреса электронной почты
+          = f.simple_fields_for :account_emails do |cp|
+            = render 'admin/resources/accounts/account_email_fields', f: cp
+          .links
+            = link_to_add_association 'Добавить', f, :account_emails, class: 'btn btn-success'
+
+          h4 Мессенджеры
+          = f.simple_fields_for :account_messengers do |cp|
+            = render 'admin/resources/accounts/account_messenger_fields', f: cp
+          .links
+            = link_to_add_association 'Добавить', f, :account_messengers, class: 'btn btn-success'
+        = f.input :skype
+        = f.input :social_urls, as: :array, input_html: {class: 'form-control social_urls'}, label: 'Социальные сети'
+        .btn.btn-primary.add-social-url-button Добавить соцсеть
+
+
+    - if can? :manage, LegalUnitEmployee
+      .nested-fields
+      .panel
+        .panel-heading
+          h4.panel-title
+            a data-toggle="collapse" href="#collapse_legal_info" = 'Информация по трудоустройству'
+        .panel-body id="collapse_legal_info" data-toggle="false" class="collapse"
+          - unless @resource_instance&.default_legal_unit_employee&.persisted?
+            - lu = @resource_instance.build_default_legal_unit_employee
+            - lu.build_legal_unit_employee_position unless lu.legal_unit_employee_position
+            - if @resource_instance&.role?(:admin) || current_account&.role?(:admin)
+              - lu.build_legal_unit_employee_state unless lu.legal_unit_employee_state
+          = f.simple_fields_for :default_legal_unit_employee do |ff|
+            - if ff.object.persisted?
+              = render 'admin/resources/accounts/legal_unit_employee_fields', f: ff
+            - else
+              .links
+                = link_to_add_association 'Добавить основное место работы', f, :default_legal_unit_employee, partial: 'admin/resources/accounts/legal_unit_employee_fields'
+
+
+    .pull-right
+      - if @resource_instance.new_record? && can?(:create, @resource_instance)
+        = f.submit "Создать профиль", class: 'btn btn-info'
+      - elsif can?(:update, @resource_instance)
+        = f.submit "Обновить", class: 'btn btn-info'
+      = link_to "Отмена", [:my, :account], class: 'btn'

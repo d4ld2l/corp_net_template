@@ -1,0 +1,56 @@
+= ff.hidden_field 'account_attributes[default_legal_unit_employee_attributes][legal_unit_id]',
+        value: account[:account_attributes][:default_legal_unit_employee_attributes][:legal_unit_id]
+= ff.hidden_field :password, value: account[:password]
+= ff.hidden_field 'account_attributes[default_legal_unit_employee_attributes][hired_at]',
+        value: account[:account_attributes][:default_legal_unit_employee_attributes][:hired_at]
+= ff.hidden_field 'account_attributes[default_legal_unit_employee_attributes][employee_number]',
+        value: account[:account_attributes][:default_legal_unit_employee_attributes][:employee_number]
+= ff.hidden_field 'account_attributes[default_legal_unit_employee_attributes][employee_uid]',
+        value: account[:account_attributes][:default_legal_unit_employee_attributes][:employee_uid]
+= ff.hidden_field 'account_attributes[default_legal_unit_employee_attributes][individual_employee_uid]',
+        value: account[:account_attributes][:default_legal_unit_employee_attributes][:individual_employee_uid]
+= ff.hidden_field 'account_attributes[city]',
+        value: account[:account_attributes][:city]
+tr.margin-bottom-10
+  td style='vertical-align:middle;'
+    = index+1
+  td.col-md-2
+    row
+      .col-md-12.margin-bottom-10
+        = ff.input 'account_attributes[surname]', input_html:{value: account[:account_attributes][:last_name]}, required: true, label:'Фамилия'
+      .col-md-12
+         = ff.input 'account_attributes[name]', input_html:{value: account[:account_attributes][:first_name]}, required: true, label: 'Имя'
+      .col-md-12
+        = ff.input 'account_attributes[middlename]', input_html:{value: account[:account_attributes][:middle_name]}, required: true, label: 'Отчество'
+  td
+    .row
+      .col-md-12
+        = ff.input :email, input_html:{value: account[:email]}, required: true,  html5: true, label: 'Email'
+      .col-md-12
+        = ff.input 'account_attributes[birthday]', input_html: {'data-value': account[:account_attributes][:birthdate], class: 'datepicker-uicker'}, label: 'Дата рождения'
+  td
+    .row
+      .col-md-12
+        = ff.input 'account_attributes[default_legal_unit_employee_attributes][legal_unit_employee_position_attributes][department_code]',
+                collection: Department.where(legal_unit_id: account[:account_attributes][:default_legal_unit_employee_attributes][:legal_unit_id]).map{|x| [x.name_ru, x.code]}, include_blank: true,
+                selected: account[:account_attributes][:default_legal_unit_employee_attributes][:legal_unit_employee_position_attributes][:department_code],
+                label: 'Подразделение'
+        label.simple-label
+          | Значение из файла:
+        span.label.label-default
+          = account[:account_attributes][:department_name]
+      .col-md-12
+        = ff.input 'account_attributes[default_legal_unit_employee_attributes][legal_unit_employee_position_attributes][position_code]',
+                collection: Position.where(legal_unit_id: account[:account_attributes][:default_legal_unit_employee_attributes][:legal_unit_id]).map{|x| [x.name_ru, x.code]}, include_blank: true,
+                selected: account[:account_attributes][:default_legal_unit_employee_attributes][:legal_unit_employee_position_attributes][:position_code],
+                label: 'Должность'
+        label.simple-label
+          | Значение из файла:
+        span.label.label-default
+          = account[:account_attributes][:position_name]
+  td
+    ul.center-block
+      - account[:duplicates].each do |d_id|
+        - u = Account.find(d_id)
+        li data-toggle="tooltip" title="#{account_duplicate_tooltip_title(u)}"
+          = u.account ? link_to(u.email, u.account) : u.email

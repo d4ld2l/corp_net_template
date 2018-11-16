@@ -1,0 +1,16 @@
+= simple_form_for @comment do |f|
+  = f.hidden_field :commentable_id, value: @resource_instance&.id
+  = f.hidden_field :commentable_type, value: @resource_instance.model_name.to_s
+  = f.hidden_field :account_id, value: current_account.id
+  .row
+    .col-md-12
+      = f.input :body
+  .row
+    .col-md-3.pull-right
+      = f.button :button, 'Прокомментировать', class: 'btn btn-primary btn-xs'
+
+      = f.simple_fields_for :documents do |s|
+        = render 'document_fields', f: s
+    .col-md-2.pull-right
+      .links
+        = link_to_add_association 'Добавить документ', f, :documents, class: 'btn btn-primary btn-xs'

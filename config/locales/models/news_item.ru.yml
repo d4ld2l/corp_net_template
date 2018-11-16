@@ -5,8 +5,14 @@ ru:
     attributes:
       news_item:
         title: Заголовок
-        body: Новость
-        preview: Превью
+        body: Содержание
+        preview: Краткое описание
         news_category_id: Категория
-        on_top: Наверх
+        on_top: Топ
+        allow_commenting: Разрешить комментирование
         tag_list: Теги
+        state:
+          draft: Черновик
+          published: Опубликовано
+          unpublished: Снято с публикации
+          archived: Архив

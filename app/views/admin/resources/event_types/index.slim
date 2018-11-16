@@ -6,7 +6,7 @@ table.table
   thead
     tr
       th.col-md-1.text-center #
-      th.col-md-6 Название
+      th.col-md-6 = sortable_header 'Название', 'name'
       th.col-md-2 Цвет
       th.col-md-3.text-right Действия
   tbody#index
@@ -18,12 +18,10 @@ table.table
           span.small style="background-color:#{type.color || ''};"
             = type.color
         td.td-actions.text-right
-          = link_to [type], class: 'btn btn-info btn-simple btn-xs-lnk' do
-            i.fa.fa-user
           - if can? :update, type
             = link_to [:edit, type], class: 'btn btn-success btn-simple btn-xs-lnk' do
               i.fa.fa-edit
           - if can? :destroy, type
-            = link_to [type], method: :delete, class: 'btn btn-danger btn-simple btn-xs-lnk' do
+            = link_to [type], method: :delete, class: 'btn btn-danger btn-simple btn-xs-lnk button_remove' do
               i.fa.fa-remove
 = render 'shared/pagination'

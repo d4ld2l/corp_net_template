@@ -1,0 +1,30 @@
+- if @update_type.eql?('data') || !@update_type
+  = f.input :role_ids, collection: Role.all.collect { |c| [c.name, c.id] }, input_html: { multiple: true, include_blank: false, class: 'selectpicker', 'data-selected-text-format' => 'count > 2', 'data-label' => 'Ничего не выбрано'}, label: 'Роли'
+  = f.input :email, as: :email, required: true, label: 'Email'
+  = f.input :login, required: true, label: 'Логин'
+  = f.input :status, label: 'Статус'
+- else
+  table.table.table-bordered
+    tbody
+      tr
+        td Электронная почта
+        td = @resource_instance.email
+      tr
+        td Роли
+        td
+          ul
+            - @resource_instance.roles.map(&:name).each do |x|
+              li = x
+      tr
+        td ФИО
+        td = @resource_instance.full_name
+
+- if @update_type.eql?('password')  || !@update_type
+  = f.input :password, as: :password, label: 'Пароль', required: true
+  = f.input :password_confirmation, as: :password, label: 'Подтверждение пароля', required: true
+p
+  - if @resource_instance.new_record?
+    = f.submit "Добавить пользователя", class: 'btn btn-info'
+  - else
+    = f.submit "Обновить", class: 'btn btn-info'
+  = link_to "Отмена", accounts_path, class: 'button'

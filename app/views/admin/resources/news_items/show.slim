@@ -1,0 +1,46 @@
+= resource_page_header("Просмотр новости #{@resource_instance.title}")
+.row
+  .col-md-12
+    table.table.table-bordered
+      tbody
+        tr
+          td Заголовок
+          td = @resource_instance.title
+        tr
+          td Категория
+          td = link_to @resource_instance.news_category&.name, [@resource_instance.news_category] if @resource_instance.news_category
+        tr
+          td Краткое описание
+          td = @resource_instance.preview
+        tr
+          td Содержание
+          td = @resource_instance.body.html_safe
+        tr
+          td Топ
+          td = t(@resource_instance.on_top)
+        tr
+          td Теги
+          td = @resource_instance.tag_list
+        tr
+          td Количество комментариев
+          td = @resource_instance.comments_count
+        tr
+          td Количество отметок "Мне нравится"
+          td = @resource_instance.likes_count
+        tr
+          td Фото галерея
+          td
+            ul
+              - @resource_instance.photos.each do |p|
+                li = image_tag p.file.for_community&.url
+h3 Комментарии
+= render 'admin/resources/news_items/comments/comments'
+.row
+  .col-md-12
+    = link_to "Все новости", [:news_items], class: 'btn btn-default'
+    - if can? :update, @resource_instance
+      = publish_link(@resource_instance)
+      = unpublish_link(@resource_instance)
+      = archive_link(@resource_instance)
+      = repair_link(@resource_instance)
+      = link_to "Редактировать", [:edit, @resource_instance], class: 'btn btn-info'

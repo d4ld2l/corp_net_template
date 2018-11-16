@@ -1,0 +1,27 @@
+ru:
+  activerecord:
+    models:
+      resume: Резюме
+      professional_specialization: Специализация
+    attributes:
+      resume:
+        position: Позиция
+        skill_list: Навыки
+        skills: Навыки
+        desired_position: Желаемая должность
+        salary_level: Желаемая зароботная плата
+        skills_description: Описание навыков
+        comment: Комментарий
+        professional_specialization: Специализация
+      professional_specializations_resume:
+        professional_specialization_id: Специализация
+        name: Название
+      resume_work_experience:
+        position: Должность
+        company_name: Название компании
+        region: Регион
+        website: Веб-сайт
+        start_date: Дата начала работы
+        end_date: Дата окончания работы
+        experience_description: Описание опыта работы
+

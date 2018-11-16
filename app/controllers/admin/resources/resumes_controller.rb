@@ -6,7 +6,7 @@ class Admin::Resources::ResumesController < Admin::ResourceController
   private
 
   def permitted_attributes
-    [:user_id, :position, :desired_position, :salary_level, :skill_list,
+    [:account_id, :desired_position, :salary_level, :skill_list,
      :skills_description, :comment, :professional_specialization_id,
      professional_specializations_resumes_attributes: [:professional_specialization_id],
      resume_work_experiences_attributes:
@@ -17,11 +17,11 @@ class Admin::Resources::ResumesController < Admin::ResourceController
   end
 
   def association_chain
-    super.only_my(current_user.id)
+    super.only_my(current_account&.id)
   end
 
   def set_user
-    @resource_instance.user_id = params[:user_id]
+    @resource_instance.account_id = params[:account_id]
   end
 
   def set_resume_skills

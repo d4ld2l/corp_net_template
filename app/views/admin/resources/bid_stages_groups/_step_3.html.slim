@@ -1,0 +1,16 @@
+= simple_form_for current_bid_stages_group, options.merge(remote: true) do |f|
+  = f.simple_fields_for :bid_stages, f.object.bid_stages do |b|
+    .panel
+      .panel-heading
+        h3 = "Статус из #{b.object.name}(#{b.object.code})"
+      .panel-body
+        .allowed_bid_stages
+          = errors_for b.object, :allowed_transition
+          = b.simple_fields_for :allowed_bid_stages, b.object.allowed_bid_stages do |p|
+            = render 'allowed_bid_stage_fields', f: p, bid: b, parent_f: f
+          .links
+            = link_to_add_association 'Добавить переход', b, :allowed_bid_stages,
+                    render_options: { locals: { bid: b, parent_f: f } },
+                    class: 'btn btn-success'
+
+  = render 'buttons', f: f

@@ -1,0 +1,18 @@
+.nested-fieldsexecu
+  .panel
+    .panel-body
+      .row
+        .col-md-10
+          .row
+            .col-md-12
+              = f.hidden_field :id
+              - current = f.object.counterparty.present? ? f.object.counterparty : f.object.build_counterparty
+              = f.simple_fields_for :counterparty, current do |ff|
+                = ff.hidden_field :id
+                = ff.input :responsible, value: ff.object&.responsible?, label: 'Ответственный'
+                = ff.hidden_field :customer_id, value: customer&.id
+                = ff.input :name, label: 'ФИО конрагента'
+                = ff.input :position, label: 'Должность'
+        .col-md-1
+          = link_to_remove_association f, class: 'btn btn-simple btn-danger button_remove' do
+            i.fa.fa-remove

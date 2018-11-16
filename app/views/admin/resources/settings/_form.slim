@@ -1,0 +1,12 @@
+= simple_form_for(@resource_instance) do |f|
+  p
+    = f.input :code, disabled: true
+    = f.input :kind, collection: resource_class.kinds, include_blank: false
+    - if f.object.kind.to_sym == :color
+      = f.input :value, as: :colorpicker
+    - else
+      = f.input :value
+    = f.input :label
+  p
+    = f.submit f.object.persisted? ? "Обновить" : "Создать", class: 'btn btn-info'
+    = link_to "Отмена", all_settings_path, class: 'button'

@@ -1,0 +1,25 @@
+#account_info.tab-pane.fade.active.in
+  table.table.table-th-block
+    thead
+      tr
+        th.col-md-4
+        th
+    tbody
+      tr
+        td.active = Account.human_attribute_name(:email)
+        td = @resource_instance.email
+      tr
+        td.active Роли
+        td
+          ul 
+            - @resource_instance.roles.each do |role|
+              li = role.name
+      tr 
+        td.active Статус
+        td = @resource_instance.status
+      tr 
+        td.active Дата создания
+        td = I18n.l(@resource_instance.created_at)
+      tr 
+        td.active Последнее обновление
+        td = I18n.l(@resource_instance.updated_at)

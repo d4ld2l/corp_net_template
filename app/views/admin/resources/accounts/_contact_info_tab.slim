@@ -1,0 +1,32 @@
+#contact-info.tab-pane.fade
+  h4 Контактные данные
+  table.table.table-th-block
+    thead
+      tr
+        th.col-md-4
+        th
+    tbody
+      tr
+        td.active = Account.human_attribute_name(:email)
+        td = @resource_instance.email
+      tr
+        td.active = resource_class.human_attribute_name(:email_work)
+        td = @resource_instance.email_work
+      tr
+        td.active = resource_class.human_attribute_name(:email_private)
+        td = @resource_instance.prefered_email
+      tr
+        td.active = resource_class.human_attribute_name(:phone_number_landline)
+        td = @resource_instance.phone_number_landline
+      tr
+        td.active = resource_class.human_attribute_name(:phone_number_corporate)
+        td = @resource_instance.phone_number_corporate
+      tr
+        td.active = resource_class.human_attribute_name(:phone_number_private)
+        td = @resource_instance.phone_number_private
+      tr
+        td.active = resource_class.human_attribute_name(:skype)
+        td = @resource_instance.skype
+      / tr
+      /   td.active = resource_class.human_attribute_name(:telegram)
+      /   td = @resource_instance.telegram

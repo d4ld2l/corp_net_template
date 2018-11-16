@@ -1,0 +1,15 @@
+.row
+  .col-md-12
+    h4 История изменений
+    table.table.table-bordered
+      thead
+        tr
+          th Статус
+          th ФИО пользователя
+          th Дата и время изменения
+      tbody
+        - @resource_instance.bids_bid_stage.versions.reorder(created_at: :desc).each do |v|
+          tr
+            td = version_change(v, @resource_instance)
+            td = version_account(v)
+            td = l(v.created_at)

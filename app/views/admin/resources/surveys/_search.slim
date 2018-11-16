@@ -1,0 +1,31 @@
+= simple_form_for :query, method: :get do |f|
+  = f.input :q, label: 'Поиск', input_html: {value: params.dig(:query, 'q').blank? ? '' : params[:query][:q] }, class: 'form-control string'
+
+  button.btn.btn-primary type="button" data-toggle="collapse" data-target="#enhanced" style="cursor:pointer" Расширенный поиск
+  div.collapse#enhanced
+    = f.input :state, collection: Survey.aasm.states.collect{|c| [t(c.name, scope: 'surveys.state'), c.name]}, input_html: {multiple: true, include_blank: false, class: 'selectpicker', 'data-label' => 'Ничего не выбрано'}, label: 'Статус'
+
+    = f.input :survey_type, label: 'Тип опроса', collection: Survey.survey_types.collect{|k,v| [t("activerecord.enum.survey_type.#{k}"), k]},
+            input_html: {value: params.dig(:query, 'survey_type').blank? ? '' : params[:query][:survey_type], selected: params.dig(:query, 'survey_type').blank? ? '' : params[:query][:survey_type]}
+
+    - html_for_anon = {value: params.dig(:query, 'anonymous') == "1" ? 1 : 0}
+    - html_for_anon[:checked] = true if params.dig(:query, 'anonymous') == "1"
+    = f.input :anonymous, as: :boolean, label: false, inline_label: 'Анонимный опрос', input_html: html_for_anon
+
+    = f.input :creator_id, collection: Account.joins('INNER JOIN surveys ON surveys.creator_id = accounts.id').select('DISTINCT ON (accounts.id) accounts.*').collect {|u| [u.full_name, u.id]}, input_html: {multiple: true, include_blank: false, class: 'selectpicker', 'data-label' => 'Ничего не выбрано'}, label: 'Автор опроса'
+
+    = f.input :publisher_id, collection: Account.joins('INNER JOIN surveys ON surveys.publisher_id = accounts.id').select('DISTINCT ON (accounts.id) accounts.*').collect {|u| [u.full_name, u.id]}, input_html: {multiple: true, include_blank: false, class: 'selectpicker', 'data-label' => 'Ничего не выбрано'}, label: 'Пользователь, опубликовавший опрос'
+
+    h6 Даты создания/изменения
+    = f.input :updated_at_from, as: :string, input_html: {'data-value': params.dig(:query, 'updated_at_from').blank? ? '': Date.strptime(params[:query]['updated_at_from'], '%d.%m.%Y'), class: 'datepicker-uicker'}, label: 'С'
+    = f.input :updated_at_to, as: :string, input_html: {'data-value': params.dig(:query, 'updated_at_to').blank? ? '': Date.strptime(params[:query]['updated_at_to'], '%d.%m.%Y'), class: 'datepicker-uicker'}, label: 'По'
+
+    h6 Даты публикации
+    = f.input :published_at_from, as: :string, input_html: {'data-value': params.dig(:query, 'published_at_from').blank? ? '': Date.strptime(params[:query]['published_at_from'], '%d.%m.%Y'), class: 'datepicker-uicker'}, label: 'С'
+    = f.input :published_at_to, as: :string, input_html: {'data-value': params.dig(:query, 'published_at_to').blank? ? '': Date.strptime(params[:query]['published_at_to'], '%d.%m.%Y'), class: 'datepicker-uicker'}, label: 'По'
+
+    h6 Действует до
+    = f.input :ends_at, as: :string, input_html: {'data-value': params.dig(:query, 'ends_at').blank? ? '': Date.strptime(params[:query]['ends_at_to'], '%d.%m.%Y'), class: 'datepicker-uicker'}, label: false
+
+  = f.submit 'Найти', type: 'submit', class: 'btn btn-primary'
+  = link_to 'Сбросить', surveys_path, class: 'btn' if params[:query]

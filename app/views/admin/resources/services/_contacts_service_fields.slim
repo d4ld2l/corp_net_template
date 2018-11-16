@@ -1,0 +1,12 @@
+.nested-fields
+  .panel
+    .panel-body
+      .row
+        .col-md-10
+          .row
+            .col-md-12
+              = f.input :contact_id, collection: Account.all.map { |u| [u.full_name, u.id] }, label: 'ФИО контакта'
+              = f.hidden_field :service_id, value: @resource_instance&.id
+        .col-md-1
+          = link_to_remove_association f, class: 'btn btn-simple btn-danger button_remove' do
+            i.fa.fa-remove

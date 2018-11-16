@@ -1,0 +1,10 @@
+.row
+  .col-md-12.pull-right
+    .panel
+      .panel-body
+        = simple_form_for @resource_instance, multiple: true do |f|
+          .field
+            = f.file_field :documents, wrapper: :layouts_input_file, multiple: true
+          = f.submit 'Добавить документ'
+        - @resource_instance.documents.each do |doc|
+          = link_to doc.file.identifier, doc.url, target: :_blank

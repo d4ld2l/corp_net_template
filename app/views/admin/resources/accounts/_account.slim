@@ -1,0 +1,56 @@
+#main
+  #real-estates-detail.row
+    .col-lg-4.col-md-4.col-xs-12
+      .panel.panel-default
+        .panel-heading
+          header.panel-title
+            .text-center
+              strong Пользователь
+        .panel-body
+          #author.text-center
+            = image_tag @resource_instance.photo.for_profile.url
+            h3 =@resource_instance.full_name
+            .margin-bottom-10
+              small.label.label-warning = @resource_instance.default_legal_unit_employee&.legal_unit_employee_position&.position&.name_ru
+            p = @resource_instance.birthday&.strftime("%d.%m.%Y")
+            p
+              i.fa.fa-trophy style='color: gold'
+              = ' '
+              = @resource_instance.balance
+            p.sosmed-author
+              - @resource_instance.social_urls.each do |x|
+                = link_to x, x, target: :_blank
+                br
+    .col-lg-8.col-md-8.col-xs-12
+      .panel
+        .panel-body
+          ul#accountTab.nav.nav-pills
+            li.active
+              a data-toggle="tab" href="#account_info"  Данные пользователя
+            li 
+              a data-toggle="tab" href="#detail"  Контактная информация
+            - if can? :see_about_tab, @resource_instance
+              li
+                a data-toggle="tab" href="#about" Кадровая информация
+            - if (can?(:see_resumes_tab, @resource_instance) || @resource_instance.is_managed_by?(current_account))
+              li
+                a data-toggle="tab" href='#resumes' Резюме
+            - if (can?(:see_transactions_tab, @resource_instance) || @resource_instance.is_managed_by?(current_account))
+              li
+                a data-toggle="tab" href='#transactions' Детализация баланса
+            - if @message
+              li
+                a data-toggle="tab" href="#message"  Отправить приглашение
+          #accountTabContent.tab-content
+            hr
+              = render 'account_info_tab'
+              = render 'detail_tab'
+            - if can? :see_about_tab, @resource_instance
+              = render 'about_tab'
+            - if (can?(:see_resumes_tab, @resource_instance) || @resource_instance.is_managed_by?(current_account)))
+              = render 'resumes_tab'
+            - if (can?(:see_transactions_tab, @resource_instance) || @resource_instance.is_managed_by?(current_account) || @resource_instance.id == current_account&.id)
+              = render 'transactions_tab'
+            - if @message
+              #message.tab-pane.fade
+                = render 'email_form'

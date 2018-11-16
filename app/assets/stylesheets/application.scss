@@ -15,10 +15,38 @@
 @import 'bootstrap-sprockets';
 @import 'bootstrap';
 @import 'bootstrap-datetimepicker';
+@import "bootstrap-select";
 @import "material-kit";
 @import "login-register";
 @import "typeahead-rails";
 @import "font-awesome";
 @import "custom";
+@import "chat";
+@import "surveys";
 @import "bootstrap-colorpicker";
 @import "users";
+
+.help-block {
+  display: block !important
+}
+
+.array span {
+  border: none;
+  border-radius: 4px;
+  position: relative;
+  padding: 2px 5px;
+  margin: 10px 1px;
+  font-size: 12px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  will-change: box-shadow, transform;
+  transition: box-shadow 0.2s cubic-bezier(0.4, 0, 1, 1), background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: #b71c1c;
+  cursor: pointer;
+}
+
+.btn-group.open > .dropdown-toggle.btn, .btn-group.open > .dropdown-toggle.btn.btn-default, .btn-group-vertical.open > .dropdown-toggle.btn, .btn-group-vertical.open > .dropdown-toggle.btn.btn-default {
+  // background-color: #555 !important;
+  color: black !important;
+}

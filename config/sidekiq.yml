@@ -1,0 +1,17 @@
+:concurrency: 25
+:queues:
+  - [critical, 10]
+  - [high, 8]
+  - [elasticsearch-social, 6]
+  - [notifications, 4]
+  - [default, 2]
+  - [mailers, 2]
+  - [info360, 1]
+:limits:
+  critical: 6
+  high: 5
+  elasticsearch-social: 4
+  notifications: 4
+  default: 3
+  mailers: 2
+  info360: 1

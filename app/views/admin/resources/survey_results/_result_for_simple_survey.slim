@@ -1,0 +1,24 @@
+= render 'header'
+
+- @collection.each_with_index do |survey_result, index|
+  .panel
+    .panel-heading
+      h3.text-center = survey_result.survey.anonymous? ? "Пользователь #{index}" : survey_result.account.full_name
+    .panel-body
+      - survey_result.questions.each do |question|
+        h4.text-center = question.wording&.html_safe
+        - question.survey_answers.where(survey_result: survey_result).each do |survey_answer|
+          table.table
+            tbody#index
+              - survey_answer.answers.each do |key, value|
+                - if key == 'own_answer'
+                  tr
+                    td.col-md-2 Ответ пользователя
+                    td.col-md-10 = value
+                - else
+                  tr
+                    td.col-md-2 = t(value, scope: 'surveys.result_for_simple_survey')
+                    td.col-md-10 = survey_answer.offered_variants.where(id: key.to_i).last&.wording
+    .panel-footer
+      p.text-right = "Дата прохождения: #{l(survey_result.created_at)}"
+

@@ -1,0 +1,86 @@
+= resource_page_header("Просмотр сервиса '#{@resource_instance.name}'")
+.row
+  .col-md-12
+    table.table.table-bordered
+      tbody
+        tr
+          td Название сервиса
+          td = @resource_instance&.name
+        tr
+          td Категория сервиса
+          td = @resource_instance&.service_group&.name
+        tr
+          td Статусная модель
+          td = @resource_instance&.bid_stages_group&.name || 'Не выбрана'
+        tr
+          td Необходима заявка
+          td = @resource_instance&.is_bid_required? ? 'Да' : 'Нет'
+        tr
+          td Краткое описание
+          td = @resource_instance.description&.html_safe
+        tr
+          td Когда и кому предоставляется сервис
+          td = @resource_instance.is_provided_them&.html_safe
+        tr
+          td Как заказать предоставление сервиса
+          td = @resource_instance.order_service&.html_safe
+        tr
+          td Результат
+          td = @resource_instance.results&.html_safe
+        tr
+          td Сроки
+          td = @resource_instance.term_for_ranting&.html_safe
+        tr
+          td Ограничения
+          td = @resource_instance.restrictions&.html_safe
+
+        tr
+          td Описание процесса
+          td = @resource_instance.process_description&.html_safe
+        tr
+          td Подтверждающие документы
+          td = @resource_instance.supporting_documents&.html_safe
+        tr
+          td Дата и время создания
+          td = l(@resource_instance.created_at)
+        tr
+          td Дата и время публикации
+          td = l(@resource_instance.published_at) if @resource_instance.published_at
+
+        tr
+          td Оповещения
+          td
+            ul
+              - @resource_instance.notifications.each do |n|
+                li = "#{n.body} (#{n.show_notification? ? 'Показывать' : 'Не показывать'})"
+        tr
+          td Файлы
+          td
+            ul
+              - @resource_instance.documents.each do |d|
+                li = link_to d.name || d.file_identifier, d.file.url
+
+    h4 Контакты
+    table.table.table-bordered
+      thead
+        tr
+          td ФИО
+          td Skype
+          td Email (рабочий)
+          td Телефон (рабочий)
+      tbody
+        - @resource_instance.contacts.each do |c|
+          tr
+            td = c&.full_name
+            td = c&.skype
+            td = c&.default_legal_unit_employee&.email_work
+            td = c&.default_legal_unit_employee&.phone_work
+  .row
+    .col-md-6.pull-left
+      = link_to 'Редактировать', [:edit, @resource_instance], class: 'btn btn-primary'
+      = link_to 'Все сервисы', [:services], class: 'btn btn-default'
+    .col-md-6.pull-right.text-right
+      - if @resource_instance.may_to_published?
+        = link_to 'Опубликовать', [:publish, @resource_instance], method: :post, class: 'btn btn-primary'
+      - if @resource_instance.may_to_unpublished?
+        = link_to 'Снять с публикации', [:unpublish, @resource_instance], method: :post, class: 'btn btn-primary'

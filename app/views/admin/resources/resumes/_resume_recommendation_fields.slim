@@ -1,0 +1,13 @@
+.nested-fields
+  .panel
+    .panel-body
+      .row
+        .col-md-11
+          = f.hidden_field :id
+          = f.input :recommender_name, label: 'ФИО'
+          = f.input :company_and_position, label: 'Место работы и должность'
+          = f.input :phone, label: 'Телефон'
+          = f.input :email, label: 'Email'
+        .col-md-1
+          = link_to_remove_association f, class: 'btn btn-simple btn-danger button_remove' do
+            i.fa.fa-remove

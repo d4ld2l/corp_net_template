@@ -1,0 +1,41 @@
+h2 Список сервисов
+- if can? :create, resource_class
+  p = link_to 'Создать', [:new, :service], class: 'btn btn-primary'
+= render 'search'
+table.table
+  thead
+    tr
+      th.col-md-2
+        = sortable_header 'Название сервиса', 'name'
+      th.col-md-2
+        = sortable_header 'Категория сервиса', 'service_groups.name'
+      th.col-md-2
+        = sortable_header 'Дата и время создания', 'created_at'
+      th.col-md-3
+        = sortable_header 'Дата и время публикации', 'published_at'
+      th.col-md-1
+        = sortable_header 'Статус', 'state'
+      th.col-md-2.text-right Действия
+  tbody#index
+    - @collection.each do |service|
+      tr
+        td = link_to service&.name, service
+        td = service.service_group&.name
+        td = l(service.created_at) if service.created_at
+        td = l(service.published_at) if service.published_at
+        td = t("activerecord.attributes.news_item.state.#{service.state}")
+        td.text-right
+          - if can? :update, service
+            = link_to [:edit, service], class: 'btn btn-success btn-simple btn-xs', 'data-toggle': 'tooltip', 'data-original-title': 'Редактировать' do
+              i.fa.fa-edit
+          - if service.may_to_published?
+            = link_to [:publish, service], method: :post, class: 'btn btn-success btn-simple btn-xs', 'data-toggle': 'tooltip', 'data-original-title': 'Опубликовать' do
+              i.fa.fa-bullhorn
+          - if service.may_to_unpublished?
+            = link_to [:unpublish, service], method: :post, class: 'btn btn-success btn-simple btn-xs', 'data-toggle': 'tooltip', 'data-original-title': 'Снять с публикации' do
+              i.fa.fa-eye-slash
+          - if service.may_to_published?
+            = link_to [service], method: :delete, data: { confirm: 'Вы уверены что хотите удалить сервис?' }, class: 'btn btn-danger btn-simple btn-xs button_remove', 'data-toggle': 'tooltip', 'data-original-title': 'Удалить' do
+              i.fa.fa-remove
+
+= render 'shared/pagination'

@@ -1,0 +1,14 @@
+ru:
+  activerecord:
+    models:
+      meeting_information: Участники
+    attributes:
+      meeting_information:
+        starts_at: Дата и время начала
+        time_starts_at: Время начала
+        date_starts_at: Дата начала
+        place: Место
+        address: Адрес
+        aim: Цель встречи
+        result: Результат встречи
+        amount: Сумма

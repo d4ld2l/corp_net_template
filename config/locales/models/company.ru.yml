@@ -5,3 +5,5 @@ ru:
     attributes:
       company:
         name: Название
+        subdomain: Поддомен
+        domain: Домен

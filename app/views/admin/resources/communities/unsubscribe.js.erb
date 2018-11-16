@@ -1,0 +1,5 @@
+<%- if params[:from] %>
+  location.href = location.href
+<%- else %>
+  $('#rerender_table').html("<%= j render 'admin/resources/communities/partials/index_table' %>");
+<%- end %>

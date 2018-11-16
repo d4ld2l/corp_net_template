@@ -1,0 +1,21 @@
+table.table
+  thead
+    tr
+      th Группа
+      th Код параметра
+      th Тип значения
+      th Значение параметра
+      th Отображаемое значение
+      th Действия
+  tbody
+    - collection.each do |setting|
+      tr
+        td = setting.settings_group&.present? ? link_to(setting.settings_group&.label, SettingsGroup) : ''
+        td = setting.code
+        td = setting.kind
+        td = pretty_value(setting.kind, setting.value)
+        td = setting.label
+        td
+          - if can? :update, Setting
+            = link_to [:edit, setting], class: 'btn btn-success btn-simple btn-xs' do
+              i.fa.fa-edit

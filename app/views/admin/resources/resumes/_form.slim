@@ -1,0 +1,46 @@
+= simple_form_for(@resource_instance) do |f|
+  = f.hidden_field(:account_id, value:params[:account_id]) unless @resource_instance.persisted?
+  #professional_specializations
+    h3 Профессиональные направления
+    = f.simple_fields_for :professional_specializations_resumes do |p|
+      = render 'professional_specializations_resume_fields', f: p, professional_specializations_resume: p.object
+    .links
+      = link_to_add_association 'Добавить', f, :professional_specializations_resumes, class: 'btn btn-success'
+  .row
+    .col-md-6.no-padding-left
+
+  .row
+    .col-md-6.no-padding-left
+      = f.input :skill_list, input_html: { id: 'resource_tag_list' }
+      /= f.input(:skills, as: :select, wrapper: :layouts_multi_select, input_html:{class:'selectpicker tick multi-select', 'data-label':'Навыки', 'data-max-options':10, multiple:true, title:'Навыки', include_hidden:false}, include_hidden:false, collection:@resume_skills_collection)
+  .row
+    .col-md-8.no-padding-left
+      = f.input :desired_position, required: true
+    .col-md-4
+      = f.input :salary_level
+  = f.input :skills_description, as: :text, input_html: {rows: 3}
+  = f.input :comment, as: :text, input_html: {rows: 3}
+  h2 Опыт
+  #resume_work_experiences.datepickerable
+    = f.simple_fields_for :resume_work_experiences do |p|
+      = render 'resume_work_experience_fields', f: p, resume_work_experience: p.object
+    .links
+      = link_to_add_association 'Добавить', f, :resume_work_experiences, class: 'btn btn-success'
+  h2 Сертификаты
+  #resume_certificates.datepickerable
+    = f.simple_fields_for :resume_certificates do |c|
+      = render 'resume_certificate_fields', f: c, resume_certificate: c.object
+    .links
+      = link_to_add_association 'Добавить', f, :resume_certificates, class: 'btn btn-success'
+  h2 Рекомендации
+  #resume_recommendations
+    = f.simple_fields_for :resume_recommendations do |c|
+      = render 'resume_recommendation_fields', f: c, resume_recommendation: c.object
+    .links
+      = link_to_add_association 'Добавить', f, :resume_recommendations, class: 'btn btn-success'
+  p
+    - if @resource_instance.new_record?
+      = f.submit "Создать резюме", class: 'btn btn-info'
+    - else
+      = f.submit "Обновить", class: 'btn btn-info'
+    = link_to "Отмена", resumes_path, class: 'button'

@@ -1,0 +1,24 @@
+.row
+  .col-md-12
+    .panel
+      .panel-body
+        .row
+          .col-md-1
+            = image_tag comment.account&.photo&.thumb&.url
+          .col-md-2
+            = comment&.account&.full_name
+          .col-md-6
+            - if comment.deleted_at
+              = "<i>Сообщение было удалено #{l(comment.deleted_at)} пользователем #{comment&.deleted_by&.full_name}<i>".html_safe
+            - else
+              = comment.body&.html_safe
+          .col-md-1
+            i.fa.fa-heart
+            = " #{comment.likes_count}"
+          .col-md-2.text-right
+            = l(comment.created_at)
+        br
+        .row
+          .col-md-offset-1.col-md-10
+            - comment.child_comments.each do |c|
+              = render 'admin/resources/news_items/comments/show_comment_fields', comment: c

@@ -1,0 +1,44 @@
+ru:
+  expectations:
+    schedule:
+      full_day: Полный день
+      exchangeable: Сменный график
+      flextime: Гибкий график
+      remote: Удаленная работа
+      rotating: Вахтовый метод
+    type_of_employment:
+      full_time: Полная занятость
+      part_time: Частичная занятость
+      temporary: Проектная/временная
+      volunteering: Волонтерство
+      probation: Стажировка
+    experience:
+      no_experience: Без опыта
+      from_1_year: От 1 года
+      for_3_years: До 3 лет
+      from_3_to_6_years: От 3 до 6 лет
+      from_6_years: Более 6 лет
+  activerecord:
+    enum:
+      type_of_salary:
+        gross: До вычета налогов
+        net: После вычета налогов
+      type_of_contract:
+        indefinite: Бессрочный
+        fixed_term: Срочный
+        gpc: Договор
+      sex:
+        male: Мужской
+        female: Женский
+        undefined: Не указан
+      preferred_contact_type:
+        phone: Телефон
+        email: E-mail
+        skype: Skype
+      vacancy_status:
+        draft: Черновик
+        worked: В работе
+        new: Новая
+        archived: Закрыта
+        paused: Приостановлена
+

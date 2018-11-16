@@ -1,0 +1,26 @@
+h2 Список проектных ролей
+- if can? :create, resource_class
+  p = link_to 'Создать', new_assessment_project_role_path, :class => "btn btn-primary"
+table.table
+  thead
+    tr
+      th.col-md-5 Название
+      th.col-md-1 Количество компетенций
+      th.col-md-2 Дата создания
+      th.col-md-2 Дата обновления
+      th.col-md-2 Действия
+  tbody#index
+    - @collection.each do |p_role|
+      tr
+        td = link_to p_role.name, p_role
+        td = p_role.skills_count
+        td = l(p_role.created_at)
+        td = l(p_role.updated_at)
+        td
+          - if can? :update, resource_class
+            = link_to [:edit, p_role], class: 'btn btn-success btn-simple btn-xs' do
+              i.fa.fa-edit
+          - if can? :delete, p_role
+            = link_to [p_role], method: :delete, class: 'btn btn-danger btn-simple btn-xs button_remove' do
+              i.fa.fa-remove
+= render 'shared/pagination'

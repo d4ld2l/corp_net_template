@@ -1,0 +1,14 @@
+.nested-fields
+  .panel
+    .panel-body
+      .row
+        .col-md-10
+          .row
+            .col-md-12
+              = f.input :show_notification, as: :boolean
+              = f.input :body, label: 'Оповещение'
+              = f.hidden_field :notice_id, value: f.object&.id
+              = f.hidden_field :notice_type, value: f.object.model_name.to_s
+        .col-md-1
+          = link_to_remove_association f, class: 'btn btn-simple btn-danger button_remove' do
+            i.fa.fa-remove

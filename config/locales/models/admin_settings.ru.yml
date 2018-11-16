@@ -1,0 +1,9 @@
+ru:
+  activerecord:
+    models:
+      admin_setting: Настройка
+    attributes:
+      admin_setting:
+        value:
+          "0": Не публиковать автоматически
+          "1": Автоматическая публикация

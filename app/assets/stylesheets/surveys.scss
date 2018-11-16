@@ -1,0 +1,44 @@
+// Place all the styles related to the Admin::Resources::Surveys controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+.head-question {
+  height: 50px;
+  border-top: 1px solid #ddd;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+
+  .icons_head {
+    margin-top: 5px!important;
+    margin-right: 5px!important;
+    .toggle-fa-question {
+      cursor: pointer;
+    }
+  }
+
+  .question_title h4 {
+    margin-top: 10px!important;
+    padding-left: 10px;
+  }
+}
+
+.head-container {
+  display: flex;
+  //justify-content: center;
+  border-radius: 2px;
+  border: 0;
+  box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.12), 0 1px 6px 0 rgba(0, 0, 0, 0.12);
+  margin-bottom: 20px;
+  background-color: #fff;
+}
+
+.wrapper {
+  display: inline-flex;
+  flex-direction: column;
+  padding-left: 0!important;
+  padding-right:  0!important;
+}
+
+.slide-up-or-down{
+  padding: 0px 20px 30px;
+  box-shadow: black 0 18px 56px -18px;
+}

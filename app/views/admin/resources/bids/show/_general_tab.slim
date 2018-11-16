@@ -1,0 +1,48 @@
+.row
+  .col-md-12
+    table.table.table-bordered
+      tbody
+        tr
+          td Сервис
+          td = link_to @resource_instance.service&.name, @resource_instance.service
+        tr
+          td Автор
+          td = @resource_instance.author&.full_name
+        tr
+          td Согласующий
+          td = @resource_instance.matching_user&.full_name
+        tr
+          td Исполнитель
+          td = @resource_instance.manager&.full_name
+        tr
+          td Ассистент
+          td = @resource_instance.assistant&.full_name
+        tr
+          td Дата и время создания
+          td = l(@resource_instance.created_at)
+        tr
+          td Дата и время обновления
+          td = l(@resource_instance.updated_at)
+        tr
+          td Статус
+          td = @resource_instance.bid_stage&.name
+    - if @resource_instance.representation_allowance.present?
+      = render 'admin/resources/bids/show/representation_allowance/participants', resource_instance: @resource_instance
+      = render 'admin/resources/bids/show/representation_allowance/meeting', resource_instance: @resource_instance
+    - if @resource_instance.byod_information.present?
+      = render 'admin/resources/bids/show/byod/byod_information', byod_information: @resource_instance.byod_information
+
+    h4 Комментарии
+    table.table.table-bordered
+      tbody
+        - @resource_instance.comments.each do |c|
+          tr
+            td.col-md-4 = c.account&.full_name
+            td.col-md-2 = l(c.created_at) if c.created_at
+            td.col-md-6 = c.body&.html_safe
+            /td = 
+            - if c.documents == []
+              td.col-md-1 = ''
+            - else
+              - c.documents.each do |d|
+                td.col-md-1 = link_to d&.name || File.basename(d.file&.url), d&.file&.url, target: :_blank

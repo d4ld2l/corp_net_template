@@ -1,0 +1,8 @@
+= simple_form_for(@resource_instance) do |f|
+  = f.input :name, required: true, label: 'Название'
+  p
+    - if @resource_instance.persisted?
+      = f.submit "Обновить", class: 'btn btn-info'
+    - else
+      = f.submit "Создать группу наград", class: 'btn btn-info'
+    = link_to "Отмена", achievement_groups_path, class: 'button'

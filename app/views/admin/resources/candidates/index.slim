@@ -1,0 +1,17 @@
+h2 Список кандидатов
+table.table
+  thead
+    tr
+      th.col-md-6 = sortable_header 'ФИО кандидата', 'last_name'
+      th.col-md-3 Дата создания
+      th.col-md-3 Действия
+  tbody#index
+    - @collection.each do |candidate|
+      tr
+        td = link_to candidate.full_name, candidate
+        td = l(candidate.created_at)
+        td
+          - if can? :delete, candidate
+            = link_to [candidate], method: :delete, class: 'btn btn-danger btn-simple btn-xs button_remove' do
+              i.fa.fa-remove
+= render 'shared/pagination'

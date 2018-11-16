@@ -1,0 +1,6 @@
+= simple_form_for [@community, @news], url: [:update_news, @community], method: :put, remote: true do |f|
+  = f.input :title
+  = f.input :body
+  = f.input :preview
+  = f.input :tag_list, input_html: { id: 'resource_tag_list' }
+  = f.button :button, 'Обновить новость', class: 'btn btn-primary btn-xs', value: params[:resource_id]

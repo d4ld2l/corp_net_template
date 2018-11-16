@@ -1,16 +1,26 @@
-h2 Список навыков
+h2 Список компетенций
 - if can? :create, resource_class
   p = link_to 'Создать', new_skill_path, :class => "btn btn-primary"
-table.table.table-bordered
+table.table
   thead
     tr
-      th Навык
-      th Действия
-  tbody
+      th.col-md-3 = sortable_header 'Название', 'name'
+      th.col-md-3 = sortable_header 'Количество индикаторов', 'indicators_count'
+      th.col-md-2 Дата создания
+      th.col-md-2 Дата обновления
+      th.col-md-2 Действия
+  tbody#index
     - @collection.each do |skill|
       tr
-        td= skill.name
+        td = link_to skill.name, skill
+        td = skill.indicators_count
+        td = l(skill.created_at)
+        td = l(skill.updated_at)
         td
           - if can? :update, resource_class
-            = link_to 'Редактировать', edit_skill_path(skill), :class => "btn btn-primary"
+            = link_to [:edit, skill], class: 'btn btn-success btn-simple btn-xs' do
+              i.fa.fa-edit
+          - if can? :delete, skill
+            = link_to [skill], method: :delete, class: 'btn btn-danger btn-simple btn-xs button_remove' do
+              i.fa.fa-remove
 = render 'shared/pagination'

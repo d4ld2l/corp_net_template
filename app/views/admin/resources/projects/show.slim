@@ -13,36 +13,113 @@ body
           - if @resource_instance.legal_unit
             = link_to @resource_instance.legal_unit&.name, @resource_instance.legal_unit
       tr
+        td Подразделение
+        td = @resource_instance.department&.name_ru
+      tr
         td Код проекта
         td = @resource_instance.charge_code
+      tr
+        td Статус
+        td = t("activerecord.attributes.project.statuses.#{@resource_instance.status}")
       tr
         td Описание
         td = @resource_instance.description
       tr
-        td Менеджер
-        td = @resource_instance.manager
+        td Технологии
+        td
+          ul
+            - @resource_instance.technology_list.each do |t|
+              li = t
       tr
-        td Заказчик
-        td = @resource_instance.customer&.name
+        td Методологии
+        td
+          ul
+            - @resource_instance.methodology_list.each do |t|
+              li = t
+      tr
+        td Продукты
+        td
+          ul
+            - @resource_instance.product_list.each do |t|
+              li = t
       tr
         td Дата начала
-        td = @resource_instance.begin_date
+        td = l(@resource_instance.begin_date) if @resource_instance.begin_date
       tr
         td Дата окончания
-        td = @resource_instance.end_date
-  h2 Сотрудники на проекте
-  table.table.table-bordered
-    thead
+        td = l(@resource_instance.end_date) if @resource_instance.end_date
       tr
-        th ФИО
-        th Email
-    tbody
-      - @resource_instance.user_projects.each do |up|
-        tr
-          td= link_to up.user.profile&.full_name || '', profile_path(up.user.profile&.id), target: "_blank"
-          td= up.user.email
+        td Менеджер
+        td = @resource_instance.manager&.full_name
+      tr
+        td Создал
+        td = @resource_instance.created_by&.full_name
+      tr
+        td Дата создания
+        td = l(@resource_instance.created_at)
+      tr
+        td Обновил
+        td = @resource_instance.updated_by&.full_name
+      tr
+        td Дата обновления
+        td = l(@resource_instance.updated_at)
+      tr
+        td Заказчики
+        td
+          ul
+            - @resource_instance.customers.each do |c|
+              li = c.name
+  h2 Сотрудники на проекте
+  - @resource_instance.account_projects.each do |pp|
+    .panel
+      .panel-heading
+        h4.panel-title
+          = link_to pp.account&.full_name || '', account_path(pp.account&.id), target: "_blank"
+      .panel-body
+        table.table.table-bordered
+          tbody
+            tr
+              td Статус
+              td = t("activerecord.attributes.account_project.statuses.#{pp.status}")
+            tr
+              td Возраст
+              td = pp.account&.age
+            tr
+              td Город
+              td = pp.account&.city
+            tr
+              td Телефон
+              td = pp.account&.preferred_phone&.number
+            tr
+              td Навыки
+              td
+                ul
+                  - pp.account&.account_skills&.each do |s|
+                    li = "#{s.skill&.name}(#{s.skill_confirmations_count})"
+        - if pp.project_work_periods&.any?
+          h3 Периоды работы на проекте
+        - pp.project_work_periods.each do |pwe|
+          .panel
+            .panel-heading
+              h5.panel-title
+                = "#{l(pwe.begin_date) if pwe.begin_date} - #{l(pwe.end_date) if pwe.end_date}"
+            .panel-body
+              table.table.table-bordered
+                tbody
+                  tr
+                    td Роль
+                    td = pwe.role
+                  tr
+                    td Обязанности
+                    td = pwe.duties
+
+
 .row
   .col-md-12
     = link_to "Все проекты", projects_path, class: 'btn btn-default'
+    - if can? :manage, MailingList
+      = link_to "Создать/обновить команду", project_to_mailing_list_path(@resource_instance), method: :post, class: 'btn btn-info'
     - if can? :update, resource_class
       = link_to "Редактировать", edit_project_path(@resource_instance), class: 'btn btn-info'
+    - if can? :manage, @resource_instance
+        = link_to 'Удалить', [@resource_instance], method: :delete, class: 'btn btn-info button_remove'

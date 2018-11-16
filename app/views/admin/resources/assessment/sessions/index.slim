@@ -1,0 +1,42 @@
+h2 Список оценочных сессий
+- if can? :create, resource_class
+  p
+    = link_to 'Создать', '#new_assessment_session',  data: { toggle: 'modal', target: '#new_assessment_session'}, class: 'btn btn-primary'
+    = link_to 'Экспорт', as_xlsx_assessment_sessions_path, :class => "btn btn-secondary"
+= render 'search'
+table.table
+  thead
+    tr
+      th.col-md-2 Название
+      th.col-md-1 Инструмент оценки
+      th.col-md-2 Оцениваемый
+      th.col-md-1 Статус
+      th.col-md-1 Участники
+      th.col-md-1 Дата создания / изменения
+      th.col-md-2 Автор
+      th.col-md-2 Действия
+  tbody#index
+    - @collection.each do |s|
+      tr
+        td = link_to s.name, s
+        td = t("activerecord.attributes.assessment_session.kind.#{s.kind}")
+        td = s.account&.full_name
+        td = t("activerecord.attributes.assessment_session.status.#{s.status}")
+        td = participants_for_index(s)
+        td = l(s.updated_at)
+        td = s.created_by&.full_name
+        td
+          - if can? :update, resource_class
+            = link_to [:edit, s], class: 'btn btn-success btn-simple btn-xs' do
+              i.fa.fa-edit
+            - s.aasm.states(permitted: true).map(&:name).each do |state|
+              = link_to change_state_assessment_session_path(s&.id, state), class: 'btn btn-success btn-simple btn-xs', title:"В статус \"#{t("activerecord.attributes.assessment_session.status.#{state}")}\"", method: :put do
+                i.fa.fa-step-forward
+            - if s.status == 'in_progress'
+              = link_to [:send_reminders, s], class: 'btn btn-success btn-simple btn-xs', method: :post, title:"Напомнить непрошедшим" do
+                i.fa.fa-at
+          - if can? :delete, s
+            = link_to [s], method: :delete, class: 'btn btn-danger btn-simple btn-xs button_remove' do
+              i.fa.fa-remove
+= render 'shared/pagination'
+= render 'new_popup'

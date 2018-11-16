@@ -1,0 +1,174 @@
+= resource_page_header("Просмотр кандидата #{@resource_instance.full_name}")
+= link_to 'Кандидат 360', info360_candidate_path(@resource_instance) if @resource_instance.info360
+.row
+  .col-md-12
+    table.table.table-bordered
+      tbody
+        tr
+          td ФИО
+          td = @resource_instance.full_name
+        tr
+          td Дата создания
+          td = l @resource_instance.created_at
+        tr
+          td Последнее обновление
+          td = l @resource_instance.updated_at
+        tr
+          td Город
+          td = @resource_instance.resume&.city
+        tr
+          td Источник резюме
+          td = @resource_instance.resume&.resume_source&.name
+        tr
+          td Вакансии
+          td
+            ul
+              - @resource_instance.vacancies.each do |vac|
+                li = vac.name
+        tr
+          td Контакты
+          td
+            ul
+              - @resource_instance.resume.resume_contacts&.each do |c|
+                li = "#{c.value}" + (c.preferred? ? ' - предпочитаемый способ связи' : '')
+        tr
+          td Дата рождения
+          td = @resource_instance.birthdate
+        tr
+          td Пол
+          td = t("activerecord.enum.sex.#{@resource_instance.resume&.sex}") unless @resource_instance.resume&.sex.blank?
+        tr
+          td Описание навыков
+          td = @resource_instance.resume&.skills_description
+        tr
+          td Навыки
+          td = @resource_instance.resume&.skill_list
+        tr
+          td Уровень образования
+          td = @resource_instance.resume&.education_level&.name
+        tr
+          td Знание языков
+          td
+            ul
+              - @resource_instance.resume&.language_skills&.each do |ls|
+                li #{ls.language&.name} - #{ls.language_level.name}
+.row
+  .col-md-12
+    h3 Опыт работы
+    table.table.table-bordered
+      thead
+        tr
+          th Должность
+          th Название компании
+          th Регион
+          th Сайт
+          th Период работы
+          th Обязанности и достижения
+      tbody
+        - @resource_instance.resume&.resume_work_experiences.each do |exp|
+          tr
+            td = exp.position
+            td = exp.company_name
+            td = exp.region
+            td = exp.website
+            td = distance_of_time_in_words(exp.start_date, exp.end_date || Date.current, only: [:years, :months])
+            td = exp.experience_description
+.row
+  .col-md-12
+    h3 Образование
+    table.table.table-bordered
+      thead
+        tr
+          th Уровень
+          th Название учебного заведения
+          th Факультет
+          th Специальность
+          th Год окончания
+      tbody
+        - @resource_instance.resume&.resume_educations.each do |ed|
+          tr
+            td = ed.education_level&.name
+            td = ed.school_name
+            td = ed.faculty_name
+            td = ed.speciality
+            td = ed.end_year
+.row
+  .col-md-12
+    h3 Повышение квалификации
+    table.table.table-bordered
+      thead
+        tr
+          th Название
+          th Проводившая организация
+          th Специализация
+          th Год окончания
+      tbody
+        - @resource_instance.resume&.resume_qualifications.each do |ed|
+          tr
+            td = ed.name
+            td = ed.company_name
+            td = ed.speciality
+            td = ed.end_year
+.row
+  .col-md-12
+    h3 Сертификаты
+    table.table.table-bordered
+      thead
+        tr
+          th Название
+          th Проводившая организация
+          th Год окончания
+      tbody
+        - @resource_instance.resume&.resume_certificates.each do |cert|
+          tr
+            td = cert.name
+            td = cert.company_name
+            td = cert.end_date
+.row
+  .col-md-12
+    h3 Рекомендации
+    table.table.table-bordered
+      thead
+        tr
+          th ФИО
+          th Компания и должность
+          th Телефон
+          th Email
+      tbody
+        - @resource_instance.resume&.resume_recommendations.each do |rec|
+          tr
+            td = rec.recommender_name
+            td = rec.company_and_position
+            td = rec.phone
+            td = rec.email
+.row
+  .col-md-12
+    h3 Ожидания
+    table.table.table-bordered
+      tbody
+        tr
+          td Должность
+          td = @resource_instance.resume&.desired_position
+        tr
+          td Уровень зарплаты
+          td = @resource_instance.resume&.salary_level
+        tr
+          td Профессиональная отрасль
+          td = @resource_instance.resume&.specialization
+        tr
+          td Опыт работы
+          td = @resource_instance.resume&.experience&.map{|x| t("expectations.experience.#{x}")}&.join(', ')
+        tr
+          td График работы
+          td = @resource_instance.resume&.working_schedule&.map{|x| t("expectations.schedule.#{x}")}&.join(', ')
+        tr
+          td Тип занятости
+          td = @resource_instance.resume&.employment_type&.map{|x| t("expectations.type_of_employment.#{x}")}&.join(', ')
+        tr
+          td Комментарий
+          td = @resource_instance.resume&.comment
+.row
+  .col-md-12
+    = link_to "Все кандидаты", candidates_path, class: 'btn btn-default'
+    - if can? :manage, @resource_instance
+      = link_to 'Удалить', [@resource_instance], method: :delete, class: 'btn btn-info button_remove'

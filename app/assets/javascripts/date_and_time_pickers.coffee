@@ -4,7 +4,8 @@ $ ->
       format: 'DD.MM.YYYY',
       locale: 'ru',
       date: $(this).data('value'),
-      useCurrent: false
+      useCurrent: false,
+      startDate: $(this).data('startDate')
     })
 
 $ ->

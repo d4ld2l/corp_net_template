@@ -1,4 +1,4 @@
 class Notification < ApplicationRecord
   belongs_to :notice, polymorphic: true
-  belongs_to :user
+  belongs_to :account, optional: true
 end

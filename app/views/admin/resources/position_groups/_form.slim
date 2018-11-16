@@ -1,5 +1,5 @@
 = simple_form_for(@resource_instance) do |f|
-  = f.input :legal_unit_id, collection: LegalUnit.all.map{|x| [x.name, x.id]}, label: 'Юридическое лицо', include_blank: false
+  = f.input :legal_unit_id, collection: LegalUnit.all.pluck(:name, :id), label: 'Юридическое лицо', include_blank: false
   = f.input :code, required: true
   = f.input :name_ru, required: true
   = f.input :description, as: :text, input_html:{rows: 10}

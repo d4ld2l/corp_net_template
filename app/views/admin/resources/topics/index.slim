@@ -3,7 +3,7 @@ h2 Список пользователей
   = link_to 'Создать обсуждение', new_community_topic_path, class: 'btn btn-primary'
   = link_to 'Вернуться к группе', [@community], class: 'btn btn-primary'
 /p
-/  = render 'shared/quick_search', path: users_admin_index_path
+/  = render 'shared/quick_search', path: accounts_path
 
 table.table
   tbody#index
@@ -17,18 +17,18 @@ table.table
               = link_to topic.subject, [@community , topic]
             .col-md-4
               - if topic.messages.any?
-                = link_to topic.messages.last.user.profile.full_name, [topic.messages.last.user.profile]
+                = link_to topic.messages.last.account.account.full_name, [topic.messages.last.account.account]
 = render 'shared/pagination'
 
         /td.td-actions.text-right
-        /  - if user.profile.present?
-        /    = link_to [user.profile], class: 'btn btn-info btn-simple btn-xs' do
-        /      i.fa.fa-user
-        /    = link_to [:edit, user.profile], class: 'btn btn-success btn-simple btn-xs-lnk' do
+        /  - if account.account.present?
+        /    = link_to [account.account], class: 'btn btn-info btn-simple btn-xs' do
+        /      i.fa.fa-account
+        /    = link_to [:edit, account.account], class: 'btn btn-success btn-simple btn-xs-lnk' do
         /      i.fa.fa-edit
         /  - else
         /    button.btn.btn-info.btn-simple.btn-xs data-toggle="tooltip" title="У этого пользователя пока что нет профиля"
-        /      i.fa.fa-user
+        /      i.fa.fa-account
         /    button.btn.btn-success.btn-simple.btn-xs-lnk data-toggle="tooltip" title="У этого пользователя пока что нет профиля"
         /      i.fa.fa-edit
         /    /button.btn.btn-danger.btn-simple.btn-xs rel="tooltip" title="Remove" type="button"

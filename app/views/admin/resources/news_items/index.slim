@@ -1,0 +1,35 @@
+h2 Список Новостей
+- if can? :create, resource_class
+  p = link_to 'Создать', [:new, :news_item], class: 'btn btn-primary'
+= render 'search'
+table.table
+  thead
+    tr
+      th.col-md-3 = sortable_header 'Название', 'title'
+      th.col-md-2 = sortable_header 'Категория', 'news_categories.name'
+      th.col-md-1 Топ
+      th.col-md-2 = sortable_header 'Статус', 'state'
+      th.col-md-1 = sortable_header 'Дата публикации', 'published_at'
+      th.col-md-3.text-right Действия
+  tbody#index
+    - @collection.each do |news_item|
+      tr
+        td = link_to news_item.title, [news_item]
+        td = link_to news_item.news_category.name, [news_item.news_category] if news_item.news_category
+        td = news_item.on_top ? 'Да' : 'Нет'
+        td = t("activerecord.attributes.news_item.state.#{news_item.state}") if news_item.state
+        td = l(news_item.published_at) if news_item.published_at
+        td.text-right
+          - if can? :update, news_item
+            = link_to [:edit, news_item], class: 'btn btn-success btn-simple btn-xs' do
+              i.fa.fa-edit
+          - if (can? :destroy, news_item) and news_item.state != 'published'
+            = link_to [news_item], method: :delete, class: 'btn btn-danger btn-simple btn-xs button_remove' do
+              i.fa.fa-remove
+          - if news_item.may_to_published?
+            = link_to [:publish, news_item], method: :post, class: 'btn btn-success btn-simple btn-xs', 'data-toggle': 'tooltip', 'data-original-title': 'Опубликовать' do
+              i.fa.fa-bullhorn
+          - if news_item.may_to_unpublished?
+            = link_to [:unpublish, news_item], method: :post, class: 'btn btn-success btn-simple btn-xs', 'data-toggle': 'tooltip', 'data-original-title': 'Снять с публикации' do
+              i.fa.fa-eye-slash
+= render 'shared/pagination'

@@ -1,0 +1,16 @@
+h2 Группы настроек
+table.table
+  thead
+    tr
+      th Код
+      th Название
+      th Действия
+  tbody
+    - @collection.each do |sg|
+      tr
+        td = sg.code
+        td = sg.label
+        td
+          - if can? :update, resource_class
+            = link_to [:edit, sg], class: 'btn btn-success btn-simple btn-xs' do
+              i.fa.fa-edit

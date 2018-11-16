@@ -1,0 +1,73 @@
+#about.tab-pane.fade
+  table.table.table-th-block
+    thead
+      tr
+        th.col-md-4
+        th
+    tbody
+      tr
+        td.active Город:
+        td = @resource_instance&.city
+      tr
+        td.active Пол:
+        td = t("activerecord.attributes.account/sex.#{@resource_instance&.sex}") if @resource_instance&.sex
+      tr
+        td.active Семейное положение
+        td = t("activerecord.enum.marital_status.#{@resource_instance&.marital_status}") if @resource_instance&.marital_status
+      tr
+        td.active Дети
+        td = @resource_instance&.kids
+      tr
+        td.active = resource_class.human_attribute_name(:office)
+        td = @resource_instance&.default_legal_unit_employee&.office&.name
+      tr
+        td.active Основное юрлицо:
+        td = @resource_instance&.default_legal_unit_employee&.legal_unit&.name
+      tr
+        td.active Дополнительные юрлица:
+        td
+          ul
+           - @resource_instance&.legal_unit_employees do |l|
+            li = l&.legal_unit&.name
+      tr
+        td.active Зарегистрирован:
+        td = l(@resource_instance.created_at, format: :date)
+      tr
+        td.active Должность
+        td = @resource_instance.default_legal_unit_employee&.legal_unit_employee_position&.position&.name_ru
+      tr
+        td.active Дата приема на работу
+        td = l(@resource_instance.default_legal_unit_employee&.hired_at) if @resource_instance.default_legal_unit_employee&.hired_at
+      tr
+        td.active Статус в текущем юридическом лице
+        td = @resource_instance.default_legal_unit_employee&.legal_unit_employee_state&.state
+      tr
+        td.active Заработная плата
+        td = @resource_instance.default_legal_unit_employee&.wage
+      tr
+        td.active Дата окончания трудового договора
+        - contract_end_date = @resource_instance.default_legal_unit_employee&.contract_end_at
+        td = l(contract_end_date) unless contract_end_date.nil?
+      tr
+        td.active Тип договора
+        td = @resource_instance.default_legal_unit_employee&.contract_type&.name 
+      tr
+        td.active Руководитель
+        td = @resource_instance.default_legal_unit_employee&.manager&.full_name
+      tr
+        td.active Блок/Практика
+        td = @resource_instance.default_legal_unit_employee&.legal_unit_employee_position&.department&.name_ru
+      tr
+        td.active История кадровых перемещений
+        td
+          ul
+            - @resource_instance.default_legal_unit_employee&.legal_unit_employee_position&.versions&.each do |x|
+              - unless x.event.to_s == 'create'
+                li = "#{x.reify.department&.name_ru} / #{x.reify.position&.name_ru} (#{l(x.created_at)})"
+      tr
+        td.active История статусов
+        td
+          ul
+            - @resource_instance.default_legal_unit_employee&.legal_unit_employee_state&.versions&.each do |x|
+              - unless x.event.to_s == 'create'
+                li = "#{x.reify&.state} (#{l(x.created_at)})"

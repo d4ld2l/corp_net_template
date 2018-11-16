@@ -1,0 +1,5 @@
+= resource_page_header("Редактирование транзакции #{@resource_instance.id}")
+= simple_form_for(@resource_instance) do |f|
+  = f.input :comment, label: 'Комментарий'
+  p
+    = f.submit "Обновить", class: 'btn btn-info'

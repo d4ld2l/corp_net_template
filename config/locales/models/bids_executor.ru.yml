@@ -1,0 +1,7 @@
+ru:
+  activerecord:
+    models:
+      bids_executor: Исполнитель заявок
+    attributes:
+      bids_executor:
+        account_id: Аккаунт исполнителя

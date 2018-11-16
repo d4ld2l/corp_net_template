@@ -1,0 +1,9 @@
+h2 Настройки
+- if @ui
+  h3
+    | UI
+    = link_to [:edit, @ui], class: 'btn btn-success btn-simple btn-xs' do
+      i.fa.fa-edit
+  = render 'admin/all_settings/ui'
+h3 Общие
+= render 'admin/all_settings/common'

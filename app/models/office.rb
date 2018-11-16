@@ -1,5 +1,5 @@
 class Office < ApplicationRecord
-	has_many :profiles
+  has_many :accounts
 
-	validates :name, presence: true
+  validates :name, presence: true
 end

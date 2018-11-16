@@ -1,34 +1,37 @@
 class Api::V0::Resources::EventsController < Api::ResourceController
+  include Api::V0::Resources::Events
+
   def index
-    render json: @collection.as_json(methods:[:participants_count, :participants, :created_by], include:{event_type:{}, documents:{}})
+    render json: @collection.as_json(json_collection_inclusion)
   end
 
   def show
-    render json: @resource_instance.as_json(methods:[:participants_count, :participants, :created_by], include:{event_type:{}, documents:{}})
+    render json: @resource_instance.decorate.as_json(json_resource_inclusion)
   end
 
   def create
-    @resource_instance.created_by ||= current_user
+    @resource_instance.created_by_id = current_account.id unless @resource_instance.created_by_id
     if @resource_instance.save
-      render json: @resource_instance.as_json(methods:[:participants_count, :participants, :created_by], include:{event_type:{}, documents:{}})
+      render json: @resource_instance.decorate.as_json(json_resource_inclusion)
     else
-      render json: {success: false}
+      render json: {success: false, errors: @resource_instance.errors.as_json}
     end
   end
 
   def update
-    @resource_instance.created_by ||= current_user
+    @resource_instance.created_by_id = current_account.id unless @resource_instance.created_by_id
     if @resource_instance.update_attributes(resource_params)
-      render json: @resource_instance.as_json(methods:[:participants_count, :participants, :created_by], include:{event_type:{}, documents:{}})
+      render json: @resource_instance.decorate.as_json(json_resource_inclusion)
     else
-      render json: {success: false}
+      render json: {success: false, errors: @resource_instance.errors.as_json}
     end
   end
 
   private
 
   def association_chain
-    result = resource_collection
+    result = resource_collection.includes(chain_collection_inclusion).available_for_account(current_account.id).default_order
+
     if params[:event_type_id]
       result = result.where(event_type_id: params[:event_type_id])
     end
@@ -54,9 +57,9 @@ class Api::V0::Resources::EventsController < Api::ResourceController
 
   def permitted_attributes
     [
-        :id, :name, :created_by_id, :starts_at, :ends_at, :description, :event_type_id, :place,
-        event_participants: [:id, :email, :user_id, :do_not_disturb, :_destroy],
-        documents_attributes:[:id, :file, :remote_file_url, :name, :_destroy]
+        :id, :name, :created_by_id, :starts_at, :ends_at, :description, :event_type_id, :place, :available_for_all,
+        event_participants_attributes: %i[id email account_id do_not_disturb _destroy],
+        documents_attributes:%i[id file remote_file_url name _destroy]
     ]
   end
 end

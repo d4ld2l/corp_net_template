@@ -1,0 +1,13 @@
+.row
+  .col-md-12.pull-right
+    .panel
+      .panel-heading.text-center
+        h4 Администратор
+      .panel-body
+        .row
+          .col-md-12.account_image_in_group
+            .account_block.text-center
+              = link_to [@resource_instance.account] do
+                = image_tag @resource_instance.account&.photo.thumb.url
+                br
+                = @resource_instance.account.email

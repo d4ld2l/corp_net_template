@@ -1,0 +1,41 @@
+= simple_form_for @resource_instance do |f|
+  = f.input :name, label: 'Название сервиса'
+  = f.input :is_bid_required, as: :boolean
+  = f.input :service_group_id, collection: ServiceGroup.all.map {|sg| [sg.name, sg.id] }, label: 'Категория сервиса'
+  = f.input :bid_stages_group_id, collection: BidStagesGroup.all.map { |sg| [sg.name, sg.id] }, label: 'Статусная модель'
+  = f.input :description, as: :ckeditor, input_html: { ckeditor: { toolbar: 'Full' } }
+  = f.input :is_provided_them, as: :ckeditor, input_html: { ckeditor: { toolbar: 'Full' } }
+  = f.input :order_service, as: :ckeditor, input_html: { ckeditor: { toolbar: 'Full' } }
+  = f.input :results, as: :ckeditor, input_html: { ckeditor: { toolbar: 'Full' } }
+  = f.input :term_for_ranting, as: :ckeditor, input_html: { ckeditor: { toolbar: 'Full' } }
+  = f.input :restrictions, as: :ckeditor, input_html: { ckeditor: { toolbar: 'Full' } }
+  = f.input :process_description, as: :ckeditor, input_html: { ckeditor: { toolbar: 'Full' } }
+  = f.input :supporting_documents, as: :ckeditor, input_html: { ckeditor: { toolbar: 'Full' } }
+
+  h4 Контакты
+  - current = f.object.contacts_services.present? ? f.object.contacts_services : f.object.contacts_services.build
+  = f.simple_fields_for :contacts_services, current do |p|
+    = errors_for f.object, :contacts_services
+    = render 'contacts_service_fields', f: p
+  .links
+    = link_to_add_association 'Добавить', f, :contacts_services, class: 'btn btn-success'
+
+
+  h4 Документы
+  #documents
+    - current = f.object.documents.present? ? f.object.documents : f.object.documents.build
+    = f.simple_fields_for :documents, current do |p|
+      = render 'document_fields', f: p
+    .links
+      = link_to_add_association 'Добавить', f, :documents, class: 'btn btn-success'
+
+  h4 Оповещения
+  #notifications
+    - current = f.object.notifications.present? ? f.object.notifications : f.object.notifications.build
+    = f.simple_fields_for :notifications, current do |p|
+      = render 'notification_fields', f: p
+    .links
+      = link_to_add_association 'Добавить', f, :notifications, class: 'btn btn-success'
+
+  = f.submit 'Сохранить', class: 'btn btn-success'
+  = link_to 'Отмена', [@resource_instance], class: 'btn bnt-default'

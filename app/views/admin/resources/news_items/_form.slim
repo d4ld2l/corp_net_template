@@ -1,0 +1,35 @@
+= simple_form_for @resource_instance do |f|
+  = f.hidden_field :account_id, value: current_account.id
+  .row
+    .col-md-6
+      = f.input :news_category_id, collection: NewsCategory.all.map{ |nc| [nc.name, nc.id] }, include_blank: false
+  .row
+    .col-md-12
+      = f.input :title
+  .row
+    .col-md-12
+      = f.input :preview
+  = f.input :body, as: :ckeditor, input_html: { ckeditor: { toolbar: 'Full' } }
+  .row
+    .col-md-2
+      = f.input :on_top
+    .col-md-2
+      = f.input :allow_commenting
+    .col-md-8
+      = f.input :tag_list, input_html: { id: 'resource_tag_list' }
+
+  .row#photo-fields
+    .col-md-12
+      h3 Фото
+      hr
+        = f.simple_fields_for :photos do |p|
+          = render 'photo_fields', f: p, photo: p.object
+      .row
+        .col-md-12
+          .links
+            = link_to_add_association 'Добавить', f, :photos, class: 'btn btn-success'
+  - if @resource_instance.new_record?
+    = f.submit "Добавить новость", class: 'btn btn-info'
+  - else
+    = f.submit "Обновить", class: 'btn btn-info'
+  = link_to "Отмена", news_items_path, class: 'button'

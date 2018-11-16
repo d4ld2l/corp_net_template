@@ -1,0 +1,39 @@
+h2 Список опросов
+- if can? :create, resource_class
+  p = link_to 'Создать', [:new, :survey], :class => "btn btn-primary"
+= render 'search'
+table.table
+  thead
+    tr
+      th.col-md-2 = sortable_header 'Название', 'name'
+      th.col-md-1 Тип опроса
+      th.col-md-2 = sortable_header 'Дата создания/изменения', 'created_at'
+      th.col-md-2 = sortable_header 'Опубликовал', 'publisher.surname'
+      th.col-md-1 = sortable_header 'Дата публикации' , 'updated_at'
+      th.col-md-1 = sortable_header 'Статус', 'state'
+      th.col-md-1 = sortable_header 'Количество участников', 'count_participants'
+      th.col-md-2.text-right Действия
+  tbody#index
+    - @collection.each do |survey|
+      tr
+        td = link_to survey.name, survey
+        td = t("activerecord.enum.survey_type.#{survey.survey_type}")
+        td = l(survey.updated_at, format: :date)
+        td = link_to(survey.publisher&.full_name, [survey.publisher]) if survey.publisher
+        td = l(survey.published_at, format: :date) if survey.published_at
+        td = t(survey.state, scope: 'surveys.state')
+        td.text-center = survey.survey_results.distinct.pluck(:account_id).uniq.count
+        td.text-right
+          - if survey.may_to_published?
+            = link_to [:publish, survey], method: :post, class: 'btn btn-success btn-simple btn-xs', 'data-toggle': 'tooltip', 'data-original-title': 'Опубликовать опрос' do
+              i.fa.fa-bullhorn
+          - if survey.may_to_unpublished?
+            = link_to [:unpublish, survey], method: :post, class: 'btn btn-success btn-simple btn-xs', 'data-toggle': 'tooltip', 'data-original-title': 'Снять с публикации опрос' do
+              i.fa.fa-eye-slash
+          - if can? :update, resource_class
+            = link_to [:edit, survey], class: 'btn btn-success btn-simple btn-xs', 'data-toggle': 'tooltip', 'data-original-title': 'Редактировать опрос' do
+              i.fa.fa-edit
+          - if survey.may_to_archived? && can?(:manage, resource_class)
+            = link_to [survey], method: :delete, class: 'btn btn-danger btn-simple btn-xs button_remove', 'data-toggle': 'tooltip', 'data-original-title': 'Удалить опрос' do
+              i.fa.fa-remove
+= render 'shared/pagination'

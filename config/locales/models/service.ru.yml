@@ -1,0 +1,17 @@
+ru:
+  activerecord:
+    models:
+      service: Роль
+    attributes:
+      service:
+        service: Название
+        description: Описание
+        is_provided_them: Когда и кому предоставляется сервис
+        order_service: Как заказать предоставление сервиса
+        results: Результат
+        term_for_ranting: Сроки
+        restrictions: Ограничения
+        is_bid_required: Требуется ли заявка?
+        process_description: Описание процесса
+        supporting_documents: Подтверждающие документы
+

@@ -1,11 +1,16 @@
 class Community < ApplicationRecord
-  enum c_type: [:opened, :closed]
 
-  belongs_to :user
-  has_many :communities_users, dependent: :destroy
-  has_many :users, through: :communities_users
+  include Elasticsearch::Model
+  include Indexable
+
+  enum c_type: %i[opened closed]
+
+  belongs_to :account, inverse_of: :managed_communities, optional: true
+
+  has_many :account_communities, dependent: :destroy
+  has_many :accounts, through: :account_communities
   # has_many :communities_news_items, dependent: :destroy
-  has_many :news_items
+  has_many :news_items, dependent: :destroy
   has_many :notifications, as: :notice
   has_many :topics, dependent: :destroy
 
@@ -17,30 +22,44 @@ class Community < ApplicationRecord
   mount_uploader :photo, PhotoUploader
   mount_uploaders :documents, DocumentUploader
 
-  searchkick callbacks: :async, word_start: [:email, :name, :surname, :middlename]#, merge_mappings: true#, language: [:english, :russian]
 
-  def self.create_new_user_by_invite_email(email)
-    password = Devise.friendly_token.first(8)
-    user = User.create(email: email.email, password: password)
-    tokens = user.create_new_auth_token
-    user.build_profile(name: email.name, surname: email.surname, middlename: email.middle_name).save(validate: false)
-    { user: user, token: tokens }
-  end
-
-  def search_data
-    {
-      tags: tags,
-      name: name
-    }
-  end
+  # def self.create_new_user_by_invite_email(email)
+  #   password = Devise.friendly_token.first(8)
+  #   account = Account.create(email: email.email, password: password)
+  #   tokens = account.create_new_auth_token
+  #   account.assign_attributes(name: email.name, surname: email.surname, middlename: email.middle_name).save(validate: false)
+  #   { account: account, token: tokens }
+  # end
 
   def users_count
-    users.count
+    accounts.count
   end
 
-  def show_users_for_block
-    users.where(communities_users: { status: :accepted })
-         .order('RANDOM()').take(8)
-         .in_groups_of(4, false)
+  def as_indexed_json(options={})
+    as_json only: %i[name created_at]
+  end
+
+  def self.search(query, options={})
+    __elasticsearch__.search(
+        query: {
+            bool: {
+                must: {
+                    multi_match: {
+                        query: query,
+                        type: 'phrase_prefix',
+                        fields: %w[name]
+                    }
+                }
+            }
+        },
+        sort: [{ _score: { order: :desc } },
+               { created_at: { order: :desc } }]
+    )
+  end
+
+  def show_accounts_for_block
+    accounts.where(account_communities: { status: :accepted })
+            .order('RANDOM()').take(8)
+            .in_groups_of(4, false)
   end
 end

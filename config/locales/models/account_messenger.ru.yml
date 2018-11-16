@@ -1,0 +1,9 @@
+ru:
+  activerecord:
+    models:
+      account_messenger: Мессенджер сотрудника
+      account_messengers: Мессенджеры сотрудника
+    attributes:
+      account_messenger:
+        name: Название
+        phones: Номера телефонов

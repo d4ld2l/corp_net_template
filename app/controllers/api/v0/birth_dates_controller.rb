@@ -1,44 +1,44 @@
 class Api::V0::BirthDatesController < Api::BaseController
-  include ActionController::ImplicitRender
-  respond_to :json
-  layout false
+  include Api::V0::BirthDates
+  before_action :authenticate_account!
 
   def index
     @collection = {}
-    collection = Profile.where.not(birthday: nil).group_by(&:birthday)
-    collection.each do |date, profiles|
+    collection = Account.includes(chain_collection_inclusion).where.not(birthday: nil).group_by(&:birthday)
+    collection.each do |date, accounts|
       date = date.change(year: Date.current.year)
       if @collection[date].present?
-        @collection[date] |= profiles
+        @collection[date] |= accounts.as_json(json_collection_inclusion)
       else
-        @collection[date] = profiles
+        @collection[date] = accounts.as_json(json_collection_inclusion)
       end
     end
 
-    render
+    render json: @collection
   end
 
   def nearest
-    @collection = {}
+    dates_arr = Account.where.not(birthday: nil).pluck(:birthday).uniq
+    dates_arr_with_shift = []
     today = Date.current
-    collection = Profile.where.not(birthday: nil).group_by(&:birthday)
-    collection.each do |date, profiles|
+    dates_arr.each do |d|
       (0..1).each do |year_shift|
-        date = date.change(year: today.year+year_shift)
-        if @collection[date].present?
-          @collection[date] |= profiles
-        else
-          @collection[date] = profiles
-        end
+        dates_arr_with_shift << d.change(year: today.year + year_shift)
       end
     end
-    @result = Hash[*@collection.reject{|k,v| k < Date.current}.sort.first]
-    render
+    nearest_date = dates_arr_with_shift.select { |x| x >= Date.today }.min
+    @collection = Account.where.not(birthday: nil)
+                         .where('extract(month from birthday) = extract(month from date ?)', nearest_date)
+                         .where('extract(day from birthday) = extract(day from date ?)', nearest_date)
+                         .includes(chain_resource_inclusion)
+
+    render json: {
+      "#{nearest_date.to_date}": @collection.as_json(json_resource_inclusion)
+    }
   end
 
   def show
-    @resource_instance = Profile.where(birthday: params[:birthday])
-
-    render
+    @resource_instance = Account.where(birthday: params[:birthday])
+    render json: @resource_instance
   end
 end

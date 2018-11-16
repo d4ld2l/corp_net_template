@@ -1,0 +1,16 @@
+ru:
+  activerecord:
+    models:
+      question: Опрос
+    attributes:
+      question:
+        image: Изображение
+        ban_own_answer: Запрет на свой вариант
+        wording: Формулировка вопроса
+        question_type: Тип вопроса
+      offered_variant:
+        image: Изображение
+    enum:
+      question_type:
+        single: Одиночный выбор
+        multiple: Множественный выбор
